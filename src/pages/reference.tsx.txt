@@ -1,0 +1,11 @@
+import {
+  useAccount,
+  useNetwork,
+  useConnect,
+  useDisconnect,
+  useEnsAvatar,
+  useEnsName,
+} from 'wagmi'
+
+const { address, connector, isConnected } = useAccount()
+  const { chain, chains } = useNetwork()

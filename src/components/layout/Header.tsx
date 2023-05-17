@@ -1,31 +1,26 @@
-import * as React from 'react';
+import React from 'react';
 
-import UnstyledLink from '@/components/links/UnstyledLink';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-const links = [
-  { href: '/', label: 'Route 1' },
-  { href: '/', label: 'Route 2' },
-];
+import Image from "next/image"
 
-export default function Header() {
+const Header = () => {
   return (
-    <header className='sticky top-0 z-50 bg-white'>
-      <div className='layout flex h-14 items-center justify-between'>
-        <UnstyledLink href='/' className='font-bold hover:text-gray-600'>
-          Home
-        </UnstyledLink>
-        <nav>
-          <ul className='flex items-center justify-between space-x-4'>
-            {links.map(({ href, label }) => (
-              <li key={`${href}${label}`}>
-                <UnstyledLink href={href} className='hover:text-gray-600'>
-                  {label}
-                </UnstyledLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <>
+      <div id='brandLogo' className="fixed p-4 h-0">
+        <div onClick={() => window.location.href = '/'} style={{ width: 70, height: 70, filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))', border: '3px solid white !important' }}>
+          <Image id="navLogo" src="/logo.png" alt="logo" width="64" height="64" />
+
+        </div>
       </div>
-    </header>
-  );
+      <div id='connectButton' className="fixed right-0 p-4 h-0">
+
+        <ConnectButton />
+      </div>
+
+    </>
+
+  )
 }
+
+export default Header;
