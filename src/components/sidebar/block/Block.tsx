@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
-import { useNotification } from "web3uikit"
 import { ethers, BigNumber } from "ethers"
 import { Mode, Coordinates, ChainData } from "@/constant/types";
 
-import { CryptoLogos, Information, BannerStrip } from "web3uikit";
 
 import { useStateCallback } from "../../../helper/hooks"
 
@@ -48,8 +46,6 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
 
   const [test, setTest] = useStateCallback(0)
 
-
-  const dispatch = useNotification()
 
 
 

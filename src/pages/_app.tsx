@@ -6,7 +6,7 @@ import Head from 'next/head'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { polygonMumbai, polygon } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { NotificationProvider } from "web3uikit"
+import { ChakraProvider } from '@chakra-ui/react'
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -37,13 +37,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="A Web3 renaissance of The Million Dollar Homepage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider theme={darkTheme()} chains={chains} initialChain={polygonMumbai}>
-          <NotificationProvider>
+      <ChakraProvider>
+        <WagmiConfig config={wagmiConfig}>
+          <RainbowKitProvider theme={darkTheme()} chains={chains} initialChain={polygonMumbai}>
             <Component {...pageProps} />
-          </NotificationProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </ChakraProvider>
+
 
 
     </>

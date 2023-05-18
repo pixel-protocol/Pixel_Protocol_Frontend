@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import styled from 'styled-components'
-import logo from "../public/logo.png"
 
 const Landing: NextPage = () => {
   return (<Container>
@@ -18,7 +17,7 @@ const Header = () => {
         <AppButton href="/app">Go to app</AppButton>
       </HeaderBar>
       <ContentContainer>
-        <Logo src={logo} layout="fixed" alt='pixelprotocol' height="200" width="200" />
+        <Image src="/images/logo.png" alt='pixelprotocol' height="200" width="200" />
         <TextContainer>
           <Headline>
             Pixel Protocol

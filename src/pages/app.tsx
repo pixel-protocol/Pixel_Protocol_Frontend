@@ -2,11 +2,11 @@ import type { NextPage } from 'next'
 import { useState, useEffect, useRef } from 'react'
 import { useGesture } from '@use-gesture/react'
 import Sidebar from '@/components/sidebar/Sidebar'
-import Header from "@/components/layout/Header"
+import Header from "@/components/Header"
 import { io } from "socket.io-client";
 import { Coordinates, Mode } from '@/constant/types';
 
-const socket = io("d3perkfc3597u7.cloudfront.net");
+const socket = process.env.dev ? io("http://localhost:5000/") : io("d3perkfc3597u7.cloudfront.net");
 
 const Home: NextPage = () => {
 
@@ -248,7 +248,7 @@ const Home: NextPage = () => {
       {/*<button onClick={() => adjustZoom(1)} style={{ position: 'absolute', right: 15, bottom: 30 }}>+</button>
       <button onClick={() => adjustZoom(-1)} style={{ position: 'absolute', right: 15, bottom: 10 }}>-</button>*/}
       {
-        (pointSelected) ? <Sidebar mode={mode} setPointSelected={setPointSelected} setPointerPosition={setPointerPosition} pointerPosition={pointerPosition as Coordinates} />
+        (pointSelected || process.env.exposeSidebar) ? <Sidebar mode={mode} setPointSelected={setPointSelected} setPointerPosition={setPointerPosition} pointerPosition={pointerPosition as Coordinates} />
           : null
       }
 

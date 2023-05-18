@@ -25,17 +25,16 @@ interface SidebarProps {
 
 const SideBarContainer = styled.div`position: absolute;
 left: 0;
-bottom: 0;
-height: 40vh;
-width: 100vw;
+top: 0;
+height: 100vh;
+width: 40vw;
 background-color: white;
 
-@media only screen and (min-width: 992px) {
-    #sidebar {
-        top: 0;
-        height: 100vh;
-        width: 40vw;
-    }
+@media (max-width: 992px) {
+    top:auto;
+    bottom: 0;
+    height: 60vh;
+    width: 100vw;
 }`
 
 
@@ -59,7 +58,7 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
 
 
     useEffect(() => {
-        console.log(`${pointerPosition.x}, ${pointerPosition.y}`)
+        console.log(`${mode}`)
     }, [mode, pointerPosition])
 
     return (
