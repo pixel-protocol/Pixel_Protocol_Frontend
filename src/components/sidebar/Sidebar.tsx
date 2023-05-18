@@ -51,6 +51,7 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
     const onSidebarCancel = () => {
         setPointSelected(false);
         setPointerPosition(null);
+        console.log('cancel sidebar triggered!')
     }
 
     //react hooks
@@ -60,6 +61,17 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
     useEffect(() => {
         console.log(`${mode}`)
     }, [mode, pointerPosition])
+
+    useEffect(() => {
+        function handleEscapeKey(event: KeyboardEvent) {
+            if (event.code === 'Escape') {
+                onSidebarCancel()
+            }
+        }
+
+        document.addEventListener('keydown', handleEscapeKey)
+        return () => document.removeEventListener('keydown', handleEscapeKey)
+    }, [])
 
     return (
         <SideBarContainer >
