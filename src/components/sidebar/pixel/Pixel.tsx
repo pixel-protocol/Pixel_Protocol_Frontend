@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { useNotification } from "web3uikit"
 import { ethers, BigNumber } from "ethers"
-import { Mode, Coordinates, ContractAddresses } from "@/constant/types";
+import { Mode, Coordinates, ChainData } from "@/constant/types";
 
 import { CryptoLogos, Information, BannerStrip } from "web3uikit";
 
@@ -9,7 +9,7 @@ import { useStateCallback } from "../../../helper/hooks"
 
 import LoadingSpinner from "@/components/LoadingSpinner"
 import styled from 'styled-components'
-import contractAddresses from "@/constant/contractAddresses.json"
+import chainData from "@/constant/chain.json"
 
 
 import {
@@ -25,11 +25,10 @@ import {
 
 
 const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
-    const caddresses: ContractAddresses = contractAddresses;
+    const cData: ChainData = chainData;
     const { address, connector, isConnected } = useAccount()
     const { chain, chains } = useNetwork()
-    const [pixelAddress, blockAddress] = (chain && chain.name in caddresses) ? caddresses[chain.name] : [null, null]
-
+    const [pixelAddress, blockAddress] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
     //get contract states
     const [mintingFee, setMintingFee] = useStateCallback("0")
     const [owner, setOwner] = useStateCallback("0")

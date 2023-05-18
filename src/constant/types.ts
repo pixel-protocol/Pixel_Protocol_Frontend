@@ -3,8 +3,14 @@ export type Coordinates = {
     y: number
 }
 
-export type ContractAddresses = {
-    [key: string]: string[]
+export type NestedChainData = {
+    contractAddresses: string[],
+    fairValueEther: number[],
+    [key: string]: any
+}
+
+export type ChainData = {
+    [key: string]: NestedChainData | any
 }
 
 export type Mode = 'Pixel' | 'Block'
