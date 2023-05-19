@@ -4,13 +4,15 @@ import { Mode, Coordinates, ChainData } from "@/constant/types";
 
 import blockABI from '@/constant/abis/Block'
 import pixelABI from '@/constant/abis/Pixel'
-
 import { useStateCallback } from "../../../helper/hooks"
 
 import LoadingSpinner from "@/components/LoadingSpinner"
 import styled from 'styled-components'
 import chainData from "@/constant/chain.json"
 
+import Sections from "@/components/sidebar/block/Sections";
+
+import { Box } from '@chakra-ui/react'
 
 import {
   useAccount,
@@ -55,8 +57,9 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
 
 
   return (
-    <>
-    </>
+    <Box m="2">
+      <Sections />
+    </Box>
   )
 }
 

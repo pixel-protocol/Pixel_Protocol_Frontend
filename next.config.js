@@ -2,7 +2,8 @@
 const nextConfig = {
   env: {
     dev: true,
-    exposeSidebar: true
+    exposeSidebar: true,
+    modeForDebugging: 'Block'
   },
   eslint: {
     dirs: ['src'],
