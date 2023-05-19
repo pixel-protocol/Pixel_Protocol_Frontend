@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { ethers, BigNumber } from "ethers"
 import { Mode, Coordinates, ChainData } from "@/constant/types";
 
+import blockABI from '@/constant/abis/Block'
+import pixelABI from '@/constant/abis/Pixel'
 
 import { useStateCallback } from "../../../helper/hooks"
 
@@ -13,6 +15,7 @@ import chainData from "@/constant/chain.json"
 import {
   useAccount,
   useNetwork,
+  useContractReads,
   useConnect,
   useDisconnect,
   useEnsAvatar,
@@ -28,25 +31,24 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
   const { chain, chains } = useNetwork()
   const [pixelAddress, blockAddress] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
 
-  //get contract states
-  const [mintingFee, setMintingFee] = useStateCallback("0")
-  const [owner, setOwner] = useStateCallback("0")
-  const [isMinted, setIsMinted] = useStateCallback(false)
-  const [color, setColor] = useStateCallback(0)
-  const [tokenId, setTokenId] = useStateCallback("0")
-
-  const [isMinting, setIsMinting] = useStateCallback(false)
-
-  //for minting
-  const [selectedColorMint, setSelectedColorMint] = useState(0)
 
 
-  //for transition when updating
-  const [loading, setLoading] = useStateCallback(true)
-
-  const [test, setTest] = useStateCallback(0)
-
-
+  const { data, isError, isLoading } = useContractReads({
+    contracts: [
+      {
+        address: blockAddress,
+        abi: blockABI,
+        functionName: 'exists',
+        args: [69],
+      },
+      {
+        address: blockAddress,
+        abi: blockABI,
+        functionName: 'owner',
+        args: [69],
+      },
+    ],
+  })
 
 
 

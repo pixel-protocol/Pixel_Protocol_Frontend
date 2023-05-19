@@ -27,7 +27,9 @@ const PixelColor = ({ id }: { id: number }) => {
     address: pixelAddress,
     abi: pixelABI,
     functionName: 'exists',
-    args: [id]
+    args: [id],
+    watch: true,
+    staleTime: 5_000
   })
 
 
@@ -35,7 +37,9 @@ const PixelColor = ({ id }: { id: number }) => {
     address: pixelAddress,
     abi: pixelABI,
     functionName: 'color',
-    args: [id]
+    args: [id],
+    watch: true,
+    staleTime: 5_000
   })
 
   return (

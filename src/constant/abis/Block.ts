@@ -1,4 +1,4 @@
-[
+const blockABI = [
   "constructor(address)",
   "event Approval(address indexed,address indexed,uint256 indexed)",
   "event ApprovalForAll(address indexed,address indexed,bool)",
@@ -35,3 +35,5 @@
   "function transferOwnership(address)",
   "function withdraw()"
 ]
+
+export default blockABI

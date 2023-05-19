@@ -53,6 +53,18 @@ export const coordToTierBlock = (x: number, y: number) => {
     }
 }
 
+export const blockIdToPixelIds = (id: number) => {
+
+    const [x, y] = idToCoordBlock(id)
+    let arr = []
+    for (let j = 0; j < 10; j++) {
+        for (let k = 0; k < 10; k++) {
+            arr.push(x * 10 + y * 10 * 1000 + k + j * 1000);
+        }
+    }
+    return arr
+}
+
 export const pixelIdToBlockId = (id: number) => {
     const [xPixel, yPixel] = idToCoordPixel(id);
     const [xBlock, yBlock] = pixelCoordToBlockCoord(xPixel, yPixel);
