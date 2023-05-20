@@ -57,7 +57,7 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
 
 
   return (
-    <Box m="2">
+    <Box p="2">
       <Sections />
     </Box>
   )

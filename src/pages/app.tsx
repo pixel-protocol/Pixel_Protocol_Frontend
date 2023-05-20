@@ -6,7 +6,7 @@ import Header from "@/components/Header"
 import { io } from "socket.io-client";
 import { Coordinates, Mode } from '@/constant/types';
 
-const socket = process.env.dev ? io("http://localhost:5000/") : io("d3perkfc3597u7.cloudfront.net");
+const socket = process.env.dev ? io("http://localhost:8000/") : io("d3perkfc3597u7.cloudfront.net");
 
 const Home: NextPage = () => {
 
