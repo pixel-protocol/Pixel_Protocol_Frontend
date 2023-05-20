@@ -19,7 +19,10 @@ import {
     useEnsName,
 } from 'wagmi'
 
+import Sections from '@/components/sidebar/pixel/Sections'
 
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Icon } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 
 const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
@@ -50,8 +53,9 @@ const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
 
 
     return (
-        <>
-        </>
+        <Box m="2">
+            <Sections />
+        </Box>
     )
 }
 

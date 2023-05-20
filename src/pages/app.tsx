@@ -10,7 +10,7 @@ const socket = process.env.dev ? io("http://localhost:5000/") : io("d3perkfc3597
 
 const Home: NextPage = () => {
 
-  const [mode, setMode] = useState<Mode>('Block')
+  const [mode, setMode] = useState<Mode>('Pixel')
 
 
   const dragStart = useRef<any>(null);
