@@ -1,12 +1,23 @@
 import { CSSProperties, useState } from "react";
 
-import { Card, CardHeader, CardBody, CardFooter, Text, Box, Grid, GridItem, Link } from '@chakra-ui/react'
+import { Card, CardBody, Text, Box, Grid, GridItem } from '@chakra-ui/react'
+import PixelPalette from "@/components/sidebar/pixel/PixelPalette";
+import { ColorResult } from "@hello-pangea/color-picker";
+import Info from "@/components/sidebar/pixel/Info";
+import { Coordinates } from "@/constant/types";
+import { coordToIdPixel } from "@/helper/conversion";
 
 const PixelCard = () => {
 
-  const [color, setColor] = useState('#ffff8f');
+  const [color, setColor] = useState('#ffffff');
+  const [newColor, setNewColor] = useState('#ffffff')
+  const [ownerAddress, setOwnerAddress] = useState("0x...")
+  const [price, setPrice] = useState("0")
+  const [blockId, setBlockId] = useState(0)
+  const [isOwner, setIsOwner] = useState(true)
+  const [coordinates, setCoordinates] = useState<Coordinates>({ x: 0, y: 1 })
 
-  const tier: "bronze" | "silver" | "gold" = "gold";
+  const tier: "bronze" | "silver" | "gold" = "";
   let borderColor: CSSProperties["borderColor"] = "";
 
   switch (tier) {
@@ -22,6 +33,12 @@ const PixelCard = () => {
     default:
       borderColor = "gray.500";
   }
+
+  const handleChangeColor = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setColor(newColor)
+  }
+
   return (<Card maxW='400px'>
     <CardBody>
       <Grid templateColumns="1fr 3fr" gap={4} alignItems="center" mb={5}>
@@ -29,36 +46,32 @@ const PixelCard = () => {
           <Box
             w="60px"
             h="60px"
-            borderRadius="md"
-            border="3px solid"
+            borderRadius="lg"
+            border="2px solid"
             borderColor={borderColor}
             display="flex"
             justifyContent="center"
             alignItems="center"
             bg={color}
-          >
-          </Box>
+          />
         </GridItem>
         <GridItem>
-          <Text fontSize="xl" fontWeight="bold">Pixel #1000</Text>
+          <Text fontSize="xl" fontWeight="bold">Pixel #{coordToIdPixel(coordinates.x, coordinates.y)}</Text>
           <Grid
             templateColumns='1fr 5fr 1fr 5fr'
             gap={3}
             maxW={["100%", "80%"]}
           >
             <GridItem><Text>X:</Text></GridItem>
-            <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md" width="100%">0</Box></GridItem>
+            <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md" width="100%">{coordinates.x}</Box></GridItem>
             <GridItem><Text>Y:</Text></GridItem>
-            <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md">1</Box></GridItem>
+            <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md">{coordinates.y}</Box></GridItem>
           </Grid>
         </GridItem>
       </Grid>
-      <Text>Owner: <Link color="blue.500">0x...</Link></Text>
-      <Text>Fair Value: ... ETH</Text>
-      <br />
-      <Text color="gray.600" fontSize="sm" fontStyle="italic">
-        This Pixel is available for mint at <Link color="blue.500">Block #0</Link> for ... ETH
-      </Text>
+      <Info ownerAddress={ownerAddress} blockId={blockId} price={price} />
+      {isOwner && <PixelPalette orgColor={color} color={newColor} handleChangeComplete={(c: ColorResult) => { setNewColor(c.hex) }}
+        onButtonClick={handleChangeColor} />}
     </CardBody>
   </Card>)
 }
