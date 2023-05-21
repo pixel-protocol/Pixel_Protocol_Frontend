@@ -34,6 +34,6 @@ const blockABI = [
   "function transferFrom(address,address,uint256)",
   "function transferOwnership(address)",
   "function withdraw()"
-]
+] as const
 
 export default blockABI

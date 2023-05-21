@@ -5,7 +5,9 @@ export type Coordinates = {
 
 export type NestedChainData = {
     contractAddresses: string[],
-    fairValueEther: number[],
+    fairValueEther: {
+        [key in Tier]: number
+    },
     [key: string]: any
 }
 
@@ -14,3 +16,5 @@ export type ChainData = {
 }
 
 export type Mode = 'Pixel' | 'Block'
+
+export type Tier = "Bronze" | "Silver" | "Gold"

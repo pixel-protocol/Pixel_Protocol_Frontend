@@ -4,10 +4,10 @@
             "0xe4ed1a5cf6e0cd705975Be663791A1Af010f67eD",
             "0xB1591D2685153d20495351884534367148868A74"
         ],
-        "fairValueEther": [
-            0.01,
-            0.0125,
-            0.015
-        ]
+        "fairValueEther": {
+            "Bronze": 0.01,
+            "Silver": 0.0125,
+            "Gold": 0.015
+        }
     }
 }

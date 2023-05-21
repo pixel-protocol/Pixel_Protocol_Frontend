@@ -82,7 +82,7 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
                 <HamburgerIcon onClick={onSidebarCancel} boxSize={8} />
             </Box>
 
-            {(mode === 'Block') ? <Block coordinates={pointerPosition} /> : <Pixel coordinates={pointerPosition} />}
+            {(mode === 'Block') ? <Block coordinates={{ "x": 1, "y": 1 }} /> : <Pixel coordinates={pointerPosition} />}
 
 
         </SideBarContainer>

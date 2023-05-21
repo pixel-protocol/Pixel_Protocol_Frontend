@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react'
 
-function BlockArt({ colors }: { colors: Array<string> }): JSX.Element {
+const BlockArt = ({ colors }: { colors: string[] }): JSX.Element => {
   const blockArtCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function BlockArt({ colors }: { colors: Array<string> }): JSX.Element {
         // Draw the grid of squares
         for (let x = 0; x < gridSize; x++) {
           for (let y = 0; y < gridSize; y++) {
-            const randomColor = colors[x * gridSize + y];
+            const randomColor = colors[x + y * gridSize];
             ctx.fillStyle = randomColor;
             ctx.fillRect(x * squareSize, y * squareSize, squareSize, squareSize);
           }
@@ -28,14 +28,7 @@ function BlockArt({ colors }: { colors: Array<string> }): JSX.Element {
     }
   }, []);
 
-  return (<Box
-    w="84px"
-    h="84px"
-    borderRadius="lg"
-    border="2px solid"
-    borderColor="gray.500"
-    overflow="hidden"
-  ><canvas ref={blockArtCanvasRef} width={80} height={80} /></Box>);
+  return (<canvas ref={blockArtCanvasRef} width={80} height={80} />);
 }
 
 export default BlockArt;

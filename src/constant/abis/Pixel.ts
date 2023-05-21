@@ -32,6 +32,6 @@ const pixelABI = [
   "function transform(uint24,uint256)",
   "function uri(uint256) view returns (string)",
   "function withdraw()"
-]
+] as const
 
 export default pixelABI

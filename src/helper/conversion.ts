@@ -1,3 +1,5 @@
+import { Tier } from "@/constant/types";
+
 export const hexToDec = (hex: string) => {
     return Number(hex)
 }
@@ -19,15 +21,15 @@ export const idToCoordPixel = (id: number) => {
     return [x, y]
 }
 
-export const coordToTierPixel = (x: number, y: number) => {
+export const coordToTierPixel = (x: number, y: number): Tier => {
     if ((x >= 400 && x < 600) && (y >= 400 && y < 600)) {
-        return 2;
+        return 'Gold';
     }
     else if ((x >= 200 && x < 800) && (y >= 200 && y < 800)) {
-        return 1;
+        return 'Silver';
     }
     else {
-        return 0;
+        return 'Bronze';
     }
 }
 
@@ -41,15 +43,15 @@ export const idToCoordBlock = (id: number) => {
     return [x, y]
 }
 
-export const coordToTierBlock = (x: number, y: number) => {
+export const coordToTierBlock = (x: number, y: number): Tier => {
     if ((x >= 40 && x < 60) && (y >= 40 && y < 60)) {
-        return 2;
+        return 'Gold';
     }
     else if ((x >= 20 && x < 80) && (y >= 20 && y < 80)) {
-        return 1;
+        return 'Silver';
     }
     else {
-        return 0;
+        return 'Bronze';
     }
 }
 
