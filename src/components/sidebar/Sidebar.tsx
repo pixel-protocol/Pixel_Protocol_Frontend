@@ -5,6 +5,8 @@ import chainData from "@/constant/chain.json"
 import Pixel from '@/components/sidebar/pixel/Pixel'
 import Block from '@/components/sidebar/block/Block'
 import styled from 'styled-components'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { Box } from '@chakra-ui/react'
 
 import {
     useAccount,
@@ -27,7 +29,7 @@ const SideBarContainer = styled.div`position: absolute;
 left: 0;
 top: 0;
 height: 100vh;
-width: 40vw;
+width: 400px;
 background-color: white;
 
 @media (max-width: 992px) {
@@ -76,11 +78,11 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
     return (
         <SideBarContainer >
 
-            <div style={{ padding: '1em' }}>
-                <button className="block ml-auto text-5xl leading-3" onClick={onSidebarCancel}>&times;</button>
-            </div>
+            <Box p="2">
+                <HamburgerIcon onClick={onSidebarCancel} boxSize={8} />
+            </Box>
 
-            {(mode === 'Block') ? <Block coordinates={pointerPosition} /> : <Pixel coordinates={pointerPosition} />}
+            {(mode === 'Block') ? <Block coordinates={{ "x": 1, "y": 1 }} /> : <Pixel coordinates={pointerPosition} />}
 
 
         </SideBarContainer>
