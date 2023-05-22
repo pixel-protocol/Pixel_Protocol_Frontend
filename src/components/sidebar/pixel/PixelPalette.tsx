@@ -72,13 +72,15 @@ const PixelPalette = (props: PixelPaletteProps) => {
           />
         </GridItem>
       </Grid>
+      <VStack align={"center"} bg="white" p={1}>
+        <CompactPicker
+          color={props.color}
+          colors={colorChoices}
+          onChangeComplete={props.handleChangeComplete}
+          styles={{ bg: { boxShadow: 'none' } }}
+        />
+      </VStack>
 
-      <CompactPicker
-        color={props.color}
-        colors={colorChoices}
-        onChangeComplete={props.handleChangeComplete}
-        styles={{ bg: { boxShadow: 'none' } } as any}
-      />
       <Button colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
     </VStack>
   )
