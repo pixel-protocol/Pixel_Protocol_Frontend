@@ -17,7 +17,7 @@ import chainData from "@/constant/chain.json"
 import { useNetwork } from "wagmi";
 import MaticIcon from "@/components/icons/MaticIcon";
 
-const PixelData = ({ id, coordinates, tier, exists }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean }) => {
+const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, color: `#${string}` }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
@@ -39,7 +39,7 @@ const PixelData = ({ id, coordinates, tier, exists }: { id: number, coordinates:
             display="flex"
             justifyContent="center"
             alignItems="center"
-            bg={"#f2a900"}
+            bg={color}
           /> : <Box
             w="80px"
             h="80px"
@@ -80,7 +80,7 @@ const PixelData = ({ id, coordinates, tier, exists }: { id: number, coordinates:
           //<Info ownerAddress={ownerAddress} blockId={blockId} price={price} />
         }
         {(exists) ?
-          <Text>Owner: { }</Text> : null}
+          <Text>Owner: {owner}</Text> : null}
         <Card border="1px solid" borderColor="purple">
           <CardBody p="3">
             <Stat>

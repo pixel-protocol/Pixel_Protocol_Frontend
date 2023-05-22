@@ -234,7 +234,6 @@ const Home: NextPage = () => {
 
   }, [ctx, c, lastX, lastY, cameraZoom, pointerPosition])
 
-
   return (
     < div >
       <Header />

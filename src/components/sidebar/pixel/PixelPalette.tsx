@@ -56,7 +56,7 @@ const PixelPalette = (props: PixelPaletteProps) => {
         />
       </VStack>
 
-      <Button colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
+      <Button isDisabled={props.orgColor === props.color} colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
     </VStack>
   )
 
