@@ -8,7 +8,7 @@ import { useStateCallback } from "../../../helper/hooks"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import styled from 'styled-components'
 import chainData from "@/constant/chain.json"
-import { coordToIdBlock, coordToTierBlock } from "@/helper/conversion";
+import { coordToIdPixel, coordToTierPixel } from "@/helper/conversion";
 
 
 
@@ -31,13 +31,13 @@ const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
     const [id, setId] = useState<number>(0)
     const [tier, setTier] = useState<Tier>("Bronze")
     useEffect(() => {
-        setId(coordToIdBlock(coordinates.x, coordinates.y))
-        setTier(coordToTierBlock(coordinates.x, coordinates.y))
+        setId(coordToIdPixel(coordinates.x, coordinates.y))
+        setTier(coordToTierPixel(coordinates.x, coordinates.y))
     }, [])
 
     useEffect(() => {
-        setId(coordToIdBlock(coordinates.x, coordinates.y))
-        setTier(coordToTierBlock(coordinates.x, coordinates.y))
+        setId(coordToIdPixel(coordinates.x, coordinates.y))
+        setTier(coordToTierPixel(coordinates.x, coordinates.y))
     }, [coordinates])
     const cData: ChainData = chainData;
     const { address, connector, isConnected } = useAccount()
