@@ -10,26 +10,46 @@ import { getColorForTier } from '@/helper/misc'
 import MaticIcon from '@/components/icons/MaticIcon'
 
 import BlockCanvas from '@/components/sidebar/block/BlockCanvas'
+import { Coordinates, Tier, ChainData } from '@/constant/types'
+import chainData from "@/constant/chain.json"
+import blockABI from "@/constant/abis/Block";
+import pixelABI from "@/constant/abis/Pixel";
 
-function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModalClose: () => void }) {
-  const [colors, setColors] = useState<string[]>([])
+import { useNetwork, useContractWrite } from 'wagmi'
+import { parseEther } from 'viem'
+import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 
-  useEffect(() => {
-    let temp = []
-    for (let i = 0; i < 100; i++) {
-      temp.push('#' + Math.floor(Math.random() * 16777215).toString(16))
+import FirstMintStep from '@/components/sidebar/block/FirstMintStep'
+import SecondMintStep from '@/components/sidebar/block/SecondMintStep'
+import { invertColor, hexToDec } from '@/helper/conversion'
+
+
+function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: number, coordinates: Coordinates, tier: Tier, isModalOpen: boolean, onModalClose: () => void }) {
+
+  const cData: ChainData = chainData;
+  const { chain, chains } = useNetwork()
+  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+
+  const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
+  const [colors, setColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+
+  const blockContract = {
+    address: blockAddress,
+    abi: blockABI,
+  }
+
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    ...blockContract,
+    functionName: 'mint',
+    onSuccess() {
+      setActiveStep(3)
     }
-    setColors(temp)
-  }, [])
-
-  useEffect(() => {
-    console.log(newColor)
-  }, [newColor])
+  })
 
   const steps = [
-    { title: 'Select Color for Pixels', forwardButtonText: 'Proceed' },
-    { title: 'Preview Block Design', forwardButtonText: 'Mint' },
-    { title: 'Confirm Transaction' }
+    { title: 'Select Colors', forwardButtonText: 'Proceed' },
+    { title: 'Review & Mint', forwardButtonText: 'Mint' },
+    { title: 'View Transaction', }
   ]
 
   const { activeStep, setActiveStep, goToNext, goToPrevious } = useSteps({
@@ -41,15 +61,13 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
     e.preventDefault()
     setActiveStep(2)
     //mint logic
-    new Promise((resolve) => {
-      setTimeout(() => {
-        setActiveStep(3)
-        resolve("Success");
-      }, 5000); // Wait for 5 seconds
-    });
+    write({
+      args: [id, colors.map(c => invertColor(hexToDec(c.slice(1))))],
+      value: parseEther((fairValuePerPixel[tier] * 100).toString() as `${number}`)
+    })
   }
 
-  const onCellClick = (index, newColor) => {
+  const onCellClick = (index: number, newColor: `#${string}`) => {
     setColors((prevColors) => {
       const temp = [...prevColors];
       temp[index] = newColor;
@@ -59,10 +77,10 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={onModalClose} size={activeStep < 3 ? "4xl" : "sm"}>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} size={"3xl"}>
         <ModalOverlay />
         <ModalContent>
-          {(activeStep < 3) && <Box m={5} mr={10}>
+          <Box m={5} mr={10}>
             <Stepper index={activeStep}>
               {steps.map((step, index) => (
                 <Step key={index}>
@@ -82,50 +100,12 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
                 </Step>
               ))}
             </Stepper>
-          </Box>}
+          </Box>
           <Spacer />
           <ModalBody>
-            {(activeStep == 0) && <BlockCanvas colors={colors} onCellClick={onCellClick} isEditting={true} />}
-            {(activeStep == 1) &&
-              <SimpleGrid justifyContent="center" alignContent="center" minChildWidth={300} spacing={5}>
-                <GridItem justifySelf="center">
-                  <BlockCanvas colors={colors} />
-                </GridItem>
-                <GridItem>
-                  <VStack spacing="2" align="stretch">
-                    <Text fontSize="xl" fontWeight="bold" color="purple">Block #0 <Badge ml={2} variant='solid' bg={getColorForTier("Gold")}>
-                      Gold
-                    </Badge></Text>
-                    <Grid
-                      templateColumns='1fr 5fr 1fr 5fr'
-                      gap={3}
-                      maxW={["100%", "100%", "50%"]}
-                    >
-                      <GridItem><Text>X:</Text></GridItem>
-                      <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md" fontWeight={"bold"}>0</Box></GridItem>
-                      <GridItem><Text>Y:</Text></GridItem>
-                      <GridItem><Box border="1px solid" textAlign="center" borderColor="gray.300" borderRadius="md" fontWeight={"bold"}>1</Box></GridItem>
-                    </Grid>
-                    <Card border="1px solid" borderColor="purple">
-                      <CardBody p="3">
-                        <Stat>
-                          <StatLabel color="purple">You will receive:</StatLabel>
-                          <StatNumber my="1">1 <span style={{ fontSize: "18px" }}>$BLOCK</span> + 100 <span style={{ fontSize: "18px" }}>$PIXEL</span></StatNumber>
-                        </Stat>
-                      </CardBody>
-                    </Card>
-                    <Card border="1px solid" borderColor="purple">
-                      <CardBody p="3">
-                        <Stat>
-                          <StatLabel color="purple">Fair Value / Mint Price</StatLabel>
-                          <StatNumber my="1"><MaticIcon boxSize={12} mr="2" />{0.01 * 100} MATIC</StatNumber>
-                          <StatHelpText mb="0">≈$1.02 ({0.01} MATIC per Pixel)</StatHelpText>
-                        </Stat>
-                      </CardBody>
-                    </Card>
-                  </VStack>
-                </GridItem>
-              </SimpleGrid>}
+            {(activeStep == 0) && <FirstMintStep colors={colors} setColors={setColors} onCellClick={onCellClick} />}
+            {(activeStep == 1) && <SecondMintStep id={id} coordinates={coordinates} tier={tier} fairValuePerPixel={fairValuePerPixel[tier]} colors={colors} />
+            }
             {(activeStep == 2) && <SimpleGrid><Spinner size='xl' justifySelf="center" /></SimpleGrid>}
             {(activeStep == 3) && <VStack spacing={5} mt={5}><Image justifySelf="center"
               width={150}
@@ -136,12 +116,13 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
               <Text>Successfully Minted! Block #id <Link color="blue.500">view txn</Link></Text></VStack>}
           </ModalBody>
           <ModalFooter>
-            {(activeStep == 0) && (<Button colorScheme='purple' onClick={goToNext} alignSelf="flex-start">Proceed</Button>)}
-            {(activeStep == 1) && (<Button colorScheme='purple' onClick={handleMint} alignSelf="flex-start">Mint</Button>)}
+            {(activeStep === 1) && (<Button colorScheme='purple' onClick={goToPrevious} alignSelf="flex-start"><ArrowBackIcon /> Back</Button>)}
             <Spacer />
-            {(activeStep == 3) && (<Button colorScheme='purple' onClick={onModalClose} alignSelf="center">Close</Button>)}
+            {(activeStep === 3) && (<Button colorScheme='purple' onClick={onModalClose} alignSelf="center">Close</Button>)}
             <Spacer />
-            {(activeStep > 0 && activeStep < 2) && (<Button colorScheme='purple' onClick={goToPrevious} alignSelf="center">Back</Button>)}
+            {(activeStep === 0) && (<Button colorScheme='purple' onClick={goToNext} alignSelf="center">Proceed <ArrowForwardIcon /></Button>)}
+            {(activeStep === 1) && (<Button colorScheme='purple' onClick={handleMint} alignSelf="center">Mint</Button>)}
+
           </ModalFooter>
         </ModalContent>
       </Modal >

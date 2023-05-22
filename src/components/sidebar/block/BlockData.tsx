@@ -20,52 +20,11 @@ import { useNetwork, useContractRead } from 'wagmi'
 import blockABI from '@/constant/abis/Block'
 import BlockArt from '@/components/sidebar/block/BlockArt'
 
-const BlockData = ({ id, coordinates, tier, exists }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean }) => {
+const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
   const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
-
-
-  const blockContract = {
-    address: blockAddress,
-    abi: blockABI,
-  }
-
-  const readConfig = {
-    watch: true,
-    staleTime: 5_000
-  }
-  if (exists) {
-    const { data: blockOwnerData, isError: blockOwnerIsError, isLoading: blockOwnerIsLoading, refetch: blockOwnerRefetch } = useContractRead({
-
-      ...blockContract,
-      functionName: 'ownerOf',
-      args: [id],
-      ...readConfig
-
-    })
-
-    const { data: blockPixelColorsData, isError: blockPixelColorsIsError, isLoading: blockPixelColorsIsLoading, refetch: blockPixelColorsRefetch } = useContractRead({
-
-      ...blockContract,
-      functionName: 'getPixelColors',
-      args: [id],
-      ...readConfig
-
-    })
-
-    const { data: blockPixelOwnerssData, isError: blockPixelOwnersIsError, isLoading: blockPixelOwnersIsLoading, refetch: blockPixelOwnersRefetch } = useContractRead({
-
-      ...blockContract,
-      functionName: 'getPixelOwners',
-      args: [id],
-      ...readConfig
-
-    })
-  }
-
-
 
   return (
     <Card variant="filled">
@@ -75,35 +34,26 @@ const BlockData = ({ id, coordinates, tier, exists }: { id: number, coordinates:
 
           <Grid templateColumns="1fr 3fr" gap={6} alignItems="center" mb={5}>
             <GridItem h="100%">
-              {
-                // If Block is minted, show underlying pixels. Else, show 'for sale' placefolder
-                (!exists) ? <Box
-                  w="80px"
-                  h="80px"
-                  borderRadius="md"
-                  border="1px solid"
-                  borderColor="purple"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  overflow="hidden"
-                  bg="white"
-                ><BlockArt colors={["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF", "#000000", "#FFFFFF", "#FFA500", "#800080", "#008000", "#800000", "#000080", "#808000", "#800080", "#008080", "#808080", "#FFC0CB", "#FFB6C1", "#FF69B4", "#FF1493", "#DB7093", "#C71585", "#FFA07A", "#FA8072", "#E9967A", "#F08080", "#CD5C5C", "#DC143C", "#FF4500", "#FF8C00", "#FF7F50", "#FF6347", "#FFD700", "#FFFF00", "#FFD700", "#FFFF00", "#ADFF2F", "#7FFF00", "#7CFC00", "#00FF00", "#32CD32", "#98FB98", "#90EE90", "#00FA9A", "#00FF7F", "#3CB371", "#2E8B57", "#008000", "#006400", "#9ACD32", "#6B8E23", "#808000", "#556B2F", "#66CDAA", "#8FBC8B", "#20B2AA", "#008B8B", "#008080", "#00FFFF", "#00FFFF", "#00BFFF", "#1E90FF", "#0000FF", "#0000CD", "#00008B", "#000080", "#8A2BE2", "#9370DB", "#7B68EE", "#6A5ACD", "#483D8B", "#4B0082", "#8B008B", "#800080", "#663399", "#9400D3", "#9932CC", "#8A2BE2", "#9370DB", "#BA55D3", "#8B008B", "#FF00FF", "#FF69B4", "#FF1493", "#C71585", "#DB7093", "#FFA07A", "#FA8072", "#E9967A", "#F08080", "#CD5C5C", "#DC143C", "#FF4500", "#FF8C00", "#FF7F50", "#FF6347", "#FFD700", "#FFFF00", "#FFD700", "#FFFF00", "#ADFF2F", "#7FFF00", "#7CFC00", "#00FF00", "#32CD32", "#98FB98", "#90EE90"]
-                } /></Box> : <Box
-                  w="80px"
-                  h="80px"
-                  borderRadius="md"
-                  border="1px solid"
-                  borderColor="purple"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  bg="white"
-                ><Image
+
+              <Box
+                w="80px"
+                h="80px"
+                borderRadius="md"
+                border="1px solid"
+                borderColor="purple"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                overflow="hidden"
+                bg="white"
+              >{
+                  // If Block is minted, show underlying pixels. Else, show 'for sale' placefolder
+
+                  (exists) ? <BlockArt colors={colors} /> : <Image
                     objectFit='cover'
                     src='/images/pixelorblockforsale.png'
                     alt='for sale'
-                  /></Box>}
+                  />}</Box>
             </GridItem>
             <GridItem>
               <VStack spacing={2} align="stretch">
@@ -125,7 +75,7 @@ const BlockData = ({ id, coordinates, tier, exists }: { id: number, coordinates:
             </GridItem>
           </Grid>
           {(exists) ?
-            <Text>Owner: { }</Text> : null}
+            <Text>Owner: {owner}</Text> : null}
           <Card border="1px solid" borderColor="purple">
             <CardBody p="3">
               <Stat>

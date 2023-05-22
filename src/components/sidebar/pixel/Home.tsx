@@ -31,8 +31,8 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     staleTime: 5_000
   }
 
-  /* Check if Pixel exists (is minted) */
-  const { data: pixelExistsData, isError: pixelExistsIsError, isLoading: pixelExistsIsLoading, refetch: pixelExistsRefetch } = useContractRead({
+  /* Get owner of pixel */
+  const { data: pixelOwnerData, isError: pixelOwnerIsError, isLoading: pixelOWnerIsLoading, refetch: pixelOwnerRefetch } = useContractRead({
 
     ...pixelContract,
     functionName: 'pixelOwner',
@@ -67,12 +67,12 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   })
 
   useEffect(() => {
-    pixelExistsRefetch()
+    pixelOwnerRefetch()
     pixelColorRefetch()
   }, [id])
 
   useEffect(() => {
-    pixelExistsRefetch()
+    pixelOwnerRefetch()
     pixelColorRefetch()
     console.log("initialized Home!")
   }, [])

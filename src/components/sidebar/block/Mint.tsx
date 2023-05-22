@@ -16,12 +16,6 @@ import MintModal from '@/components/sidebar/block/MintModal';
 
 const cData: ChainData = chainData;
 
-const getFairValuePerPixel = (tier: Tier | null) => {
-  if (tier) {
-    return cData["fairValueEther"][tier]
-  }
-  return 0
-}
 
 const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
@@ -49,7 +43,7 @@ const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
 
       </CardBody>
     </Card >
-    {isModalOpen && (<MintModal isModalOpen={isModalOpen} onModalClose={onModalClose} />)}
+    {isModalOpen && (<MintModal id={id} coordinates={coordinates} tier={tier} isModalOpen={isModalOpen} onModalClose={onModalClose} />)}
   </>
   )
 }

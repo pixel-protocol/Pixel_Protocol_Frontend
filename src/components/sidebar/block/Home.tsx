@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import BlockData from "@/components/sidebar/block/BlockData";
 import Mint from "@/components/sidebar/block/Mint";
 import { VStack } from "@chakra-ui/react";
@@ -8,6 +8,7 @@ import { useAccount, useNetwork, useContractRead } from "wagmi";
 import chainData from "@/constant/chain.json"
 import blockABI from "@/constant/abis/Block";
 import pixelABI from "@/constant/abis/Pixel";
+import { zeroAddress } from "@/constant/constants";
 
 
 const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
@@ -15,6 +16,8 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+  const [blockOwner, setBlockOwner] = useState<`0x${string}`>(zeroAddress)
+  const [pixelColors, setPixelColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
 
   const blockContract = {
     address: blockAddress,
@@ -26,27 +29,55 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     staleTime: 5_000
   }
 
-  /* Check if Block exists (is minted) */
-  const { data: blockExistsData, isError: blockExistsIsError, isLoading: blockExistsIsLoading, refetch: blockExistsRefetch } = useContractRead({
+  /* Get owner of block */
+  const { data: blockOwnerData, isError: blockOwnerIsError, isLoading: blockOWnerIsLoading, refetch: blockOwnerRefetch } = useContractRead({
 
     ...blockContract,
-    functionName: 'exists',
+    functionName: 'ownerOf',
     args: [id],
-    ...readConfig
+    ...readConfig,
+    onSuccess(data) {
+      setBlockOwner(data as `0x${string}`)
+    },
+    onError(err) {
+      setBlockOwner(zeroAddress)
+      console.log(err)
+    },
+
+  })
+
+  /* get colors of pixels */
+  const { data: pixelColorsData, isError: pixelColorsIsError, isLoading: pixelColorsIsLoading, refetch: pixelColorsRefetch } = useContractRead({
+
+    ...blockContract,
+    functionName: 'getPixelColors',
+    args: [id],
+    ...readConfig,
+    onSuccess(data) {
+      const hexCodes = (data as number[]).map(x => "#" + x.toString(16).padStart(6, '0') as `#${string}`)
+      setPixelColors(hexCodes)
+    },
+    onError(err) {
+      setPixelColors(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+      console.log(err)
+    },
 
   })
 
   useEffect(() => {
-    blockExistsRefetch()
+    blockOwnerRefetch()
+    pixelColorsRefetch()
   }, [id])
 
   useEffect(() => {
+    blockOwnerRefetch()
+    pixelColorsRefetch()
     console.log("initialized Home!")
   }, [])
   return (
     <VStack spacing={2} align="stretch">
-      <BlockData id={id} coordinates={coordinates} tier={tier} exists={blockExistsData as boolean} />
-      {(!blockExistsData) ? <Mint id={id} coordinates={coordinates} tier={tier} /> : null}
+      <BlockData id={id} coordinates={coordinates} tier={tier} exists={blockOwner !== zeroAddress} owner={blockOwner} colors={pixelColors} />
+      {(blockOwner === zeroAddress) ? <Mint id={id} coordinates={coordinates} tier={tier} /> : null}
 
     </VStack>
   )

@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 
 const Pixels = () => {
   useEffect(() => {
-    console.log("initialized!")
+    console.log("initialized Pixels!")
   }, [])
   return (
     <>
