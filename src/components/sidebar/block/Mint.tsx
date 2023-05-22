@@ -6,12 +6,13 @@ import {
   StatNumber,
   StatHelpText,
   StatArrow,
-  StatGroup, Card, CardHeader, CardBody, CardFooter, Text, Grid, GridItem, Box, Link, Badge, Button, Image
+  StatGroup, Card, CardHeader, CardBody, CardFooter, Text, Grid, GridItem, Box, Link, Badge, Button, Image, useDisclosure
 } from '@chakra-ui/react'
 
 import chainData from "@/constant/chain.json"
 
 import { Tier, Coordinates, ChainData } from '@/constant/types'
+import MintModal from '@/components/sidebar/block/MintModal';
 
 const cData: ChainData = chainData;
 
@@ -23,7 +24,9 @@ const getFairValuePerPixel = (tier: Tier | null) => {
 }
 
 const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
-  return (
+  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+
+  return (<>
     <Card variant="filled">
       <CardBody>
         <VStack spacing="2" align="stretch">
@@ -39,14 +42,15 @@ const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
               </Stat>
             </CardBody>
           </Card>
-          <Button loadingText="Minting" colorScheme='purple'>
+          <Button loadingText="Minting" colorScheme='purple' onClick={onModalOpen}>
             Mint
           </Button>
         </VStack>
 
       </CardBody>
     </Card >
-
+    {isModalOpen && (<MintModal isModalOpen={isModalOpen} onModalClose={onModalClose} />)}
+  </>
   )
 }
 

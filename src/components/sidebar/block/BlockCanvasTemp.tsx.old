@@ -1,0 +1,114 @@
+import { useEffect, useRef, useState } from "react";
+import { Grid, GridItem } from '@chakra-ui/react';
+import MintPalette from '@/components/sidebar/block/MintPalette';
+import { ColorResult } from "@hello-pangea/color-picker";
+
+export default function BlockCanvas({ initialColors, onSubmit }: { initialColors: string[], onSubmit: Function }) {
+  const [colors, setColors] = useState<string[]>(initialColors)
+  const [newColor, setNewColor] = useState('#FFFFFF')
+  const blockCanvas = useRef<HTMLCanvasElement>(null);
+  const pixelSize = 20;
+  const borderSize = 1;
+  console.log('rendered')
+
+  //doesn't work without this
+  useEffect(() => {
+    setColors(initialColors.slice());
+    console.log(colors)
+  }, []);
+
+  useEffect(() => {
+    if (blockCanvas.current) {
+      const canvas = blockCanvas.current;
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = (pixelSize + borderSize) * 10 + borderSize;
+      canvas.height = (pixelSize + borderSize) * 10 + borderSize;
+      if (ctx) {
+        for (let y = 0; y < 10; y++) {
+          for (let x = 0; x < 10; x++) {
+            const xPos = (pixelSize + borderSize) * x;
+            const yPos = (pixelSize + borderSize) * y;
+
+            ctx.fillStyle = initialColors[x * 10 + y];
+            ctx.fillRect(xPos + borderSize, yPos + borderSize, pixelSize, pixelSize);
+
+            const borderColor = "#000000";
+            ctx.fillStyle = borderColor;
+            if (x == 0) ctx.fillRect(xPos, yPos, borderSize, pixelSize + borderSize);
+            if (y == 0) ctx.fillRect(xPos, yPos, pixelSize + borderSize, borderSize);
+            ctx.fillRect(xPos + pixelSize + borderSize, yPos, borderSize, pixelSize + borderSize * 2);
+            ctx.fillRect(xPos, yPos + pixelSize + borderSize, pixelSize + borderSize * 2, borderSize);
+          }
+        }
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (blockCanvas.current) {
+      const canvas = blockCanvas.current;
+      canvas.addEventListener("click", handleCellClick);
+      return () => {
+        canvas.removeEventListener("click", handleCellClick)
+      };
+    }
+  }, [newColor, colors])
+
+  const handleColorClick = (index) => {
+    setColors((prevColors) => {
+      const temp = [...prevColors];
+      temp[index] = newColor;
+      return temp;
+    });
+  }
+
+  const handleChangeColor = (c: ColorResult) => {
+    console.log(c.hex)
+    setNewColor(c.hex)
+  }
+
+  function handleCellClick(event) {
+    const canvas = blockCanvas.current;
+    if (canvas) {
+      const rect = canvas.getBoundingClientRect();
+
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const cellX = (pixelSize + borderSize) * Math.floor(x / (pixelSize + borderSize));
+      const cellY = (pixelSize + borderSize) * Math.floor(y / (pixelSize + borderSize));
+
+      console.log(Math.floor(x / (pixelSize + borderSize)) * 10 + Math.floor(y / (pixelSize + borderSize)))
+
+      handleColorClick(Math.floor(x / (pixelSize + borderSize)) * 10 + Math.floor(y / (pixelSize + borderSize)))
+
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = newColor;
+      ctx.fillRect(cellX + borderSize, cellY + borderSize, pixelSize, pixelSize);
+    }
+  }
+
+  // function getRandomColor() {
+  //   const letters = "0123456789ABCDEF";
+  //   let color = "#";
+  //   for (let i = 0; i < 6; i++) {
+  //     color += letters[Math.floor(Math.random() * 16)];
+  //   }
+  //   return color;
+  // }
+  return (
+    <Grid justifyContent="center" width="100%" templateColumns="1fr 1fr">
+      <GridItem justifySelf="center">
+        <Grid templateColumns={"repeat(10, 21px)"} templateRows={"repeat(10, 21px)"}>
+          {/*blockGrid(colors)*/}
+          <canvas ref={blockCanvas} />
+        </Grid>
+      </GridItem>
+      <GridItem justifySelf="center">
+        <MintPalette color={newColor} onClick={handleChangeColor} />
+      </GridItem>
+    </Grid>
+  )
+}
