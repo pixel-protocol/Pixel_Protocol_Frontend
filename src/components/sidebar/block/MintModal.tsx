@@ -3,18 +3,16 @@ import React, { useEffect, useState } from 'react'
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
   Text, Step, StepDescription, StepIcon, StepIndicator, StepNumber, StepSeparator,
-  StepStatus, StepTitle, Stepper, useSteps, Box, ModalFooter, Button, Grid, GridItem, Spacer, Image, Flex, Link, Card, CardBody, Stat, StatHelpText, StatLabel, StatNumber, VStack, Badge, SimpleGrid
+  StepStatus, StepTitle, Stepper, useSteps, Box, ModalFooter, Button, Grid, GridItem, Spacer, Image, Flex, Link, Card, CardBody, Stat, StatHelpText, StatLabel, StatNumber, VStack, Badge, SimpleGrid, Spinner
 } from '@chakra-ui/react'
 
 import { getColorForTier } from '@/helper/misc'
 import MaticIcon from '@/components/icons/MaticIcon'
 
 import BlockCanvas from '@/components/sidebar/block/BlockCanvas'
-import BlockCell from '@/components/sidebar/block/BlockCell'
 
 function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModalClose: () => void }) {
   const [colors, setColors] = useState<string[]>([])
-  const [newColor, setNewColor] = useState('#FFFFFF')
 
   useEffect(() => {
     let temp = []
@@ -31,6 +29,7 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
   const steps = [
     { title: 'Select Color for Pixels', forwardButtonText: 'Proceed' },
     { title: 'Preview Block Design', forwardButtonText: 'Mint' },
+    { title: 'Confirm Transaction' }
   ]
 
   const { activeStep, setActiveStep, goToNext, goToPrevious } = useSteps({
@@ -40,20 +39,14 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
 
   const handleMint = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    setActiveStep(2)
     //mint logic
-    setActiveStep(3)
-  }
-
-  const blockGrid = (colors: string[]) => {
-    let grid = []
-    for (let y = 0; y < 10; y++) {
-      for (let x = 0; x < 10; x++) {
-        grid.push(<BlockCell color={colors[x + y * 10]} active={activeStep == 0}
-          onClick={(activeStep == 0) ? handleSelect : () => { }} index={x + y * 10}
-          styles={(activeStep != 0) ? { color: { cursor: "default" } } : {}} />)
-      }
-    }
-    return grid
+    new Promise((resolve) => {
+      setTimeout(() => {
+        setActiveStep(3)
+        resolve("Success");
+      }, 5000); // Wait for 5 seconds
+    });
   }
 
   const onCellClick = (index, newColor) => {
@@ -64,16 +57,12 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
     });
   }
 
-  const handleNewColorChange = (e) => {
-    setNewColor(e)
-  }
-
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={onModalClose} size={activeStep < 3 ? "4xl" : "sm"}>
         <ModalOverlay />
         <ModalContent>
-          {(activeStep < 2) && <Box m={5} mr={10}>
+          {(activeStep < 3) && <Box m={5} mr={10}>
             <Stepper index={activeStep}>
               {steps.map((step, index) => (
                 <Step key={index}>
@@ -137,6 +126,7 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
                   </VStack>
                 </GridItem>
               </SimpleGrid>}
+            {(activeStep == 2) && <SimpleGrid><Spinner size='xl' justifySelf="center" /></SimpleGrid>}
             {(activeStep == 3) && <VStack spacing={5} mt={5}><Image justifySelf="center"
               width={150}
               objectFit='scale-down'
@@ -151,7 +141,7 @@ function MintModal({ isModalOpen, onModalClose }: { isModalOpen: boolean, onModa
             <Spacer />
             {(activeStep == 3) && (<Button colorScheme='purple' onClick={onModalClose} alignSelf="center">Close</Button>)}
             <Spacer />
-            {(activeStep > 0 && activeStep < 3) && (<Button colorScheme='purple' onClick={goToPrevious} alignSelf="center">Back</Button>)}
+            {(activeStep > 0 && activeStep < 2) && (<Button colorScheme='purple' onClick={goToPrevious} alignSelf="center">Back</Button>)}
           </ModalFooter>
         </ModalContent>
       </Modal >
