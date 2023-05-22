@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CompactPicker, ColorResult, Color } from "@hello-pangea/color-picker";
-import { Box, Button, Grid, GridItem, Icon } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Icon, VStack } from "@chakra-ui/react";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 const colorChoices = [
@@ -39,49 +39,48 @@ interface PixelPaletteProps {
 const PixelPalette = (props: PixelPaletteProps) => {
 
   return (
-    <Grid templateColumns="1fr 1fr 1fr" templateRows='repeat(2, 1fr)'
-      alignItems="center" width={["100%", 250]} ml={[0, 5]} mt={5}>
-      <GridItem justifySelf="right">
-        <Box
-          w="60px"
-          h="60px"
-          borderRadius="lg"
-          border="2px solid"
-          borderColor="gray.500"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          bg={props.orgColor ? props.orgColor : "#ffffff"}
-        />
-      </GridItem>
-      <GridItem justifySelf="center">
-        <Icon as={MdOutlineKeyboardDoubleArrowRight} boxSize={50} />
-      </GridItem>
-      <GridItem justifySelf="left">
-        <Box
-          w="60px"
-          h="60px"
-          borderRadius="lg"
-          border="2px solid"
-          borderColor="gray.500"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          bg={props.color}
-        />
-      </GridItem>
-      <GridItem colSpan={3} justifySelf="center">
-        <Button colorScheme='purple' variant='solid' width={250} onClick={props.onButtonClick}>Replace Color</Button>
-      </GridItem>
-      <GridItem colSpan={3} justifySelf="center">
-        <CompactPicker
-          color={props.color}
-          colors={colorChoices}
-          onChangeComplete={props.handleChangeComplete}
-          styles={{ bg: { boxShadow: 'none' } } as any}
-        />
-      </GridItem>
-    </Grid>
+    <VStack spacing={2} align="stretch">
+      <Grid templateColumns="1fr 1fr 1fr"
+        alignItems="center" w="100%" my={3}>
+        <GridItem justifySelf="right">
+          <Box
+            w="60px"
+            h="60px"
+            borderRadius="lg"
+            border="2px solid"
+            borderColor="gray.500"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            bg={props.orgColor ? props.orgColor : "#ffffff"}
+          />
+        </GridItem>
+        <GridItem justifySelf="center">
+          <Icon as={MdOutlineKeyboardDoubleArrowRight} boxSize={50} />
+        </GridItem>
+        <GridItem justifySelf="left">
+          <Box
+            w="60px"
+            h="60px"
+            borderRadius="lg"
+            border="2px solid"
+            borderColor="gray.500"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            bg={props.color}
+          />
+        </GridItem>
+      </Grid>
+
+      <CompactPicker
+        color={props.color}
+        colors={colorChoices}
+        onChangeComplete={props.handleChangeComplete}
+        styles={{ bg: { boxShadow: 'none' } } as any}
+      />
+      <Button colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
+    </VStack>
   )
 
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { ethers, BigNumber } from "ethers"
-import { Mode, Coordinates, ChainData } from "@/constant/types";
+import { Mode, Coordinates, ChainData, Tier } from "@/constant/types";
 
 
 import { useStateCallback } from "../../../helper/hooks"
@@ -8,6 +8,8 @@ import { useStateCallback } from "../../../helper/hooks"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import styled from 'styled-components'
 import chainData from "@/constant/chain.json"
+import { coordToIdBlock, coordToTierBlock } from "@/helper/conversion";
+
 
 
 import {
@@ -26,6 +28,17 @@ import { Box } from '@chakra-ui/react'
 
 
 const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
+    const [id, setId] = useState<number>(0)
+    const [tier, setTier] = useState<Tier>("Bronze")
+    useEffect(() => {
+        setId(coordToIdBlock(coordinates.x, coordinates.y))
+        setTier(coordToTierBlock(coordinates.x, coordinates.y))
+    }, [])
+
+    useEffect(() => {
+        setId(coordToIdBlock(coordinates.x, coordinates.y))
+        setTier(coordToTierBlock(coordinates.x, coordinates.y))
+    }, [coordinates])
     const cData: ChainData = chainData;
     const { address, connector, isConnected } = useAccount()
     const { chain, chains } = useNetwork()
@@ -53,8 +66,8 @@ const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
 
 
     return (
-        <Box m="2">
-            <Sections />
+        <Box p="2">
+            <Sections id={id} coordinates={coordinates} tier={tier} />
         </Box>
     )
 }
