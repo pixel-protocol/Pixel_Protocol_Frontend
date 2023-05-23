@@ -5,6 +5,7 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { colorChoices } from "@/constant/constants";
 
 interface PixelPaletteProps {
+  isLoading: boolean,
   orgColor: string | undefined,
   handleChangeComplete?: (color: ColorResult) => void,
   color: string | undefined,
@@ -57,7 +58,7 @@ const PixelPalette = (props: PixelPaletteProps) => {
       </VStack>
       {(props.orgColor === props.color) ? <Alert status="error"><AlertIcon /><Text>Select a different color!</Text></Alert> : null}
 
-      <Button isDisabled={props.orgColor === props.color} colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
+      <Button isLoading={props.isLoading} loadingText="Replacing Color" isDisabled={props.orgColor === props.color} colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
     </VStack>
   )
 

@@ -38,10 +38,11 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     abi: blockABI,
   }
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const { data, isLoading, isSuccess, isError, write } = useContractWrite({
     ...blockContract,
     functionName: 'mint',
-    onSuccess() {
+    onSettled(data, error) {
+      console.log('Settled', { data, error })
       setActiveStep(3)
     }
   })
@@ -77,9 +78,9 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={onModalClose} size={"3xl"}>
+      <Modal isOpen={isModalOpen} onClose={onModalClose} size={"3xl"} >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent minH={"60vh"}>
           <Box m={5} mr={10}>
             <Stepper index={activeStep}>
               {steps.map((step, index) => (
@@ -108,10 +109,10 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
             }
             {(activeStep == 2) && <SimpleGrid><Spinner size='xl' justifySelf="center" /></SimpleGrid>}
             {(activeStep == 3) && <VStack spacing={5} mt={5}><Image justifySelf="center"
-              width={150}
+              width={250}
               objectFit='scale-down'
-              src='/images/GreenTick.png'
-              alt='transaction complete'
+              src={(isSuccess) ? '/images/GreenTick.png' : '/images/RedCross.png'}
+              alt={(isSuccess) ? 'Transaction Complete' : 'Transaction Failed'}
             />
               <Text>Successfully Minted! Block #id <Link color="blue.500">view txn</Link></Text></VStack>}
           </ModalBody>

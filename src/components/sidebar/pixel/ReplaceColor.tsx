@@ -58,7 +58,7 @@ const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, 
   return (
     <Card variant="filled">
       <CardBody>
-        <PixelPalette orgColor={color} color={newColor} handleChangeComplete={(c: ColorResult) => { setNewColor(c.hex as `#${string}`) }}
+        <PixelPalette isLoading={isLoading} orgColor={color} color={newColor} handleChangeComplete={(c: ColorResult) => { setNewColor(c.hex as `#${string}`) }}
           onButtonClick={handleChangeColor} />
       </CardBody>
     </Card>
