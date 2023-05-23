@@ -13,8 +13,8 @@ import { ColorResult } from "@hello-pangea/color-picker";
 import { hexToDec, invertColor } from '@/helper/conversion';
 
 import chainData from "@/constant/chain.json"
-import blockABI from "@/constant/abis/Block";
-import pixelABI from "@/constant/abis/Pixel";
+import blockABI from "@/constant/abis/Block.json";
+import pixelABI from "@/constant/abis/Pixel.json";
 
 import PixelPalette from '@/components/sidebar/pixel/PixelPalette'
 

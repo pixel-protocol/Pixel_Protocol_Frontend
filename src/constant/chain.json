@@ -1,8 +1,8 @@
 {
     "polygonMumbai": {
         "contractAddresses": [
-            "0xe4ed1a5cf6e0cd705975Be663791A1Af010f67eD",
-            "0xB1591D2685153d20495351884534367148868A74"
+            "0x5AE974b4DC19200461Afc64BC23f9816472EB4c8",
+            "0x1699151c66f1818f5b712de0F0770370E9F58eE1"
         ],
         "fairValueEther": {
             "Bronze": 0.01,
