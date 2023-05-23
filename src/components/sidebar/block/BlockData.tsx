@@ -17,14 +17,27 @@ import { coordToTierBlock } from '@/helper/conversion'
 
 import { useNetwork, useContractRead } from 'wagmi'
 
-import blockABI from '@/constant/abis/Block'
+import blockABI from '@/constant/abis/Block.json'
 import BlockArt from '@/components/sidebar/block/BlockArt'
 
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-  const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
+  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    } else {
+      setFairValuePerPixel(0)
+    }
+  }, [chain, tier])
 
   return (
     <Card variant="filled">
@@ -80,8 +93,8 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
             <CardBody px="3" py="2">
               <Stat>
                 <StatLabel color="purple">Fair Value / Mint Price</StatLabel>
-                <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel[tier] * 100} MATIC</StatNumber>
-                <StatHelpText mb="0">{fairValuePerPixel[tier]} MATIC per Pixel</StatHelpText>
+                <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel * 100} MATIC</StatNumber>
+                <StatHelpText mb="0">{fairValuePerPixel} MATIC per Pixel</StatHelpText>
               </Stat>
             </CardBody>
           </Card>

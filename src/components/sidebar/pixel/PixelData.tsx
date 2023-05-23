@@ -21,19 +21,24 @@ import { pixelIdToBlockId } from "@/helper/conversion";
 const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, color: `#${string}` }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-  const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
+  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
 
 
   const [blockId, setBlockId] = useState(0)
 
   useEffect(() => {
-    setBlockId(pixelIdToBlockId(id))
-  })
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    }
+  }, [])
 
   useEffect(() => {
-    setBlockId(pixelIdToBlockId(id))
-  }, [id])
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    } else {
+      setFairValuePerPixel(0)
+    }
+  }, [chain, tier])
 
   return (<Card variant="filled">
     <CardBody>
@@ -94,7 +99,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
           <CardBody p="3">
             <Stat>
               <StatLabel color="purple">Fair Value</StatLabel>
-              <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel[tier]} MATIC</StatNumber>
+              <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel} MATIC</StatNumber>
             </Stat>
           </CardBody>
         </Card>

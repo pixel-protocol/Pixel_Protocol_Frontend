@@ -7,7 +7,6 @@ import { useAccount, useNetwork, useContractRead } from "wagmi";
 
 import chainData from "@/constant/chain.json"
 import blockABI from "@/constant/abis/Block";
-import pixelABI from "@/constant/abis/Pixel";
 import { zeroAddress } from "@/constant/constants";
 
 
@@ -15,9 +14,24 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
 
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+  const [blockAddress, setBlockAddress] = useState<`0x${string}`>(zeroAddress)
   const [blockOwner, setBlockOwner] = useState<`0x${string}`>(zeroAddress)
   const [pixelColors, setPixelColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setBlockAddress(cData[chain.name]["contractAddresses"][1])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setBlockAddress(cData[chain.name]["contractAddresses"][1])
+    } else {
+      setBlockAddress(zeroAddress)
+    }
+  }, [chain])
 
   const blockContract = {
     address: blockAddress,
@@ -34,7 +48,7 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
 
     ...blockContract,
     functionName: 'ownerOf',
-    args: [id],
+    args: [BigInt(id)],
     ...readConfig,
     onSuccess(data) {
       setBlockOwner(data as `0x${string}`)
@@ -51,7 +65,7 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
 
     ...blockContract,
     functionName: 'getPixelColors',
-    args: [id],
+    args: [BigInt(id)],
     ...readConfig,
     onSuccess(data) {
       const hexCodes = (data as number[]).map(x => "#" + x.toString(16).padStart(6, '0') as `#${string}`)

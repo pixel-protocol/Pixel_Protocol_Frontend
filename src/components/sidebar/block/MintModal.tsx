@@ -16,7 +16,7 @@ import blockABI from "@/constant/abis/Block";
 import pixelABI from "@/constant/abis/Pixel";
 
 import { useNetwork, useContractWrite } from 'wagmi'
-import { parseEther } from 'viem'
+import { parseEther, zeroAddress } from 'viem'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 
 import FirstMintStep from '@/components/sidebar/block/FirstMintStep'
@@ -24,13 +24,39 @@ import SecondMintStep from '@/components/sidebar/block/SecondMintStep'
 import { invertColor, hexToDec } from '@/helper/conversion'
 
 
+
 function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: number, coordinates: Coordinates, tier: Tier, isModalOpen: boolean, onModalClose: () => void }) {
 
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+  const [blockAddress, setBlockAddress] = useState<`0x${string}`>(zeroAddress)
+  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+  const [blockExplorerTx, setBlockExplorerTx] = useState<string>("")
 
-  const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
+  //const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+  //const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : null
+  //const blockExplorerTx = (chain && chain.name in cData) ? cData[chain.name]["blockExplorerTx"] : null
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setBlockAddress(cData[chain.name]["contractAddresses"][1])
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+      setBlockExplorerTx(cData[chain.name]["blockExplorerTx"])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setBlockAddress(cData[chain.name]["contractAddresses"][1])
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+      setBlockExplorerTx(cData[chain.name]["blockExplorerTx"])
+    } else {
+      setBlockAddress(zeroAddress)
+      setFairValuePerPixel(0)
+      setBlockExplorerTx("")
+    }
+  }, [chain, tier])
+
   const [colors, setColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
 
   const blockContract = {
@@ -38,9 +64,11 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     abi: blockABI,
   }
 
-  const { data, isLoading, isSuccess, isError, write } = useContractWrite({
+  const { data, error, isLoading, isSuccess, isError, write } = useContractWrite({
     ...blockContract,
     functionName: 'mint',
+    args: [BigInt(id), colors.map(c => hexToDec("0x" + c.slice(1)))],
+    value: parseEther((fairValuePerPixel * 100).toString() as `${number}`),
     onSettled(data, error) {
       console.log('Settled', { data, error })
       setActiveStep(3)
@@ -62,10 +90,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     e.preventDefault()
     setActiveStep(2)
     //mint logic
-    write({
-      args: [id, colors.map(c => invertColor(hexToDec(c.slice(1))))],
-      value: parseEther((fairValuePerPixel[tier] * 100).toString() as `${number}`)
-    })
+    write()
   }
 
   const onCellClick = (index: number, newColor: `#${string}`) => {
@@ -75,6 +100,13 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
       return temp;
     });
   }
+  console.log("Chain: " + chain?.name)
+  console.log("Block Address: " + blockAddress)
+  console.log("ID: " + id)
+  console.log("BigInt ID: " + BigInt(id))
+  console.log(colors)
+  console.log(colors.map(c => hexToDec("0x" + c.slice(1))))
+
 
   return (
     <>
@@ -105,7 +137,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
           <Spacer />
           <ModalBody>
             {(activeStep == 0) && <FirstMintStep colors={colors} setColors={setColors} onCellClick={onCellClick} />}
-            {(activeStep == 1) && <SecondMintStep id={id} coordinates={coordinates} tier={tier} fairValuePerPixel={fairValuePerPixel[tier]} colors={colors} />
+            {(activeStep == 1) && <SecondMintStep id={id} coordinates={coordinates} tier={tier} fairValuePerPixel={fairValuePerPixel} colors={colors} />
             }
             {(activeStep == 2) && <SimpleGrid><Spinner size='xl' justifySelf="center" /></SimpleGrid>}
             {(activeStep == 3) && <VStack spacing={5} mt={5}><Image justifySelf="center"
@@ -114,7 +146,12 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
               src={(isSuccess) ? '/images/GreenTick.png' : '/images/RedCross.png'}
               alt={(isSuccess) ? 'Transaction Complete' : 'Transaction Failed'}
             />
-              <Text>Successfully Minted! Block #id <Link color="blue.500">view txn</Link></Text></VStack>}
+
+              {(isSuccess) ? <Text>
+                Successfully Minted! Block #{id} <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`}>view txn</Link></Text>
+                : <Text>Mint Failed! {error?.message}</Text>}
+
+            </VStack>}
           </ModalBody>
           <ModalFooter>
             {(activeStep === 1) && (<Button colorScheme='purple' onClick={goToPrevious} alignSelf="flex-start"><ArrowBackIcon /> Back</Button>)}

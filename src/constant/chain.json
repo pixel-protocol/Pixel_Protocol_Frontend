@@ -1,5 +1,5 @@
 {
-    "polygonMumbai": {
+    "Polygon Mumbai": {
         "contractAddresses": [
             "0x5AE974b4DC19200461Afc64BC23f9816472EB4c8",
             "0x1699151c66f1818f5b712de0F0770370E9F58eE1"
@@ -8,6 +8,7 @@
             "Bronze": 0.01,
             "Silver": 0.0125,
             "Gold": 0.015
-        }
+        },
+        "blockExplorerTx": "https://mumbai.polygonscan.com/tx/"
     }
 }

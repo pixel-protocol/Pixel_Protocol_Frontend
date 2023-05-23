@@ -84,7 +84,7 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
 
             {
                 //Coordinates={pointerPosition}
-                (mode === 'Block') ? <Block coordinates={{ "x": 1, "y": 1 }} /> : <Pixel coordinates={{ "x": 1, "y": 1 }} />}
+                (mode === 'Block') ? <Block coordinates={{ "x": 1, "y": 1 }} /> : <Pixel coordinates={{ "x": 10, "y": 10 }} />}
 
 
         </SideBarContainer>

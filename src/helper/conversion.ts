@@ -81,5 +81,5 @@ export const pixelCoordToBlockCoord = (x: number, y: number) => {
 
 
 export const invertColor = (dec: number) => {
-    return 16777216 - dec;
+    return 16777215 - dec;
 }

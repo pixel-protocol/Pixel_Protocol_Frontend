@@ -26,8 +26,21 @@ const cData: ChainData = chainData;
 const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-  const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
+  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
+    } else {
+      setFairValuePerPixel(0)
+    }
+  }, [chain, tier])
 
   return (<>
     <Card variant="filled">
@@ -44,7 +57,7 @@ const Mint = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
                 <CardBody p="3">
                   <Stat>
                     <StatLabel color="purple">You pay</StatLabel>
-                    <StatNumber my="1" fontSize={"sm"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel[tier] * 100} MATIC</StatNumber>
+                    <StatNumber my="1" fontSize={"sm"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel * 100} MATIC</StatNumber>
                   </Stat>
                 </CardBody>
               </Card>

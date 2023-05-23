@@ -13,14 +13,14 @@ import { ColorResult } from "@hello-pangea/color-picker";
 import { hexToDec, invertColor } from '@/helper/conversion';
 
 import chainData from "@/constant/chain.json"
-import blockABI from "@/constant/abis/Block.json";
-import pixelABI from "@/constant/abis/Pixel.json";
+import pixelABI from "@/constant/abis/Pixel";
 
 import PixelPalette from '@/components/sidebar/pixel/PixelPalette'
 
 import { Tier, Coordinates, ChainData } from '@/constant/types'
 
 import { useContractWrite, useAccount, useNetwork } from 'wagmi'
+import { zeroAddress } from 'viem';
 
 
 
@@ -30,8 +30,22 @@ const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, 
   const cData: ChainData = chainData;
   const { address, connector, isConnected } = useAccount()
   const { chain, chains } = useNetwork()
-  const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
+  const [pixelAddress, setPixelAddress] = useState<`0x${string}`>(zeroAddress)
   const [newColor, setNewColor] = useState<`#${string}`>('#ffffff')
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setPixelAddress(cData[chain.name]["contractAddresses"][0])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (chain && chain.name in cData) {
+      setPixelAddress(cData[chain.name]["contractAddresses"][0])
+    } else {
+      setPixelAddress(zeroAddress)
+    }
+  }, [chain])
 
 
   const pixelContract = {
@@ -41,18 +55,20 @@ const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, 
 
   const { data, isLoading, isSuccess, write } = useContractWrite({
     ...pixelContract,
-    functionName: 'transform(uint24,uint256)',
+    functionName: 'transform',
+    args: [hexToDec("0x" + newColor.slice(1)), BigInt(id)],
     onSuccess() {
       setColor(newColor)
+    },
+    onError(e) {
+      console.log(e.message)
     }
   })
 
 
   const handleChangeColor = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    write({
-      args: [invertColor(hexToDec(newColor.slice(1))), id],
-    })
+    write()
   }
 
   return (
