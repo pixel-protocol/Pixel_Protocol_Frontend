@@ -29,7 +29,7 @@ const SideBarContainer = styled.div`position: absolute;
 left: 0;
 top: 0;
 height: 100vh;
-width: 400px;
+width: 420px;
 background-color: white;
 
 @media (max-width: 992px) {

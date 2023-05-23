@@ -1,11 +1,11 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useState, useEffect } from "react";
 
 import {
   Card, CardBody, Box, Grid, GridItem, VStack, Image, Badge, Stat,
   StatLabel,
   StatNumber,
   StatHelpText,
-  Text
+  Text, Alert, AlertIcon, Button, Link
 } from '@chakra-ui/react'
 import PixelPalette from "@/components/sidebar/pixel/PixelPalette";
 import { ColorResult } from "@hello-pangea/color-picker";
@@ -16,7 +16,8 @@ import { getColorForTier } from "@/helper/misc";
 import chainData from "@/constant/chain.json"
 import { useNetwork } from "wagmi";
 import MaticIcon from "@/components/icons/MaticIcon";
-
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { pixelIdToBlockId } from "@/helper/conversion";
 const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, color: `#${string}` }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
@@ -24,12 +25,20 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
   const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : cData["polygonMumbai"]["fairValueEther"]
 
 
+  const [blockId, setBlockId] = useState(0)
 
+  useEffect(() => {
+    setBlockId(pixelIdToBlockId(id))
+  })
+
+  useEffect(() => {
+    setBlockId(pixelIdToBlockId(id))
+  }, [id])
 
   return (<Card variant="filled">
     <CardBody>
-      <VStack spacing={2} align="stretch">
-        <Grid templateColumns="1fr 3fr" gap={6} alignItems="center" mb={5}>
+      <VStack spacing={3} align="stretch">
+        <Grid templateColumns="1fr 3fr" gap={6} alignItems="center">
           <GridItem h="100%">{(exists) ? <Box
             w="80px"
             h="80px"
@@ -85,11 +94,16 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
           <CardBody p="3">
             <Stat>
               <StatLabel color="purple">Fair Value</StatLabel>
-              <StatNumber my="1"><MaticIcon boxSize={12} mr="2" />{fairValuePerPixel[tier]} MATIC</StatNumber>
-              <StatHelpText mb="0">≈$1.02</StatHelpText>
+              <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel[tier]} MATIC</StatNumber>
             </Stat>
           </CardBody>
         </Card>
+        <Alert status='info'>
+          <AlertIcon />
+          <Text>This Pixel belongs to <Link color="purple">Block #{blockId}<ExternalLinkIcon ml={1} /></Link></Text>
+        </Alert>
+
+
       </VStack>
     </CardBody>
   </Card>)

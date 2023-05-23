@@ -48,7 +48,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
 
   const steps = [
     { title: 'Select Colors', forwardButtonText: 'Proceed' },
-    { title: 'Review & Mint', forwardButtonText: 'Mint' },
+    { title: 'Preview & Mint', forwardButtonText: 'Mint' },
     { title: 'View Transaction', }
   ]
 

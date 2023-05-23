@@ -27,7 +27,7 @@ const FirstMintStep = ({ colors, setColors, onCellClick }:
         <VStack spacing={8} align={"stretch"}>
           <Alert status='warning'>
             <AlertIcon />
-            <Text color="gray">Pixels are white by default</Text>
+            <Text>Pixels are white by default!</Text>
           </Alert>
           <Center>
             <CompactPicker

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CompactPicker, ColorResult, Color } from "@hello-pangea/color-picker";
-import { Box, Button, Grid, GridItem, Icon, VStack } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Icon, VStack, Alert, AlertIcon, Text } from "@chakra-ui/react";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { colorChoices } from "@/constant/constants";
 
@@ -14,7 +14,7 @@ interface PixelPaletteProps {
 const PixelPalette = (props: PixelPaletteProps) => {
 
   return (
-    <VStack spacing={2} align="stretch">
+    <VStack spacing={3} align="stretch">
       <Grid templateColumns="1fr 1fr 1fr"
         alignItems="center" w="100%" my={3}>
         <GridItem justifySelf="right">
@@ -52,9 +52,10 @@ const PixelPalette = (props: PixelPaletteProps) => {
           color={props.color}
           colors={colorChoices}
           onChangeComplete={props.handleChangeComplete}
-          styles={{ bg: { boxShadow: 'none' } }}
+          styles={{ bg: { boxShadow: 'none' }, compact: { width: "280px", } }}
         />
       </VStack>
+      {(props.orgColor === props.color) ? <Alert status="error"><AlertIcon /><Text>Select a different color!</Text></Alert> : null}
 
       <Button isDisabled={props.orgColor === props.color} colorScheme='purple' variant='solid' onClick={props.onButtonClick}>Replace Color</Button>
     </VStack>

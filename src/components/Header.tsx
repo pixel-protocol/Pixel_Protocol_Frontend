@@ -29,7 +29,7 @@ const Header = () => {
     <>
       <div id='brandLogo' className="fixed p-4 h-0">
         <LogoContainer onClick={() => window.location.href = '/'}>
-          <Logo src="/images/logo.png" alt="logo" width="64" height="64" />
+          <Logo src="/images/pixellogo.png" alt="logo" width="64" height="64" />
 
         </LogoContainer>
       </div >

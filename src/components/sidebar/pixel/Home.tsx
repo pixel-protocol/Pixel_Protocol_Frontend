@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import BlockData from "@/components/sidebar/block/BlockData";
-import Mint from "@/components/sidebar/pixel/Mint";
 import { VStack } from "@chakra-ui/react";
 import { Coordinates, Tier, ChainData } from "@/constant/types";
 import { useAccount, useNetwork, useContractRead } from "wagmi";
@@ -79,8 +78,7 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   return (
     <VStack spacing={2} align="stretch">
       <PixelData id={id} coordinates={coordinates} tier={tier} exists={pixelOwner !== zeroAddress} owner={pixelOwner} color={pixelColor} />
-      {(pixelOwner === zeroAddress) ? <Mint id={id} coordinates={coordinates} tier={tier} /> : null}
-      {(address && pixelOwner === address) ? <ReplaceColor id={id} coordinates={coordinates} tier={tier} color={pixelColor} setColor={setPixelColor} /> : null}
+      {(/*address && pixelOwner === address*/ true) ? <ReplaceColor id={id} coordinates={coordinates} tier={tier} color={pixelColor} setColor={setPixelColor} /> : null}
 
     </VStack>
   )

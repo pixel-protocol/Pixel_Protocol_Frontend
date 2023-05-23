@@ -30,9 +30,9 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
     <Card variant="filled">
 
       <CardBody>
-        <VStack spacing={2} align="stretch">
+        <VStack spacing={3} align="stretch">
 
-          <Grid templateColumns="1fr 3fr" gap={6} alignItems="center" mb={5}>
+          <Grid templateColumns="1fr 3fr" gap={6} alignItems="center">
             <GridItem h="100%">
 
               <Box
@@ -77,11 +77,11 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
           {(exists) ?
             <Text>Owner: {owner}</Text> : null}
           <Card border="1px solid" borderColor="purple">
-            <CardBody p="3">
+            <CardBody px="3" py="2">
               <Stat>
                 <StatLabel color="purple">Fair Value / Mint Price</StatLabel>
-                <StatNumber my="1"><MaticIcon boxSize={12} mr="2" />{fairValuePerPixel[tier] * 100} MATIC</StatNumber>
-                <StatHelpText mb="0">≈$1.02 ({fairValuePerPixel[tier]} MATIC per Pixel)</StatHelpText>
+                <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel[tier] * 100} MATIC</StatNumber>
+                <StatHelpText mb="0">{fairValuePerPixel[tier]} MATIC per Pixel</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
