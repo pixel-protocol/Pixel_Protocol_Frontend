@@ -21,7 +21,6 @@ import {
 interface SidebarProps {
     mode: Mode,
     pointerPosition: Coordinates,
-    setPointSelected: Dispatch<SetStateAction<boolean>>,
     setPointerPosition: Dispatch<SetStateAction<Coordinates | null>>
 }
 
@@ -29,7 +28,7 @@ const SideBarContainer = styled.div`position: absolute;
 left: 0;
 top: 0;
 height: 100vh;
-width: 400px;
+width: 420px;
 background-color: white;
 
 @media (max-width: 992px) {
@@ -42,7 +41,7 @@ background-color: white;
 
 
 
-const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }: SidebarProps) => {
+const Sidebar = ({ mode, pointerPosition, setPointerPosition }: SidebarProps) => {
     const cData: ChainData = chainData;
     const { address, connector, isConnected } = useAccount()
     const { chain, chains } = useNetwork()
@@ -51,7 +50,6 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
     //for transition when updating
     //const [loading, setLoading] = useStateCallback(true)
     const onSidebarCancel = () => {
-        setPointSelected(false);
         setPointerPosition(null);
         console.log('cancel sidebar triggered!')
     }
@@ -84,7 +82,7 @@ const Sidebar = ({ mode, pointerPosition, setPointSelected, setPointerPosition }
 
             {
                 //Coordinates={pointerPosition}
-                (mode === 'Block') ? <Block coordinates={{ "x": 1, "y": 1 }} /> : <Pixel coordinates={{ "x": 1, "y": 1 }} />}
+                (mode === 'Block') ? <Block coordinates={pointerPosition} /> : <Pixel coordinates={pointerPosition} />}
 
 
         </SideBarContainer>

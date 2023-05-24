@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react'
 
-const BlockArt = ({ colors }: { colors: string[] }): JSX.Element => {
+const BlockArt = ({ colors }: { colors: `#${string}`[] }): JSX.Element => {
   const blockArtCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

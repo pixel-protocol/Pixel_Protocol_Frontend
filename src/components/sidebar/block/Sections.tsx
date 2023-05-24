@@ -15,8 +15,8 @@ import {
   useEnsName,
 } from 'wagmi'
 
-import blockABI from '@/constant/abis/Block'
-import pixelABI from '@/constant/abis/Pixel'
+import blockABI from '@/constant/abis/Block.json'
+import pixelABI from '@/constant/abis/Pixel.json'
 import { useStateCallback } from "../../../helper/hooks"
 
 import LoadingSpinner from "@/components/LoadingSpinner"
