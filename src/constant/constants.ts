@@ -13,7 +13,7 @@ export const colorChoices = [
   "#138075",
   "#66b84a",
   "#d4bf60",
-  "#ffffff",
+  "#FFFFFF",
   "#b86840",
   "#802d3b",
   "#451f3f",
