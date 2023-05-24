@@ -5,27 +5,59 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import Header from "@/components/Header"
 import { io } from "socket.io-client";
 import { Coordinates, Mode } from '@/constant/types';
+import { FloatingMenu } from '@/components/FloatingMenu'
+import Pill from '@/components/Pill'
 
 const socket = process.env.dev ? io("http://localhost:8000/") : io("d3perkfc3597u7.cloudfront.net");
+const BLOCK_SIZE = 10;
 
 const Home: NextPage = () => {
 
-  const [mode, setMode] = useState<Mode>('Pixel')
 
 
   const dragStart = useRef<any>(null);
-  const dragged = useRef(false);
   const pinched = useRef(false);
   const [cameraZoom, setCameraZoom] = useState(1);
   const [lastX, setLastX] = useState(0);
   const [lastY, setLastY] = useState(0);
   const [pointerPosition, setPointerPosition] = useState<Coordinates | null>(null);
-  const [pointSelected, setPointSelected] = useState(false);
+  const [selectedPointerPosition, setSelectedPointerPosition] = useState<Coordinates | null>(null);
   const [c, setC] = useState<HTMLCanvasElement | null>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageData = useRef<ImageData | null>(null);
   const offscreenCanvas = useRef<HTMLCanvasElement | null>(null);
+  const [mode, setMode] = useState<Mode>('Pixel')
+  const startMousePosition = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (!!window && !!selectedPointerPosition) {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('x', selectedPointerPosition.x.toString());
+      searchParams.set('y', selectedPointerPosition.y.toString());
+      searchParams.set('mode', mode);
+
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [selectedPointerPosition, mode])
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const x = searchParams.get('x');
+    const y = searchParams.get('y');
+    const mode = searchParams.get('mode');
+    if (x !== null && y !== null) {
+      moveToPoint(parseInt(x), parseInt(y));
+      setMode(mode ? mode as Mode : 'Pixel');
+    }
+  }, [])
+
+  const toggleMode = () => {
+    setMode((mode === "Pixel") ? "Block" : "Pixel");
+    setPointerPosition(null);
+    setSelectedPointerPosition(null);
+  }
 
   const redraw = useRef(() => {
     requestAnimationFrame(redraw.current);
@@ -58,10 +90,21 @@ const Home: NextPage = () => {
   }
 
   const moveToPoint = (x: number, y: number) => {
+    if (selectedPointerPosition && selectedPointerPosition.x == x && selectedPointerPosition.y == y) {
+      setSelectedPointerPosition(null);
+      setPointerPosition(null);
+      return
+    }
+
     if (x < 0 || x >= 1000 || y < 0 || y >= 1000) return;
 
-    setPointerPosition({ x, y })
-    setPointSelected(true);
+    if (mode === "Block") {
+      const bx = Math.min(Math.max(0, Math.floor(x / BLOCK_SIZE)), 99);
+      const by = Math.min(Math.max(0, Math.floor(y / BLOCK_SIZE)), 99);
+      setSelectedPointerPosition({ x: bx, y: by });
+    } else {
+      setSelectedPointerPosition({ x, y });
+    }
 
     setLastX(-x + window.innerWidth / (2 * 25));
     setLastY(-y + window.innerHeight / (2 * 25));
@@ -89,43 +132,6 @@ const Home: NextPage = () => {
     },
     onPinchEnd: () => {
       pinched.current = false;
-    },
-    onMove: ({ event }) => {
-      if (dragged || pointSelected) return;
-
-      const { x, y } = calculateRealPosition(event.clientX, event.clientY);
-      if (0 <= x && x < 1000 && 0 <= y && y < 1000) {
-        setPointerPosition({ x, y });
-      }
-    },
-    onClick: ({ event, moving, pinching, wheeling }) => {
-      if (dragged || moving || pinching || wheeling) return;
-
-      const { x, y } = calculateRealPosition(event.clientX, event.clientY);
-      moveToPoint(x, y);
-    },
-    onPointerDown: ({ event }) => {
-      dragStart.current = {
-        x: event.offsetX / cameraZoom - lastX,
-        y: event.offsetY / cameraZoom - lastY
-      };
-      // setDragged(true)
-      dragged.current = true;
-    },
-    onPointerMove: ({ event }) => {
-      if (!dragged.current || pinched.current) return;
-      const newLastX = event.offsetX / cameraZoom - dragStart.current.x;
-      const newLastY = event.offsetY / cameraZoom - dragStart.current.y;
-
-      const EDGE_PAD = 300 / cameraZoom;
-      if (newLastX < -1000 + EDGE_PAD || newLastX > window.innerWidth / cameraZoom - EDGE_PAD) return;
-      if (newLastY < -1000 + EDGE_PAD || newLastY > window.innerHeight / cameraZoom - EDGE_PAD) return;
-
-      setLastX(newLastX);
-      setLastY(newLastY);
-    },
-    onPointerUp: () => {
-      dragged.current = false;
     }
   },
     {
@@ -223,33 +229,93 @@ const Home: NextPage = () => {
 
       ctx.drawImage(offscreenCanvas.current, 0, 0);
 
-      if (pointerPosition) {
-        ctx.strokeStyle = 'rgba(255, 255, 0)';
-        ctx.lineWidth = 0.2
-        ctx.rect(pointerPosition.x, pointerPosition.y, 1, 1);
-        ctx.stroke();
+      if (mode === "Block") {
+        if (pointerPosition !== null) {
+          ctx.strokeStyle = 'rgb(255, 255, 0)';
+          ctx.lineWidth = 0.2
+          ctx.rect(pointerPosition.x * BLOCK_SIZE, pointerPosition.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.stroke();
+        }
+
+        if (selectedPointerPosition !== null) {
+          ctx.strokeStyle = 'rgb(255, 255, 0)';
+          ctx.lineWidth = 0.2
+          ctx.rect(selectedPointerPosition.x * BLOCK_SIZE, selectedPointerPosition.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.stroke();
+        }
+      } else {
+        if (pointerPosition !== null) {
+          ctx.strokeStyle = 'rgb(255, 255, 0)';
+          ctx.lineWidth = 0.2
+          ctx.rect(pointerPosition.x, pointerPosition.y, 1, 1);
+          ctx.stroke();
+        }
+
+        if (selectedPointerPosition !== null) {
+          ctx.strokeStyle = 'rgb(255, 255, 0)';
+          ctx.lineWidth = 0.2
+          ctx.rect(selectedPointerPosition.x, selectedPointerPosition.y, 1, 1);
+          ctx.stroke();
+        }
       }
 
 
       requestAnimationFrame(redraw.current);
     };
 
-  }, [ctx, c, lastX, lastY, cameraZoom, pointerPosition])
+  }, [ctx, c, lastX, lastY, cameraZoom, pointerPosition, selectedPointerPosition, mode])
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    dragStart.current = { x: e.clientX / cameraZoom - lastX, y: e.clientY / cameraZoom - lastY };
+    startMousePosition.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (startMousePosition.current.x === e.clientX && startMousePosition.current.y === e.clientY) {
+      const { x, y } = calculateRealPosition(e.clientX, e.clientY);
+      moveToPoint(x, y);
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (e.buttons === 1) {
+      const deltaX = e.clientX / cameraZoom - dragStart.current.x;
+      const deltaY = e.clientY / cameraZoom - dragStart.current.y;
+      setLastX(deltaX);
+      setLastY(deltaY);
+    } else {
+      const { x, y } = calculateRealPosition(e.clientX, e.clientY);
+      if (mode === "Block") {
+        if (0 <= x && x < 1000 && 0 <= y && y < 1000) {
+          const bx = Math.min(Math.max(0, Math.floor(x / BLOCK_SIZE)), 99);
+          const by = Math.min(Math.max(0, Math.floor(y / BLOCK_SIZE)), 99);
+
+          setPointerPosition({ x: bx, y: by });
+        }
+
+      } else {
+        if (0 <= x && x < 1000 && 0 <= y && y < 1000) {
+          setPointerPosition({ x, y });
+        }
+      }
+    }
+  };
 
   return (
     < div >
       <Header />
 
+      <FloatingMenu mode={mode} toggleMode={toggleMode} />
+
       <div id="canvas-container" className='bg-slate-300' style={{ overflow: 'hidden', height: '100vh' }}>
-        <canvas id="pixelCanvas" width={1000} height={1000} style={{ imageRendering: 'pixelated', touchAction: 'none' }} ref={canvasRef}></canvas>
+        <canvas id="pixelCanvas" width={1000} height={1000} style={{ imageRendering: 'pixelated', touchAction: 'none' }} ref={canvasRef}
+          onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}></canvas>
       </div>
+      <Pill pointerPosition={selectedPointerPosition as Coordinates} cameraZoom={cameraZoom} moveToPoint={moveToPoint} />
+
+
       {
-        //<Pill pointerPosition={pointerPosition as Coordinates} cameraZoom={cameraZoom} moveToPoint={moveToPoint} />
-      }
-      {/*<button onClick={() => adjustZoom(1)} style={{ position: 'absolute', right: 15, bottom: 30 }}>+</button>
-      <button onClick={() => adjustZoom(-1)} style={{ position: 'absolute', right: 15, bottom: 10 }}>-</button>*/}
-      {
-        (pointSelected || process.env.exposeSidebar) ? <Sidebar mode={mode} setPointSelected={setPointSelected} setPointerPosition={setPointerPosition} pointerPosition={pointerPosition as Coordinates} />
+        (selectedPointerPosition !== null || process.env.exposeSidebar) ? <Sidebar mode={mode} setPointerPosition={setPointerPosition} pointerPosition={pointerPosition as Coordinates} />
           : null
       }
 
