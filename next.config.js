@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     dev: true,
-    exposeSidebar: true,
+    exposeSidebar: false,
     modeForDebugging: 'Block'
   },
   eslint: {

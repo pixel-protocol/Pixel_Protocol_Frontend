@@ -160,7 +160,7 @@ const Home: NextPage = () => {
 
     redraw.current();
 
-    socket.on("canvasData", (data) => {
+    socket.on("canvas", (data) => {
       const dataArr = new Uint8Array(data);
 
       const arr = new Uint8ClampedArray(4000000);
@@ -171,10 +171,12 @@ const Home: NextPage = () => {
         arr[idx + 2] = dataArr[i + 2];
         arr[idx + 3] = 1;
       }
+      console.log("Data: ")
+      console.log(arr)
       imageData.current = new ImageData(arr, 1000, 1000);
       offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
     })
-    socket.on("pixelData", (data) => {
+    socket.on("colorChange", (data) => {
       const ids = data.ids; const colors = data.rgb;
 
       if (imageData.current) {
@@ -188,7 +190,7 @@ const Home: NextPage = () => {
         offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
       }
       else {
-        socket.emit("requestCanvasData")
+        socket.emit("requestCanvas")
       }
 
     })
