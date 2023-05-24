@@ -5,7 +5,7 @@ import BlockCanvas from "@/components/sidebar/block/BlockCanvas";
 import { CompactPicker } from "@hello-pangea/color-picker";
 import { colorChoices } from "@/constant/constants";
 const FirstMintStep = ({ colors, setColors, onCellClick }:
-  { colors: `#${string}`[], setColors: React.Dispatch<React.SetStateAction<`#${string}`[]>>, onCellClick: Function }) => {
+  { colors: `#${string}`[], setColors: React.Dispatch<React.SetStateAction<`#${string}`[]>>, onCellClick: (index: number, newColor: `#${string}`) => void }) => {
   const [newColor, setNewColor] = useState<`#${string}`>('#ffffff')
 
 
@@ -15,7 +15,7 @@ const FirstMintStep = ({ colors, setColors, onCellClick }:
   }
 
   const resetColor = () => {
-    setColors(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+    setColors([...Array(100)].map(_ => "#ffffff"))
   }
 
   return (

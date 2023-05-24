@@ -57,7 +57,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     }
   }, [chain, tier])
 
-  const [colors, setColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+  const [colors, setColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
 
   const blockContract = {
     address: blockAddress,
@@ -148,7 +148,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
             />
 
               {(isSuccess) ? <Text>
-                Successfully Minted! Block #{id} <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`}>view txn</Link></Text>
+                Successfully Minted! Block #{id} <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`} isExternal>view txn</Link></Text>
                 : <Text>Mint Failed! {error?.message}</Text>}
 
             </VStack>}
