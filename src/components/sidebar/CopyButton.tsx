@@ -1,6 +1,6 @@
 import { Tooltip, Icon, Box, border, Button } from "@chakra-ui/react"
 import { MdContentCopy } from "react-icons/md"
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function CopyButton({ target }: { target: string }) {
 
@@ -26,7 +26,7 @@ export default function CopyButton({ target }: { target: string }) {
 
   return (
     <Tooltip isOpen={isOpen} label="Copied!" bg="gray.500" placement="top" hasArrow={true} arrowPadding={0} gutter={0}>
-      <Button colorScheme='gray' p="0" m="0" borderRadius="full" size="sm" onClick={handleClick}>
+      <Button minW={0} colorScheme='gray' p="0" m="0" borderRadius="full" size="sm" onClick={handleClick}>
         <Icon as={MdContentCopy} style={{ cursor: "pointer" }} />
       </Button>
     </Tooltip>)

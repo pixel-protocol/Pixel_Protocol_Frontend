@@ -3,7 +3,8 @@ const nextConfig = {
   env: {
     dev: true,
     exposeSidebar: false,
-    modeForDebugging: 'Block'
+    modeForDebugging: 'Block',
+    POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY
   },
   eslint: {
     dirs: ['src'],

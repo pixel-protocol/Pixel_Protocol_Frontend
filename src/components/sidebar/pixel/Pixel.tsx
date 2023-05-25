@@ -39,31 +39,6 @@ const Pixel = ({ coordinates }: { coordinates: Coordinates }) => {
         setId(coordToIdPixel(coordinates.x, coordinates.y))
         setTier(coordToTierPixel(coordinates.x, coordinates.y))
     }, [coordinates])
-    const cData: ChainData = chainData;
-    const { address, connector, isConnected } = useAccount()
-    const { chain, chains } = useNetwork()
-    const [pixelAddress, blockAddress] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-    //get contract states
-    const [mintingFee, setMintingFee] = useStateCallback("0")
-    const [owner, setOwner] = useStateCallback("0")
-    const [isMinted, setIsMinted] = useStateCallback(false)
-    const [color, setColor] = useStateCallback(0)
-    const [tokenId, setTokenId] = useStateCallback("0")
-
-    const [isMinting, setIsMinting] = useStateCallback(false)
-
-    //for minting
-    const [selectedColorMint, setSelectedColorMint] = useState(0)
-
-
-    //for transition when updating
-    const [loading, setLoading] = useStateCallback(true)
-
-    const [test, setTest] = useStateCallback(0)
-
-
-
-
 
     return (
         <Box p="2">

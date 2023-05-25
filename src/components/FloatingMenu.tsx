@@ -15,11 +15,11 @@ const Row = styled.div`
     display: flex;
 `
 
-const MenuItem = styled.div<{ isActive: boolean, isLeft: boolean }>`
-    color: ${props => props.isActive ? 'white' : 'black'};
+const MenuItem = styled.div<{ isactive: boolean, isleft: boolean }>`
+    color: ${props => props.isactive ? 'white' : 'black'};
     padding: 5px 10px;
-    background-color: ${props => props.isActive ? '#222' : '#bbb'};
-    border-radius: ${props => props.isLeft ? '5px 0 0 5px' : '0 5px 5px 0'};
+    background-color: ${props => props.isactive ? '#222' : '#bbb'};
+    border-radius: ${props => props.isleft ? '5px 0 0 5px' : '0 5px 5px 0'};
     cursor: pointer;
 `
 
@@ -35,8 +35,8 @@ export function FloatingMenu({ mode, toggleMode }: { mode: Mode, toggleMode: () 
     return <Container>
         <Label>Select Mode</Label>
         <Row>
-            <MenuItem onClick={() => toggleMode()} isActive={mode === "Block"} isLeft={true}>Block</MenuItem>
-            <MenuItem onClick={() => toggleMode()} isActive={mode !== "Block"} isLeft={false}>Pixel</MenuItem>
+            <MenuItem onClick={() => toggleMode()} isactive={mode === "Block"} isleft={true}>Block</MenuItem>
+            <MenuItem onClick={() => toggleMode()} isactive={mode !== "Block"} isleft={false}>Pixel</MenuItem>
         </Row>
     </Container>
 }

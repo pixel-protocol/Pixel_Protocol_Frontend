@@ -19,62 +19,53 @@ import PixelPalette from '@/components/sidebar/pixel/PixelPalette'
 
 import { Tier, Coordinates, ChainData } from '@/constant/types'
 
-import { useContractWrite, useAccount, useNetwork } from 'wagmi'
+import { useContractWrite, useAccount, useNetwork, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { zeroAddress } from 'viem';
-
+import { testnetChain } from '@/constant/constants';
 
 
 const cData: ChainData = chainData;
 
 const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, coordinates: Coordinates, tier: Tier, color: `#${string}`, setColor: React.Dispatch<React.SetStateAction<`#${string}`>> }) => {
-  const cData: ChainData = chainData;
   const { address, connector, isConnected } = useAccount()
   const { chain, chains } = useNetwork()
-  const [pixelAddress, setPixelAddress] = useState<`0x${string}`>(zeroAddress)
+  const [pixelAddress, setPixelAddress] = cData[testnetChain]["contractAddresses"][0]
   const [newColor, setNewColor] = useState<`#${string}`>('#ffffff')
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setPixelAddress(cData[chain.name]["contractAddresses"][0])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setPixelAddress(cData[chain.name]["contractAddresses"][0])
-    } else {
-      setPixelAddress(zeroAddress)
-    }
-  }, [chain])
-
 
   const pixelContract = {
     address: pixelAddress,
     abi: pixelABI,
   }
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
     ...pixelContract,
     functionName: 'transform',
     args: [hexToDec("0x" + newColor.slice(1)), BigInt(id)],
-    onSuccess() {
+
+  })
+
+  const { data, error, isError, write } = useContractWrite(config)
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+    onSuccess(data) {
       setColor(newColor)
-    },
-    onError(e) {
-      console.log(e.message)
     }
   })
 
-
   const handleChangeColor = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    write()
+    write?.()
   }
 
   return (
     <Card variant="filled">
       <CardBody>
-        <PixelPalette isLoading={isLoading} orgColor={color} color={newColor} handleChangeComplete={(c: ColorResult) => { setNewColor(c.hex as `#${string}`) }}
+        <PixelPalette write={write} isLoading={isLoading} orgColor={color} color={newColor} handleChangeComplete={(c: ColorResult) => { setNewColor(c.hex as `#${string}`) }}
           onButtonClick={handleChangeColor} />
       </CardBody>
     </Card>

@@ -315,7 +315,7 @@ const Home: NextPage = () => {
 
 
       {
-        (selectedPointerPosition !== null || process.env.exposeSidebar) ? <Sidebar mode={mode} setPointerPosition={setPointerPosition} pointerPosition={pointerPosition as Coordinates} />
+        (selectedPointerPosition !== null || process.env.exposeSidebar) ? <Sidebar mode={mode} setPointerPosition={setSelectedPointerPosition} pointerPosition={selectedPointerPosition as Coordinates} />
           : null
       }
 

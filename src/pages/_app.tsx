@@ -6,14 +6,15 @@ import Head from 'next/head'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { polygonMumbai, polygon } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { ChakraProvider } from '@chakra-ui/react'
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-    polygonMumbai, polygon,
+    polygonMumbai,
   ],
-  [publicProvider()]
+  [alchemyProvider({ apiKey: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY as string }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({

@@ -15,47 +15,23 @@ import chainData from "@/constant/chain.json"
 import blockABI from "@/constant/abis/Block";
 import pixelABI from "@/constant/abis/Pixel";
 
-import { useNetwork, useContractWrite } from 'wagmi'
+import { useNetwork, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { parseEther, zeroAddress } from 'viem'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 
 import FirstMintStep from '@/components/sidebar/block/FirstMintStep'
 import SecondMintStep from '@/components/sidebar/block/SecondMintStep'
 import { invertColor, hexToDec } from '@/helper/conversion'
-
+import { testnetChain } from '@/constant/constants'
 
 
 function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: number, coordinates: Coordinates, tier: Tier, isModalOpen: boolean, onModalClose: () => void }) {
 
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [blockAddress, setBlockAddress] = useState<`0x${string}`>(zeroAddress)
-  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
-  const [blockExplorerTx, setBlockExplorerTx] = useState<string>("")
-
-  //const [pixelAddress, blockAddress]: [`0x${string}`, `0x${string}`] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-  //const fairValuePerPixel = (chain && chain.name in cData) ? cData[chain.name]["fairValueEther"] : null
-  //const blockExplorerTx = (chain && chain.name in cData) ? cData[chain.name]["blockExplorerTx"] : null
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setBlockAddress(cData[chain.name]["contractAddresses"][1])
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-      setBlockExplorerTx(cData[chain.name]["blockExplorerTx"])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setBlockAddress(cData[chain.name]["contractAddresses"][1])
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-      setBlockExplorerTx(cData[chain.name]["blockExplorerTx"])
-    } else {
-      setBlockAddress(zeroAddress)
-      setFairValuePerPixel(0)
-      setBlockExplorerTx("")
-    }
-  }, [chain, tier])
+  const blockAddress = cData[testnetChain]["contractAddresses"][1]
+  const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
+  const blockExplorerTx = cData[testnetChain]["blockExplorerTx"]
 
   const [colors, setColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
 
@@ -64,16 +40,27 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     abi: blockABI,
   }
 
-  const { data, error, isLoading, isSuccess, isError, write } = useContractWrite({
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
     ...blockContract,
     functionName: 'mint',
     args: [BigInt(id), colors.map(c => hexToDec("0x" + c.slice(1)))],
     value: parseEther((fairValuePerPixel * 100).toString() as `${number}`),
+  })
+
+  const { data, error, isError, write } = useContractWrite(config)
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
     onSettled(data, error) {
       console.log('Settled', { data, error })
       setActiveStep(3)
-    }
+    },
   })
+
 
   const steps = [
     { title: 'Select Colors', forwardButtonText: 'Proceed' },
@@ -88,9 +75,11 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
 
   const handleMint = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+
     setActiveStep(2)
     //mint logic
-    write()
+    write?.()
+
   }
 
   const onCellClick = (index: number, newColor: `#${string}`) => {
@@ -149,7 +138,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
 
               {(isSuccess) ? <Text>
                 Successfully Minted! Block #{id} <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`} isExternal>view txn</Link></Text>
-                : <Text>Mint Failed! {error?.message}</Text>}
+                : <Text>Mint Failed! {error?.message}{prepareError?.message}</Text>}
 
             </VStack>}
           </ModalBody>
@@ -159,7 +148,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
             {(activeStep === 3) && (<Button colorScheme='purple' onClick={onModalClose} alignSelf="center">Close</Button>)}
             <Spacer />
             {(activeStep === 0) && (<Button colorScheme='purple' onClick={goToNext} alignSelf="center">Proceed <ArrowForwardIcon /></Button>)}
-            {(activeStep === 1) && (<Button colorScheme='purple' onClick={handleMint} alignSelf="center">Mint</Button>)}
+            {(activeStep === 1) && (<Button colorScheme='purple' disabled={!write || isLoading} onClick={handleMint} alignSelf="center">Mint</Button>)}
 
           </ModalFooter>
         </ModalContent>

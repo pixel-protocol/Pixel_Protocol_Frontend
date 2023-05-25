@@ -7,37 +7,36 @@ import {
 } from '@chakra-ui/react'
 
 import { Coordinates, Tier, ChainData } from "@/constant/types";
-import { coordToIdPixel } from "@/helper/conversion";
+import { idToCoordBlock, pixelIdToBlockId } from "@/helper/conversion";
 import { getColorForTier } from "@/helper/misc";
 import chainData from "@/constant/chain.json"
 import { useAccount, useNetwork } from "wagmi";
 
 import MaticIcon from "@/components/icons/MaticIcon";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { pixelIdToBlockId } from "@/helper/conversion";
 import CopyButton from "@/components/sidebar/CopyButton";
 import OwnerIcon from "@/components/sidebar/OwnerIcon";
+
+import { testnetChain } from "@/constant/constants";
+
+const cData: ChainData = chainData;
+
 const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, color: `#${string}` }) => {
-  const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+
+  const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
+  const blockExplorerAcc = cData[testnetChain]["blockExplorerAcc"]
   const { address, connector, isConnected } = useAccount()
 
   const [blockId, setBlockId] = useState(0)
 
   useEffect(() => {
-    if (chain && chain.name in cData) {
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-    }
+    setBlockId(pixelIdToBlockId(id))
   }, [])
 
   useEffect(() => {
-    if (chain && chain.name in cData) {
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-    } else {
-      setFairValuePerPixel(0)
-    }
-  }, [chain, tier])
+    setBlockId(pixelIdToBlockId(id))
+  }, [id])
 
   const truncateAddress = (address: `0x${string}`) => {
     return address.slice(0, 5) + '...' + address.slice(-4)
@@ -97,8 +96,8 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
           //<Info ownerAddress={ownerAddress} blockId={blockId} price={price} />
         }
         {(exists) ?
-          <HStack spacing="0.2rem"><Text>Owner: {truncateAddress(owner)}</Text> <CopyButton target={owner} />
-            {(address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text>You</Text></HStack></Badge>}
+          <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
+            {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginLeft={"0.2rem"}>You</Text></HStack></Badge>}
           </HStack> : null}
         <Card border="1px solid" borderColor="purple">
           <CardBody p="3">
@@ -110,7 +109,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
         </Card>
         <Alert status='info'>
           <AlertIcon />
-          <Text>This Pixel belongs to <Link color="purple">Block #{blockId}<ExternalLinkIcon ml={1} /></Link></Text>
+          <Text>This Pixel belongs to <Link color="purple" href={`/app?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
         </Alert>
 
 

@@ -13,35 +13,26 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import MaticIcon from '@/components/icons/MaticIcon';
 import PixelIcon from '@/components/icons/PixelIcon';
 import BlockIcon from '@/components/icons/BlockIcon';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import chainData from "@/constant/chain.json"
 
 import { Tier, Coordinates, ChainData } from '@/constant/types'
 import MintModal from '@/components/sidebar/block/MintModal';
 import { testnetChain } from '@/constant/constants';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const cData: ChainData = chainData;
 
 
-const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number, coordinates: Coordinates, tier: Tier, isConnected: boolean, isValidChain: boolean }) => {
-  const { chain } = useNetwork()
-  const { chains, error, isLoading, pendingChainId, switchNetwork } =
-    useSwitchNetwork()
-
-  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
+const MintWalletNotConnected = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
-
-  const { openConnectModal } = useConnectModal();
 
   return (<>
     <Card variant="filled">
       <CardBody>
         <VStack spacing="3" align="stretch">
           <Image h="120px" src="/images/chest.svg" alt="buy me!" />
-
-
 
           <Grid templateColumns="repeat(9, 1fr)"
             alignItems="center" w="100%">
@@ -70,31 +61,20 @@ const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number
               </Card>
             </GridItem>
           </Grid>
-          {(isConnected) ? (isValidChain) ?
-            <Button loadingText="Minting" colorScheme='purple' onClick={onModalOpen}>
-              Mint
-            </Button> : <><Alert status="error">
-              <AlertIcon />
-              <Text>Please switch network to mint!</Text>
 
-            </Alert>
-              <Button disabled={!switchNetwork || chains[0].id === chain?.id} colorScheme='purple' onClick={() => switchNetwork?.(chains[0].id)}>Switch Network</Button>
+          <Alert status="error">
+            <AlertIcon />
+            <Text>Please Connect Wallet to Mint!</Text>
+          </Alert>
 
-            </> : <><Alert status="error">
-              <AlertIcon />
-              <Text>Please connect wallet to mint!</Text>
-            </Alert>
+          <ConnectButton />
 
-            <Button disabled={!openConnectModal || isConnected} colorScheme='purple' onClick={openConnectModal}>Connect Wallet</Button></>
-
-          }
         </VStack>
 
       </CardBody>
     </Card >
-    {isModalOpen && (<MintModal id={id} coordinates={coordinates} tier={tier} isModalOpen={isModalOpen} onModalClose={onModalClose} />)}
   </>
   )
 }
 
-export default Mint;
+export default MintWalletNotConnected;

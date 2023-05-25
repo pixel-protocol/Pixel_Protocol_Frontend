@@ -8,30 +8,17 @@ import { useAccount, useNetwork, useContractRead } from "wagmi";
 import chainData from "@/constant/chain.json"
 import blockABI from "@/constant/abis/Block";
 import { zeroAddress } from "@/constant/constants";
-
+import { testnetChain } from "@/constant/constants";
 
 const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
 
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [blockAddress, setBlockAddress] = useState<`0x${string}`>(zeroAddress)
+  const { address, connector, isConnected } = useAccount()
+
+  const blockAddress = cData[testnetChain]["contractAddresses"][1]
   const [blockOwner, setBlockOwner] = useState<`0x${string}`>(zeroAddress)
-  const [pixelColors, setPixelColors] = useState<`#${string}`[]>(Array.apply(null, Array(100)).map(_ => "#ffffff"))
-
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setBlockAddress(cData[chain.name]["contractAddresses"][1])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setBlockAddress(cData[chain.name]["contractAddresses"][1])
-    } else {
-      setBlockAddress(zeroAddress)
-    }
-  }, [chain])
+  const [pixelColors, setPixelColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
 
   const blockContract = {
     address: blockAddress,
@@ -70,9 +57,11 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     onSuccess(data) {
       const hexCodes = (data as number[]).map(x => "#" + x.toString(16).padStart(6, '0') as `#${string}`)
       setPixelColors(hexCodes)
+      console.log(data)
+
     },
     onError(err) {
-      setPixelColors(Array.apply(null, Array(100)).map(_ => "#ffffff"))
+      setPixelColors([...Array(100)].map(_ => "#ffffff"))
       console.log(err)
     },
 
@@ -81,6 +70,7 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   useEffect(() => {
     blockOwnerRefetch()
     pixelColorsRefetch()
+    console.log("ID Changed!")
   }, [id])
 
   useEffect(() => {
@@ -91,7 +81,9 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   return (
     <VStack spacing={2} align="stretch">
       <BlockData id={id} coordinates={coordinates} tier={tier} exists={blockOwner !== zeroAddress} owner={blockOwner} colors={pixelColors} />
-      {(blockOwner === zeroAddress) ? <Mint id={id} coordinates={coordinates} tier={tier} /> : null}
+      {(blockOwner === zeroAddress) ?
+        <Mint id={id} coordinates={coordinates} tier={tier} isConnected={isConnected} isValidChain={chain?.name === testnetChain} /> :
+        null}
 
     </VStack>
   )

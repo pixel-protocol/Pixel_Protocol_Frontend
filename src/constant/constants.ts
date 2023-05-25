@@ -30,3 +30,5 @@ export const colorChoices = [
 ]
 
 export const zeroAddress = "0x0000000000000000000000000000000000000000"
+
+export const testnetChain = "Polygon Mumbai"

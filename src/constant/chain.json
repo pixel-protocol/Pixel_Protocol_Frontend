@@ -9,6 +9,7 @@
             "Silver": 0.0125,
             "Gold": 0.015
         },
-        "blockExplorerTx": "https://mumbai.polygonscan.com/tx/"
+        "blockExplorerTx": "https://mumbai.polygonscan.com/tx/",
+        "blockExplorerAcc": "https://mumbai.polygonscan.com/address/"
     }
 }

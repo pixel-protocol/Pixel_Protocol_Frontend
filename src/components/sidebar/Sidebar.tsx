@@ -42,11 +42,6 @@ background-color: white;
 
 
 const Sidebar = ({ mode, pointerPosition, setPointerPosition }: SidebarProps) => {
-    const cData: ChainData = chainData;
-    const { address, connector, isConnected } = useAccount()
-    const { chain, chains } = useNetwork()
-    const [pixelAddress, blockAddress] = (chain && chain.name in cData) ? cData[chain.name]["contractAddresses"] : [null, null]
-
     //for transition when updating
     //const [loading, setLoading] = useStateCallback(true)
     const onSidebarCancel = () => {

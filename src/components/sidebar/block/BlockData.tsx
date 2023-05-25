@@ -22,25 +22,14 @@ import BlockArt from '@/components/sidebar/block/BlockArt'
 import CopyButton from '@/components/sidebar/CopyButton'
 import OwnerIcon from '@/components/sidebar/OwnerIcon'
 
+import { testnetChain } from '@/constant/constants'
+
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
-  const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+  const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
+  const blockExplorerAcc = cData[testnetChain]["blockExplorerAcc"][tier]
   const { address, connector, isConnected } = useAccount()
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setFairValuePerPixel(cData[chain.name]["fairValueEther"][tier])
-    } else {
-      setFairValuePerPixel(0)
-    }
-  }, [chain, tier])
 
   const truncateAddress = (address: `0x${string}`) => {
     return address.slice(0, 5) + '...' + address.slice(-4)
@@ -94,10 +83,11 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
               </VStack>
             </GridItem>
           </Grid>
-          {exists ?
-            <HStack spacing="0.2rem"><Text>Owner: {truncateAddress(owner)}</Text> <CopyButton target={owner} />
-              {(address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text>You</Text></HStack></Badge>}
+          {(exists) ?
+            <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
+              {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginLeft={"0.2rem"}>You</Text></HStack></Badge>}
             </HStack> : null}
+
           <Card border="1px solid" borderColor="purple">
             <CardBody px="3" py="2">
               <Stat>

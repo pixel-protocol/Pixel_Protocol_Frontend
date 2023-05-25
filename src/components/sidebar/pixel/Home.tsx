@@ -11,29 +11,16 @@ import pixelABI from "@/constant/abis/Pixel";
 import PixelData from "@/components/sidebar/pixel/PixelData";
 import ReplaceColor from "@/components/sidebar/pixel/ReplaceColor";
 
+import { testnetChain } from "@/constant/constants";
+
 const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
 
   const cData: ChainData = chainData;
   const { address, connector, isConnected } = useAccount()
   const { chain, chains } = useNetwork()
-  const [pixelAddress, setPixelAddress] = useState<`0x${string}`>(zeroAddress)
+  const pixelAddress = cData[testnetChain]["contractAddresses"][0]
   const [pixelOwner, setPixelOwner] = useState<`0x${string}`>(zeroAddress)
   const [pixelColor, setPixelColor] = useState<`#${string}`>("#ffffff")
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setPixelAddress(cData[chain.name]["contractAddresses"][0])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (chain && chain.name in cData) {
-      setPixelAddress(cData[chain.name]["contractAddresses"][0])
-    } else {
-      setPixelAddress(zeroAddress)
-    }
-  }, [chain])
-
 
   const pixelContract = {
     address: pixelAddress,
