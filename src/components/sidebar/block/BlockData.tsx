@@ -5,7 +5,7 @@ import {
   StatNumber,
   StatHelpText,
   StatArrow,
-  StatGroup, Card, CardHeader, CardBody, CardFooter, Text, Grid, GridItem, Box, Link, Badge, VStack, Image
+  StatGroup, Card, CardHeader, CardBody, CardFooter, Text, Grid, GridItem, Box, Link, Badge, VStack, Image, Spacer, HStack
 } from '@chakra-ui/react'
 
 import chainData from "@/constant/chain.json"
@@ -15,15 +15,18 @@ import { Tier, Coordinates, ChainData } from '@/constant/types'
 import { getColorForTier } from '@/helper/misc'
 import { coordToTierBlock } from '@/helper/conversion'
 
-import { useNetwork, useContractRead } from 'wagmi'
+import { useNetwork, useContractRead, useAccount } from 'wagmi'
 
 import blockABI from '@/constant/abis/Block.json'
 import BlockArt from '@/components/sidebar/block/BlockArt'
+import CopyButton from '@/components/sidebar/CopyButton'
+import OwnerIcon from '@/components/sidebar/OwnerIcon'
 
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
+  const { address, connector, isConnected } = useAccount()
 
   useEffect(() => {
     if (chain && chain.name in cData) {
@@ -38,6 +41,10 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
       setFairValuePerPixel(0)
     }
   }, [chain, tier])
+
+  const truncateAddress = (address: `0x${string}`) => {
+    return address.slice(0, 5) + '...' + address.slice(-4)
+  }
 
   return (
     <Card variant="filled">
@@ -87,8 +94,10 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
               </VStack>
             </GridItem>
           </Grid>
-          {(exists) ?
-            <Text>Owner: {owner}</Text> : null}
+          {exists ?
+            <HStack spacing="0.2rem"><Text>Owner: {truncateAddress(owner)}</Text> <CopyButton target={owner} />
+              {(address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text>You</Text></HStack></Badge>}
+            </HStack> : null}
           <Card border="1px solid" borderColor="purple">
             <CardBody px="3" py="2">
               <Stat>

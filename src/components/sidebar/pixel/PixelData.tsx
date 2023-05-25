@@ -1,28 +1,27 @@
 import { CSSProperties, useState, useEffect } from "react";
 
 import {
-  Card, CardBody, Box, Grid, GridItem, VStack, Image, Badge, Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  Text, Alert, AlertIcon, Button, Link
+  Card, CardBody, Box, Grid, GridItem,
+  VStack, Image, Badge, Stat, StatLabel,
+  StatNumber, Text, Alert, AlertIcon, Link, HStack
 } from '@chakra-ui/react'
-import PixelPalette from "@/components/sidebar/pixel/PixelPalette";
-import { ColorResult } from "@hello-pangea/color-picker";
-import Info from "@/components/sidebar/pixel/Info";
+
 import { Coordinates, Tier, ChainData } from "@/constant/types";
 import { coordToIdPixel } from "@/helper/conversion";
 import { getColorForTier } from "@/helper/misc";
 import chainData from "@/constant/chain.json"
-import { useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
+
 import MaticIcon from "@/components/icons/MaticIcon";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { pixelIdToBlockId } from "@/helper/conversion";
+import CopyButton from "@/components/sidebar/CopyButton";
+import OwnerIcon from "@/components/sidebar/OwnerIcon";
 const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, color: `#${string}` }) => {
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const [fairValuePerPixel, setFairValuePerPixel] = useState<number>(0)
-
+  const { address, connector, isConnected } = useAccount()
 
   const [blockId, setBlockId] = useState(0)
 
@@ -39,6 +38,10 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
       setFairValuePerPixel(0)
     }
   }, [chain, tier])
+
+  const truncateAddress = (address: `0x${string}`) => {
+    return address.slice(0, 5) + '...' + address.slice(-4)
+  }
 
   return (<Card variant="filled">
     <CardBody>
@@ -94,7 +97,9 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
           //<Info ownerAddress={ownerAddress} blockId={blockId} price={price} />
         }
         {(exists) ?
-          <Text>Owner: {owner}</Text> : null}
+          <HStack spacing="0.2rem"><Text>Owner: {truncateAddress(owner)}</Text> <CopyButton target={owner} />
+            {(address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text>You</Text></HStack></Badge>}
+          </HStack> : null}
         <Card border="1px solid" borderColor="purple">
           <CardBody p="3">
             <Stat>
