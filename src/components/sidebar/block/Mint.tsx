@@ -24,7 +24,6 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 const cData: ChainData = chainData;
 
-
 const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number, coordinates: Coordinates, tier: Tier, isConnected: boolean, isValidChain: boolean }) => {
   const { chain } = useNetwork()
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
