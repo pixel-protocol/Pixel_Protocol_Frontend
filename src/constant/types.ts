@@ -8,6 +8,8 @@ export type NestedChainData = {
     fairValueEther: {
         [key in Tier]: number
     },
+    blockExplorerTx: string,
+    blockExplorerAcc: string,
     [key: string]: any
 }
 

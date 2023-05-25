@@ -28,8 +28,10 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
-  const blockExplorerAcc = cData[testnetChain]["blockExplorerAcc"][tier]
+  const blockExplorerAcc = cData[testnetChain]["blockExplorerAcc"]
   const { address, connector, isConnected } = useAccount()
+
+  console.log("Block explorer acc: " + blockExplorerAcc)
 
   const truncateAddress = (address: `0x${string}`) => {
     return address.slice(0, 5) + '...' + address.slice(-4)
@@ -84,8 +86,8 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
             </GridItem>
           </Grid>
           {(exists) ?
-            <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
-              {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginLeft={"0.2rem"}>You</Text></HStack></Badge>}
+            <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={(blockExplorerAcc as string) + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
+              {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
             </HStack> : null}
 
           <Card border="1px solid" borderColor="purple">

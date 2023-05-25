@@ -97,7 +97,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
         }
         {(exists) ?
           <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
-            {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginLeft={"0.2rem"}>You</Text></HStack></Badge>}
+            {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
           </HStack> : null}
         <Card border="1px solid" borderColor="purple">
           <CardBody p="3">
