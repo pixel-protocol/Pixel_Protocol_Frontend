@@ -109,7 +109,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
         </Card>
         <Alert status='info'>
           <AlertIcon />
-          <Text>This Pixel belongs to <Link color="purple" href={`/app?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
+          <Text>This Pixel belongs to <Link color="purple" href={`/app?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=Block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
         </Alert>
 
 
