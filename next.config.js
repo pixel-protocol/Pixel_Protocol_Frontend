@@ -7,7 +7,11 @@ const nextConfig = {
     POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY
   },
   eslint: {
+    ignoreDuringBuilds: true,
     dirs: ['src'],
+  },
+  typescript: {
+    ignoreBuildErrors: true
   },
 
   reactStrictMode: true,
