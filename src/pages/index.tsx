@@ -6,6 +6,7 @@ import ValueProposition from '@/components/landing/ValueProposition';
 import Overview from '@/components/landing/Overview';
 import Features from '@/components/landing/Features';
 import LandingFooter from '@/components/landing/LandingFooter';
+import BackToTopButton from '@/components/landing/BackToTopButton';
 
 const Landing: NextPage = () => {
   return (<>
@@ -15,6 +16,7 @@ const Landing: NextPage = () => {
     <Overview />
     <Features />
     <LandingFooter />
+    <BackToTopButton />
   </>);
 }
 

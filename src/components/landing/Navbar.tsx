@@ -5,6 +5,7 @@ import { SiTwitter } from 'react-icons/si';
 
 import { Button, HStack, chakra, Icon } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
+import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 
 import Image from 'next/image';
 
@@ -36,18 +37,41 @@ const Navbar = () => {
             <Image src="/images/logo.png" alt="pixelprotocol" width={40} height={40} />
           </Link>
           <Flex ml={5} as="nav" >
-            <Link mx={2} href="#first">
-              <Button variant="ghost" _hover={{ bg: 'purple.700' }} borderRadius="full" color="white">Home</Button>
-            </Link>
-            <Link mx={2} href="#value">
-              <Button variant="ghost" _hover={{ bg: 'purple.700' }} borderRadius="full" color="white">Value</Button>
-            </Link>
-            <Link mx={2} href="#overview">
-              <Button variant="ghost" _hover={{ bg: 'purple.700' }} borderRadius="full" color="white">Overview</Button>
-            </Link>
-            <Link mx={2} href="#features">
-              <Button variant="ghost" _hover={{ bg: 'purple.700' }} borderRadius="full" color="white">Features</Button>
-            </Link>
+            <ScrollLink
+              to="first"
+              smooth={true}
+              duration={500}
+              mx={2}
+            >
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Home</Button>
+            </ScrollLink>
+            <ScrollLink
+              to="value"
+              smooth={true}
+              duration={500}
+              offset={-20}
+              mx={2}
+            >
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Value</Button>
+            </ScrollLink>
+            <ScrollLink
+              to="overview"
+              smooth={true}
+              duration={500}
+              offset={-20}
+              mx={2}
+            >
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Overview</Button>
+            </ScrollLink>
+            <ScrollLink
+              to="features"
+              smooth={true}
+              duration={500}
+              offset={-20}
+              mx={2}
+            >
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Features</Button>
+            </ScrollLink>
           </Flex>
           <Spacer />
           <Flex justifySelf="flex-end" align="center">
