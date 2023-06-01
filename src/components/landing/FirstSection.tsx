@@ -1,5 +1,6 @@
 import { Box, Flex, Text, Spacer, Button, Icon, VStack, HStack, Link } from "@chakra-ui/react";
-import { FiArrowUpRight } from 'react-icons/fi'
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import LaunchAppButton from "@/components/landing/LaunchAppButton";
 
 const FirstSection = () => {
   return (
@@ -20,12 +21,13 @@ const FirstSection = () => {
         <Text fontSize="6xl" fontWeight="bold" color="white" padding="0px">Pixel Protocol</Text>
 
         <Text fontSize="2xl" color="white" padding="0px">
-          Slogan: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          A Web3 Renaissance of <Link href="http://www.milliondollarhomepage.com/" target="_blank"><Text as="span" color={"#f2a900"}>The Million Dollar Homepage <ExternalLinkIcon /></Text></Link>
         </Text>
         <Link href="/app">
-          <Button colorScheme='purple' pr={2} borderRadius="full" mt={5} >
-            Launch App <Icon as={FiArrowUpRight} ml={1} boxSize="20px" />
-          </Button>
+          <Box pr={2} mt={5}>
+            <LaunchAppButton />
+          </Box>
+
         </Link>
       </Box>
     </Flex >)

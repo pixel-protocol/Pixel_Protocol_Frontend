@@ -9,11 +9,12 @@ import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 
 import Image from 'next/image';
 
+import LaunchAppButton from '@/components/landing/LaunchAppButton';
 
 const Navbar = () => {
 
   const DISCORD_LINK = "#"
-  const TWITTER_LINK = "#"
+  const TWITTER_LINK = "https://twitter.com/0xPixelProtocol"
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -31,11 +32,9 @@ const Navbar = () => {
 
   return (
     <chakra.header id="header">
-      <Box bg={isScrolled ? "black" : "transparent"} py={4} position="fixed" top={0} left={0} right={0} zIndex={999}>
-        <Flex maxW="container.lg" mx="auto" alignItems="center">
-          <Link href="/">
-            <Image src="/images/logo.png" alt="pixelprotocol" width={40} height={40} />
-          </Link>
+      <Box bg={isScrolled ? "black" : "transparent"} py={3} position="fixed" top={0} left={0} right={0} zIndex={999}>
+        <Flex maxW="container.xl" mx="auto" alignItems="center">
+          <Image src="/images/logo.png" alt="pixelprotocol" width={40} height={40} />
           <Flex ml={5} as="nav" >
             <ScrollLink
               to="first"
@@ -52,7 +51,7 @@ const Navbar = () => {
               offset={-20}
               mx={2}
             >
-              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Value</Button>
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Overview</Button>
             </ScrollLink>
             <ScrollLink
               to="overview"
@@ -61,7 +60,7 @@ const Navbar = () => {
               offset={-20}
               mx={2}
             >
-              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Overview</Button>
+              <Button variant="ghost" _hover={{ bg: 'purple.600' }} borderRadius="full" color="white">Demo</Button>
             </ScrollLink>
             <ScrollLink
               to="features"
@@ -75,16 +74,16 @@ const Navbar = () => {
           </Flex>
           <Spacer />
           <Flex justifySelf="flex-end" align="center">
-            <Link mx={2} href={TWITTER_LINK}>
+            <Link mx={2} href={TWITTER_LINK} target="_blank">
               <Icon as={SiTwitter} boxSize={30} color="white" />
             </Link>
-            <Link mx={2} href={DISCORD_LINK}>
+            <Link mx={2} href={DISCORD_LINK} target="_blank">
               <Icon as={BsDiscord} boxSize={30} color="white" />
             </Link>
             <Link mx={2} href="/app">
-              <Button colorScheme='purple' pr={2} borderRadius="full">
-                Launch App <Icon as={FiArrowUpRight} ml={1} boxSize="20px" />
-              </Button>
+              <Box pr={2}>
+                <LaunchAppButton />
+              </Box>
             </Link>
           </Flex>
         </Flex>
