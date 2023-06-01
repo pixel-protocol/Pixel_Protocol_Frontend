@@ -7,14 +7,14 @@ import { Button, HStack, chakra, Icon } from '@chakra-ui/react';
 import { useEffect, useState } from "react";
 import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 
+import { DISCORD_LINK, TWITTER_LINK } from '@/constant/constants';
+
 import Image from 'next/image';
 
 import LaunchAppButton from '@/components/landing/LaunchAppButton';
 
 const Navbar = () => {
 
-  const DISCORD_LINK = "#"
-  const TWITTER_LINK = "https://twitter.com/0xPixelProtocol"
 
   const [isScrolled, setIsScrolled] = useState(false);
 

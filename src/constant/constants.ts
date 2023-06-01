@@ -32,3 +32,7 @@ export const colorChoices = [
 export const zeroAddress = "0x0000000000000000000000000000000000000000"
 
 export const testnetChain = "Polygon Mumbai"
+
+export const TWITTER_LINK = "https://twitter.com/0xPixelProtocol"
+export const DISCORD_LINK = "https://discord.gg/ybAhumgUNv"
+export const EMAIL_LINK = "mailto:pixelprotocolweb3@gmail.com"
