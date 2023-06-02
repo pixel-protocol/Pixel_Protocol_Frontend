@@ -1,53 +1,54 @@
-import { Text, Button, Icon, VStack, Image, Grid, Link, Box } from "@chakra-ui/react";
+import { Text, Button, Icon, VStack, Image, Grid, Link, Box, Card, CardHeader, CardBody, CardFooter, Stack, Heading, Spacer, SimpleGrid, HStack } from "@chakra-ui/react";
 import { FiArrowUpRight } from 'react-icons/fi'
-import { Card, CardHeader, CardBody, CardFooter, Stack, Heading, Spacer, SimpleGrid } from '@chakra-ui/react'
 
 const Features = () => {
   return (
-    <Box id="features" h="120vh" bg="black" color="white">
-      <Box pt={20} px={4}>
-        <SimpleGrid minChildWidth='lg' spacing='15px' width="80vw" ml={20}>
-          <Box justifySelf="center">
-            <Feature />
-          </Box>
-          <Box justifySelf="center">
-            <Feature />
-          </Box>
-        </SimpleGrid>
-      </Box>
+    <Box id="features" py={45} bg="black" color="white">
+      <VStack spacing={5} maxW="container.lg" mx="auto" alignItems="center">
+        <HStack spacing={5}>
+          {
+            features.map((f, i) => {
+              return (
+                <FeatureCard key={i} name={f.name} image={f.image} description={f.description} />
+              )
+            })
+          }
+        </HStack>
+      </VStack>
     </Box>)
 }
 
-const Feature = () => {
+const features = [
+  { name: "The Homepage", image: "/images/hero_image_thehomepage_feature.jpg", description: "A decentralized canvas for public discourse using pixels. Own a piece of Web3 history today!" },
+  { name: "Pixel Estate", image: "/images/hero_image_pixelestate_feature.jpg", description: "Real estate on The Homepage for passive income generation via renting out blocks and pixels." },
+]
+
+const FeatureCard = ({ name, image, description }: { name: string, image: string, description: string }) => {
   return (
     <Card
       overflow='hidden'
       bg="gray.900"
       color="white"
-      maxW='lg'
-      py={10}
+      width="100%"
     >
+      <Image
+        objectFit='contain'
+        width="100%"
+        src={image}
+        alt={name}
+      />
       <CardBody>
-        <Image
-          objectFit='contain'
-          maxW={{ base: '100%', sm: '400px' }}
-          src="/images/logo.png"
-          alt='Caffe Latte'
-        />
+
 
         <Stack>
-          <Text fontSize="3xl">The perfect latte</Text>
+          <Text fontSize="3xl">{name}</Text>
 
           <Text py='2' color='grey'>
-            Caffè latte is a coffee beverage of Italian origin made with espresso
-            and steamed milk.
+            {description}
           </Text>
-
-          <Link>Learn more</Link>
         </Stack>
       </CardBody>
     </Card >
   )
 }
-
 export default Features;

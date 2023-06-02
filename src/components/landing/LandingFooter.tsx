@@ -1,6 +1,7 @@
 import { Box, Flex, Link, Spacer, Text, VStack, Avatar, Icon, chakra, Divider, HStack } from '@chakra-ui/react';
-import { BsDiscord } from 'react-icons/bs';
+import { BsDiscord, BsFillEnvelopeFill } from 'react-icons/bs';
 import { SiTwitter } from 'react-icons/si';
+
 
 import { DISCORD_LINK, TWITTER_LINK, EMAIL_LINK } from '@/constant/constants';
 
@@ -24,7 +25,7 @@ const LandingFooter = () => {
                   <Icon as={BsDiscord} boxSize={30} color="white" />
                 </Link>
                 <Link mx={2} href={EMAIL_LINK}>
-                  <Icon as={BsDiscord} boxSize={30} color="white" />
+                  <Icon as={BsFillEnvelopeFill} boxSize={30} color="white" />
                 </Link>
               </Box>
             </VStack>
