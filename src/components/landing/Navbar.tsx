@@ -40,7 +40,7 @@ const Navbar = () => {
       <Box bg={isScrolled ? "black" : "transparent"} py={3} position="fixed" top={0} left={0} right={0} zIndex={999}>
         <Flex maxW="container.xl" mx="auto" alignItems="center">
           <Box pl={2}>
-            <Image src="/images/logo.png" alt="pixelprotocol" width="40px" height="40px" />
+            <Image src="/images/logo.png" alt="pixelprotocol" height="40px" />
           </Box>
           <Flex ml={5} as="nav" display={{ base: "none", md: "flex" }}>
             <ScrollLink
