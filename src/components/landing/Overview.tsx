@@ -6,9 +6,9 @@ const ValueProposition = () => {
   return (
     <Box id="overview" pt={45} bg="black" color="white">
       <VStack id="value" maxW="container.lg" mx="auto" bg="black" alignContent="center" justifyContent="center" alignItems="center">
-        <Hero />
-        <HeroRight />
-        <Hero />
+        <Hero title="Market Your Content" image="/images/hero1.jpeg" description="Hero 1 Description" />
+        <Hero title="Build Your Community" image="/images/hero1.jpeg" description="Hero 2 Description" />
+        <Hero title="Earn Passive Income" image="/images/hero3.jpeg" description="Hero 3 Description" />
       </VStack>
     </Box >
   )
@@ -46,7 +46,7 @@ const ValueProposition = () => {
 //   )
 // }
 
-const Hero = () => {
+const Hero = ({ title, image, description }: { title: string, image: string, description: string }) => {
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
@@ -55,21 +55,22 @@ const Hero = () => {
       bg="black"
       pt={20}
       color="white"
+      width={{ base: "100%", lg: "80%" }}
     >
       <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '200px', md: '300px' }}
-        src="/images/logo.png"
-        alt='Caffe Latte'
+        minW={{ md: "350px" }}
+        maxW={{ base: '100%', sm: "45%", md: '400px' }}
+        src={image}
+        alt={title}
       />
 
-      <Stack pl="50px">
+      <Stack pl={["20px", "20px", "50px"]} maxW={400}>
         <CardBody pt="40px">
-          <Text fontSize="3xl">The perfect latte</Text>
+          <Text fontSize="3xl">{title}</Text>
 
           <Text py='2' color='grey'>
-            Caffè latte is a coffee beverage of Italian origin made with espresso
-            and steamed milk.
+            {description}
           </Text>
         </CardBody>
 
@@ -82,7 +83,7 @@ const Hero = () => {
     </Card >)
 }
 
-const HeroRight = () => {
+const HeroRight = ({ title, image, description }: { title: string, image: string, description: string }) => {
   const isBigScreen = useBreakpointValue({ base: false, sm: true });
 
   return (
@@ -96,17 +97,16 @@ const HeroRight = () => {
     >
       {!isBigScreen && <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '200px', md: '300px' }}
-        src="/images/logo.png"
-        alt='Caffe Latte'
+        maxW={{ base: '100%', sm: '250px', md: '400px' }}
+        src={image}
+        alt={title}
       />}
       <Stack pr={{ sm: '50px' }} pl={{ base: '50px', sm: '0px' }}>
         <CardBody pt="40px">
-          <Text fontSize="3xl">The perfect latte</Text>
+          <Text fontSize="3xl">{title}</Text>
 
           <Text py='2' color='grey'>
-            Caffè latte is a coffee beverage of Italian origin made with espresso
-            and steamed milk.
+            {description}
           </Text>
         </CardBody>
 
@@ -119,9 +119,9 @@ const HeroRight = () => {
 
       {isBigScreen && <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '200px', md: '300px' }}
-        src="/images/logo.png"
-        alt='Caffe Latte'
+        maxW={{ base: '100%', sm: '250px', md: '400px' }}
+        src={image}
+        alt={title}
       />}
 
     </Card>)
