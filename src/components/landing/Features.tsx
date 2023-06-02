@@ -1,11 +1,10 @@
-import { Text, Button, Icon, VStack, Image, Grid, Link, Box, Card, CardHeader, CardBody, CardFooter, Stack, Heading, Spacer, SimpleGrid, HStack } from "@chakra-ui/react";
-import { FiArrowUpRight } from 'react-icons/fi'
+import { Text, VStack, Image, Box, Card, CardBody, Stack } from "@chakra-ui/react";
 
 const Features = () => {
   return (
     <Box id="features" py={45} bg="black" color="white">
       <VStack spacing={5} maxW="container.lg" mx="auto" alignItems="center">
-        <HStack spacing={5}>
+        <Stack spacing={5} direction={{ base: 'column', sm: 'row' }}>
           {
             features.map((f, i) => {
               return (
@@ -13,7 +12,7 @@ const Features = () => {
               )
             })
           }
-        </HStack>
+        </Stack>
       </VStack>
     </Box>)
 }

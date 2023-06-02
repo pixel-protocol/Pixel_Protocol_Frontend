@@ -18,9 +18,9 @@ const FirstSection = () => {
         zIndex={-999}
       />
       <Box py={4} px={4} ml={[30, 30, 30, 40]} mb={5} bg="transparent">
-        <Text fontSize="6xl" fontWeight="bold" color="white" padding="0px">Pixel Protocol</Text>
+        <Text fontSize={["4xl", "5xl", "6xl"]} fontWeight="bold" color="white" padding="0px">Pixel Protocol</Text>
 
-        <Text fontSize="2xl" color="white" padding="0px">
+        <Text fontSize={["1xl", "2xl"]} color="white" padding="0px">
           A Web3 Renaissance of <Link href="http://www.milliondollarhomepage.com/" target="_blank"><Text as="span" color={"#f2a900"}>The Million Dollar Homepage <ExternalLinkIcon /></Text></Link>
         </Text>
         <Link href="/app">
