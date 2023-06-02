@@ -7,9 +7,17 @@ import Overview from '@/components/landing/Overview';
 import Features from '@/components/landing/Features';
 import LandingFooter from '@/components/landing/LandingFooter';
 import BackToTopButton from '@/components/landing/BackToTopButton';
+import { Global, css } from "@emotion/react";
 
 const Landing: NextPage = () => {
   return (<>
+    <Global
+      styles={css`
+          html {
+            ${hideScrollbarStyle}
+          },
+        `}
+    />
     <Navbar />
     <FirstSection />
     <Overview />
@@ -20,10 +28,17 @@ const Landing: NextPage = () => {
   </>);
 }
 
-const FullHeightBox = () => {
-  return <Box h="100vh" bg="black">
+const hideScrollbarStyle = css`
+  /* Hide scrollbar for modern browsers */
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background-color: transparent;
+  }
 
-  </Box>;
-};
+  /* Hide scrollbar for IE and Edge */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
 
 export default Landing;

@@ -4,7 +4,7 @@ import LaunchAppButton from "@/components/landing/LaunchAppButton";
 
 const FirstSection = () => {
   return (
-    <Flex id="first" h="100vh" align="flex-end" >
+    <Flex as="section" id="first" h="100vh" align="flex-end">
       <Box
         position="absolute"
         top={0}

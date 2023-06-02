@@ -2,7 +2,7 @@ import { Text, VStack, Image, Box, Card, CardBody, Stack } from "@chakra-ui/reac
 
 const Features = () => {
   return (
-    <Box id="features" py={45} bg="black" color="white">
+    <Box as="section" id="features" py={45} bg="black" color="white">
       <VStack spacing={5} maxW="container.lg" mx="auto" alignItems="center">
         <Stack spacing={5} direction={{ base: 'column', sm: 'row' }}>
           {
@@ -26,7 +26,7 @@ const FeatureCard = ({ name, image, description }: { name: string, image: string
   return (
     <Card
       overflow='hidden'
-      bg="gray.900"
+      bgGradient={"linear(to bottom right, black, gray.900)"}
       color="white"
       width="100%"
     >
