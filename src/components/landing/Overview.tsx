@@ -1,14 +1,16 @@
-import { Text, Button, Icon, VStack, Image, Grid, Link } from "@chakra-ui/react";
+import { Text, Button, Icon, VStack, Image, Box, Card, CardBody, CardFooter, Stack } from "@chakra-ui/react";
 import { FiArrowUpRight } from 'react-icons/fi'
-import { Card, CardHeader, CardBody, CardFooter, Stack, Heading, Spacer } from '@chakra-ui/react'
+import { useBreakpointValue } from '@chakra-ui/media-query';
 
 const ValueProposition = () => {
   return (
-    <VStack id="value" width="100%" bg="black" alignContent="center" justifyContent="center" alignItems="center">
-      <Hero />
-      <HeroRight />
-      <Hero />
-    </VStack>
+    <Box id="overview" pt={45} bg="black" color="white">
+      <VStack id="value" maxW="container.lg" mx="auto" bg="black" alignContent="center" justifyContent="center" alignItems="center">
+        <Hero />
+        <HeroRight />
+        <Hero />
+      </VStack>
+    </Box >
   )
 }
 
@@ -51,12 +53,12 @@ const Hero = () => {
       overflow='hidden'
       variant='unstyled'
       bg="black"
-      py={20}
+      pt={20}
       color="white"
     >
       <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '300px' }}
+        maxW={{ base: '100%', sm: '200px', md: '300px' }}
         src="/images/logo.png"
         alt='Caffe Latte'
       />
@@ -81,17 +83,24 @@ const Hero = () => {
 }
 
 const HeroRight = () => {
+  const isBigScreen = useBreakpointValue({ base: false, sm: true });
+
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
       overflow='hidden'
       variant='unstyled'
       bg="black"
-      py={20}
+      pt={20}
       color="white"
     >
-
-      <Stack pr="50px">
+      {!isBigScreen && <Image
+        objectFit='contain'
+        maxW={{ base: '100%', sm: '200px', md: '300px' }}
+        src="/images/logo.png"
+        alt='Caffe Latte'
+      />}
+      <Stack pr={{ sm: '50px' }} pl={{ base: '50px', sm: '0px' }}>
         <CardBody pt="40px">
           <Text fontSize="3xl">The perfect latte</Text>
 
@@ -108,12 +117,12 @@ const HeroRight = () => {
         </CardFooter>
       </Stack>
 
-      <Image
+      {isBigScreen && <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '300px' }}
+        maxW={{ base: '100%', sm: '200px', md: '300px' }}
         src="/images/logo.png"
         alt='Caffe Latte'
-      />
+      />}
 
     </Card>)
 }
