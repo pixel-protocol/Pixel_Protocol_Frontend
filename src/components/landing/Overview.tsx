@@ -20,17 +20,17 @@ const Hero = ({ title, image, description }: { title: string, image: string, des
       overflow='hidden'
       bg="black"
       pt={20}
-      color="white"
-      width={{ base: "100%", lg: "80%" }}
+      px={{ base: 2, sm: 0 }}
+      width={{ base: "100%" }}
     >
       <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: "45%" }}
+        maxW={{ base: '100%', sm: "47.5%" }}
         src={image}
         alt={title}
       />
       <Spacer />
-      <Stack width={{ base: "100%", sm: "45%" }}>
+      <Stack width={{ base: "100%", sm: "47.5%" }}>
         <Text fontSize="3xl">{title}</Text>
 
         <Text py='2' color='grey'>
@@ -49,8 +49,9 @@ const HeroRight = ({ title, image, description }: { title: string, image: string
       overflow='hidden'
       bg="black"
       pt={20}
+      px={{ base: 2, sm: 0 }}
       color="white"
-      width={{ base: "100%", lg: "80%" }}
+      width={{ base: "100%" }}
       spacing={5}
     >
       {!isBigScreen && <Image
@@ -58,7 +59,7 @@ const HeroRight = ({ title, image, description }: { title: string, image: string
         src={image}
         alt={title}
       />}
-      <Stack width={{ base: "100%", sm: "45%" }}>
+      <Stack width={{ base: "100%", sm: "47.5%" }}>
         <Text fontSize="3xl">{title}</Text>
 
         <Text py='2' color='grey'>
@@ -68,7 +69,7 @@ const HeroRight = ({ title, image, description }: { title: string, image: string
       <Spacer />
       {isBigScreen && <Image
         objectFit='contain'
-        maxW={{ base: '100%', sm: '45%' }}
+        maxW={{ base: '100%', sm: '47.5%' }}
         src={image}
         alt={title}
       />}

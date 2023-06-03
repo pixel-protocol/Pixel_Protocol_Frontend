@@ -4,7 +4,7 @@ const Features = () => {
   return (
     <Box as="section" id="features" py={45} bg="black" color="white">
       <VStack spacing={5} maxW="container.lg" mx="auto" alignItems="center">
-        <Stack spacing={5} direction={{ base: 'column', sm: 'row' }}>
+        <Stack spacing={5} direction={{ base: 'column', sm: 'row' }} px={{ base: 2, sm: 0 }}>
           {
             features.map((f, i) => {
               return (

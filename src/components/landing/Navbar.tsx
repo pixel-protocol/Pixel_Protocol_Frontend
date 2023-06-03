@@ -107,7 +107,7 @@ const Navbar = () => {
       >
         <DrawerOverlay />
         <DrawerContent bgColor="gray.900">
-          <DrawerHeader color="white">Menu</DrawerHeader>
+          <DrawerHeader color="white">Pixel Protocol</DrawerHeader>
 
           <VStack align="left" spacing={0}>
             <ScrollLink
