@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react';
 
 const BackToTopButton = () => {
   const [showButton, setShowButton] = useState(false);
+  const [bottom, setBottom] = useState(4)
 
   const handleScroll = () => {
+    const reverse = document.documentElement.scrollHeight - window.innerHeight - window.pageYOffset;
+    const footerElement = document.querySelector("footer");
+    if (reverse < 0) console.log(reverse)
+    if (footerElement) {
+      const height = footerElement.offsetHeight;
+      if (reverse < height) { setBottom(height - reverse) }
+    }
+
     if (window.pageYOffset > 300) {
       setShowButton(true);
     } else {
@@ -29,7 +38,7 @@ const BackToTopButton = () => {
       {showButton && (
         <Button
           position="fixed"
-          bottom={4}
+          bottom={bottom}
           right={4}
           size="sm"
           onClick={scrollToTop}
