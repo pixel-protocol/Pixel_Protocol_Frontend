@@ -2,8 +2,10 @@ import { Text, VStack, Image, Box, Card, CardBody, Stack } from "@chakra-ui/reac
 
 const Features = () => {
   return (
-    <Box as="section" id="features" py={45} bg="black" color="white">
-      <VStack spacing={5} maxW="container.lg" mx="auto" alignItems="center">
+    <Box as="section" id="features" py={120} bg="black" color="white">
+      <VStack spacing={10} maxW="container.lg" mx="auto" alignItems="center">
+        <Text px={{ base: 2, sm: 0 }} fontSize={{ base: "xl", sm: "4xl" }} fontWeight={"bold"} textAlign={"center"}>features in the <Text as="span" color={"#f2a900"}>Pixel</Text> ecosytem</Text>
+
         <Stack spacing={5} direction={{ base: 'column', sm: 'row' }} px={{ base: 2, sm: 0 }}>
           {
             features.map((f, i) => {
@@ -40,9 +42,9 @@ const FeatureCard = ({ name, image, description }: { name: string, image: string
 
 
         <Stack>
-          <Text fontSize="3xl">{name}</Text>
+          <Text fontWeight={"bold"} fontSize={{ base: "xl", sm: "3xl" }}>{name}</Text>
 
-          <Text py='2' color='grey'>
+          <Text py='2' color='gray.300'>
             {description}
           </Text>
         </Stack>
