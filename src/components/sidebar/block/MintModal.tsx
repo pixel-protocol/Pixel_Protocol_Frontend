@@ -49,15 +49,30 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     functionName: 'mint',
     args: [BigInt(id), colors.map(c => hexToDec("0x" + c.slice(1)))],
     value: parseEther((fairValuePerPixel * 100).toString() as `${number}`),
+    onError(error) {
+      alert("Prepare Contract Write Error!")
+      if (activeStep !== 3) {
+        setActiveStep(3)
+      }
+    }
   })
 
   const { data, error, isError, write } = useContractWrite(config)
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
-    onSettled(data, error) {
-      console.log('Settled', { data, error })
-      setActiveStep(3)
+
+    onSuccess(data) {
+      alert("Transaction Successful!")
+      if (activeStep !== 3) {
+        setActiveStep(3)
+      }
+    },
+    onError(error) {
+      alert("Transaction Unsuccessful!")
+      if (activeStep !== 3) {
+        setActiveStep(3)
+      }
     },
   })
 
@@ -70,7 +85,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
 
   const { activeStep, setActiveStep, goToNext, goToPrevious } = useSteps({
     index: 0,
-    count: steps.length,
+    count: steps.length + 1,
   })
 
   const handleMint = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -89,12 +104,14 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
       return temp;
     });
   }
+  /*
   console.log("Chain: " + chain?.name)
   console.log("Block Address: " + blockAddress)
   console.log("ID: " + id)
   console.log("BigInt ID: " + BigInt(id))
   console.log(colors)
   console.log(colors.map(c => hexToDec("0x" + c.slice(1))))
+  */
 
 
   return (
@@ -103,7 +120,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
         <ModalOverlay />
         <ModalContent minH={"60vh"}>
           <Box m={5} mr={10}>
-            <Stepper index={activeStep}>
+            <Stepper index={activeStep} colorScheme='purple'>
               {steps.map((step, index) => (
                 <Step key={index}>
                   <StepIndicator>
@@ -137,8 +154,8 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
             />
 
               {(isSuccess) ? <Text>
-                Successfully Minted! Block #{id} <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`} isExternal>view txn</Link></Text>
-                : <Text>Mint Failed! {error?.message}{prepareError?.message}</Text>}
+                Successfully Minted! Block #{id} {(data?.hash) ? <Link color="blue.500" href={`${blockExplorerTx}${data.hash}`} isExternal>view txn</Link> : null}</Text>
+                : (isPrepareError) ? <Text>{prepareError?.message?.substring(0, 240)}...</Text> : <Text>Mint Failed! {error?.message?.substring(0, 240)}... <Link color="blue.500" href={`${blockExplorerTx}${data?.hash}`} isExternal>view txn</Link></Text>}
 
             </VStack>}
           </ModalBody>
