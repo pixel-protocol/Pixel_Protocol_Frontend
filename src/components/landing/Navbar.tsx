@@ -89,8 +89,8 @@ const Navbar = () => {
             </Link>
 
           </Flex>
-          <Link mx={2} href="/app">
-            <Box pr={2} display={{ base: "none", sm: "block" }}>
+          <Link ml={2} href="/app">
+            <Box display={{ base: "none", sm: "block" }}>
               <LaunchAppButton />
             </Box>
           </Link>
