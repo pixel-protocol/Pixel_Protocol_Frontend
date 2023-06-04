@@ -4,7 +4,9 @@ const nextConfig = {
     dev: false,
     exposeSidebar: false,
     modeForDebugging: 'Block',
-    POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY
+    POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY,
+    INFURA_API_KEY: process.env.INFURA_API_KEY,
+    INFURA_API_KEY_SECRET: process.env.INFURA_API_KEY_SECRET
   },
   eslint: {
     ignoreDuringBuilds: true,

@@ -1,9 +1,9 @@
 import { Text, VStack, Image, Box, Stack, Spacer } from "@chakra-ui/react";
 import { useBreakpointValue } from '@chakra-ui/media-query';
 
-const description1 = "Promote your ads and showcase your art through our decentralized public space built for the Web3 community."
-const description2 = "Strengthen your community by creating a presence on the protocol through collaborative efforts."
-const description3 = "Earn passive income by renting out real estate on The Homepage to prospective tenants."
+const description1 = 'Pixel Protocol offers a unique opportunity to market your project or cause through "The Homepage," a decentralized canvas. Showcase your ideas, artwork, or messages to the wider Web3 community, building trust and generating publicity for your project.'
+const description2 = "Join forces with others in your project or community to collectively purchase pixels on the canvas. By forming a bigger picture together, you strengthen your community bonds and create a visual representation of your shared vision or identity."
+const description3 = "Monetize your pixels by renting them out to interested parties. This innovative feature allows you to generate passive income while facilitating dynamic content creation on the canvas. Renting out your space not only earns you income but also contributes to a vibrant and engaging ecosystem within Pixel Protocol."
 
 const ValueProposition = () => {
   return (
