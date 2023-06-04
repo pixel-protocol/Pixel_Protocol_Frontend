@@ -10,8 +10,8 @@ const ValueProposition = () => {
     <Box as="section" id="overview" py={120} bg="black" color="white">
       <VStack spacing={10} id="value" maxW="container.lg" mx="auto" bg="black" alignContent="center" justifyContent="center" alignItems="center">
         <Text px={{ base: 2, sm: 0 }} fontSize={{ base: "xl", sm: "4xl" }} textAlign={"center"} fontWeight={"bold"}>a free and open <Text as="span" color={"#f2a900"}>pixel-based</Text> forum for you to...</Text>
-        <Hero title="Market Your Content" image="/images/hero1.jpeg" description={description1} />
-        <HeroRight title="Build Your Community" image="/images/hero2.jpeg" description={description2} />
+        <Hero title="Market Your Content" image="/images/hero1.png" description={description1} />
+        <HeroRight title="Build Your Community" image="/images/hero2.png" description={description2} />
         <Hero title="Earn Passive Income" image="/images/hero3.png" description={description3} />
       </VStack>
     </Box >
@@ -26,6 +26,8 @@ const Hero = ({ title, image, description }: { title: string, image: string, des
       bg="black"
       px={{ base: 2, sm: 0 }}
       width={{ base: "100%" }}
+      spacing={{ base: 2, sm: 5 }}
+
     >
       <Image
         objectFit='contain'
@@ -34,7 +36,7 @@ const Hero = ({ title, image, description }: { title: string, image: string, des
         alt={title}
       />
       <Spacer />
-      <Stack width={{ base: "100%", sm: "47.5%" }}>
+      <Stack p={3} width={{ base: "100%", sm: "47.5%" }}>
         <Text fontWeight={"bold"} fontSize={{ base: "xl", sm: "3xl" }}>{title}</Text>
 
         <Text py='2' color='gray.300'>
@@ -53,16 +55,15 @@ const HeroRight = ({ title, image, description }: { title: string, image: string
       overflow='hidden'
       bg="black"
       px={{ base: 2, sm: 0 }}
-      color="white"
       width={{ base: "100%" }}
-      spacing={5}
+      spacing={{ base: 2, sm: 5 }}
     >
       {!isBigScreen && <Image
         objectFit='contain'
         src={image}
         alt={title}
       />}
-      <Stack width={{ base: "100%", sm: "47.5%" }}>
+      <Stack p={3} width={{ base: "100%", sm: "47.5%" }}>
         <Text fontWeight={"bold"} fontSize={{ base: "xl", sm: "3xl" }}>{title}</Text>
 
         <Text py='2' color='gray.300'>
