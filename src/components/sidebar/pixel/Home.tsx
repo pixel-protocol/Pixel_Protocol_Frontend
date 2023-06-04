@@ -36,7 +36,7 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   const { data: pixelOwnerData, isError: pixelOwnerIsError, isLoading: pixelOWnerIsLoading, refetch: pixelOwnerRefetch } = useContractRead({
 
     ...pixelContract,
-    functionName: 'pixelOwner',
+    functionName: 'ownerOf',
     args: [BigInt(id)],
     ...readConfig,
     onSuccess(data) {

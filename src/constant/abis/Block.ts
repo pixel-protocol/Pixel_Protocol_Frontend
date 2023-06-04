@@ -66,13 +66,13 @@ const blockABI = [
       {
         "indexed": true,
         "internalType": "address",
-        "name": "caller",
+        "name": "owner",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
-        "name": "blockId",
+        "name": "id",
         "type": "uint256"
       },
       {
