@@ -42,7 +42,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
         </TabPanel>
         <TabPanel>
-          {(tabIndex === 1) ? <Pixels /> : null}
+          {(tabIndex === 1) ? <Pixels id={id} coordinates={coordinates} tier={tier} /> : null}
 
         </TabPanel>
         <TabPanel>

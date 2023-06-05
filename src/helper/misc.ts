@@ -14,3 +14,6 @@ export const getColorForTier = (tier: Tier | null) => {
   }
 }
 
+export const truncateAddress = (address: `0x${string}`) => {
+  return address.slice(0, 5) + '...' + address.slice(-4)
+}

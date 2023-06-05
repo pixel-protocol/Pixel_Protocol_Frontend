@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, createContext } from "react"
 import BlockData from "@/components/sidebar/block/BlockData";
 import Mint from "@/components/sidebar/block/Mint";
 import { VStack } from "@chakra-ui/react";
 import { Coordinates, Tier, ChainData } from "@/constant/types";
-import { useAccount, useNetwork, useContractRead } from "wagmi";
+import { useAccount, useNetwork, useContractRead, useContractReads } from "wagmi";
 
 import chainData from "@/constant/chain.json"
 import blockABI from "@/constant/abis/Block";
 import { zeroAddress } from "@/constant/constants";
 import { testnetChain } from "@/constant/constants";
+
+export const BlockHomeContext = createContext({})
 
 const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
 
@@ -19,6 +21,8 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
   const blockAddress = cData[testnetChain]["contractAddresses"][1]
   const [blockOwner, setBlockOwner] = useState<`0x${string}`>(zeroAddress)
   const [pixelColors, setPixelColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
+  const [pixelOwners, setPixelOwners] = useState<`0x${string}`[]>([...Array(100)].map(_ => zeroAddress))
+
 
   const blockContract = {
     address: blockAddress,
@@ -30,62 +34,59 @@ const Home = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     staleTime: 5_000
   }
 
-  /* Get owner of block */
-  const { data: blockOwnerData, isError: blockOwnerIsError, isLoading: blockOWnerIsLoading, refetch: blockOwnerRefetch } = useContractRead({
 
-    ...blockContract,
-    functionName: 'ownerOf',
-    args: [BigInt(id)],
-    ...readConfig,
+  const { data, isError, isLoading, refetch } = useContractReads({
+    contracts: [
+      {
+        ...blockContract,
+        functionName: 'ownerOf',
+        args: [BigInt(id)],
+      },
+      {
+        ...blockContract,
+        functionName: 'getPixelColors',
+        args: [BigInt(id)],
+      },
+      {
+        ...blockContract,
+        functionName: 'getPixelOwners',
+        args: [BigInt(id)],
+      }
+    ],
     onSuccess(data) {
-      setBlockOwner(data as `0x${string}`)
+      const [blockOwner, pixelColors, pixelOwners] = data
+      setBlockOwner(blockOwner.result ? blockOwner.result as `0x${string}` : zeroAddress)
+      setPixelColors(pixelColors.result ? (pixelColors.result as number[]).map(x => "#" + x.toString(16).padStart(6, '0') as `#${string}`) : [...Array(100)].map(_ => "#ffffff"))
+      setPixelOwners(pixelOwners.result ? pixelOwners.result as `0x${string}`[] : [...Array(100)].map(_ => zeroAddress))
     },
     onError(err) {
       setBlockOwner(zeroAddress)
-      console.log(err)
-    },
-
-  })
-
-  /* get colors of pixels */
-  const { data: pixelColorsData, isError: pixelColorsIsError, isLoading: pixelColorsIsLoading, refetch: pixelColorsRefetch } = useContractRead({
-
-    ...blockContract,
-    functionName: 'getPixelColors',
-    args: [BigInt(id)],
-    ...readConfig,
-    onSuccess(data) {
-      const hexCodes = (data as number[]).map(x => "#" + x.toString(16).padStart(6, '0') as `#${string}`)
-      setPixelColors(hexCodes)
-      console.log(data)
-
-    },
-    onError(err) {
       setPixelColors([...Array(100)].map(_ => "#ffffff"))
+      setPixelOwners([...Array(100)].map(_ => zeroAddress))
       console.log(err)
     },
 
   })
+
+  /* get owners of blocks */
 
   useEffect(() => {
-    blockOwnerRefetch()
-    pixelColorsRefetch()
-    console.log("ID Changed!")
+    refetch()
   }, [id])
 
   useEffect(() => {
-    blockOwnerRefetch()
-    pixelColorsRefetch()
-    console.log("initialized Home!")
+    refetch()
   }, [])
   return (
-    <VStack spacing={2} align="stretch">
-      <BlockData id={id} coordinates={coordinates} tier={tier} exists={blockOwner !== zeroAddress} owner={blockOwner} colors={pixelColors} />
-      {(blockOwner === zeroAddress) ?
-        <Mint id={id} coordinates={coordinates} tier={tier} isConnected={isConnected} isValidChain={chain?.name === testnetChain} /> :
-        null}
+    <BlockHomeContext.Provider value={{ blockOwner, setBlockOwner, pixelColors, setPixelColors }}>
+      <VStack spacing={2} align="stretch">
+        <BlockData id={id} coordinates={coordinates} tier={tier} exists={blockOwner !== zeroAddress} owner={blockOwner} colors={pixelColors} />
+        {(blockOwner === zeroAddress) ?
+          <Mint id={id} coordinates={coordinates} tier={tier} isConnected={isConnected} isValidChain={chain?.name === testnetChain} /> :
+          null}
 
-    </VStack>
+      </VStack>
+    </BlockHomeContext.Provider>
   )
 }
 

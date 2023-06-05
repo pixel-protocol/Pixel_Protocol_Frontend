@@ -31,6 +31,8 @@ export const colorChoices = [
 
 export const zeroAddress = "0x0000000000000000000000000000000000000000"
 
+export const sampleBlockColor = ['#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#66b84a', '#4ab8b8', '#66b84a', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#66b84a', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#66b84a', '#4ab8b8', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#66b84a', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#66b84a', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#66b84a', '#4ab8b8', '#4ab8b8', '#66b84a', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#4ab8b8', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#66b84a', '#4ab8b8', '#66b84a', '#66b84a']
+
 export const testnetChain = "Polygon Mumbai"
 
 export const TWITTER_LINK = "https://twitter.com/0xPixelProtocol"
