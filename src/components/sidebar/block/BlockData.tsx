@@ -17,7 +17,6 @@ import { coordToTierBlock } from '@/helper/conversion'
 
 import { useNetwork, useContractRead, useAccount } from 'wagmi'
 
-import blockABI from '@/constant/abis/Block.json'
 import BlockArt from '@/components/sidebar/block/BlockArt'
 import CopyButton from '@/components/sidebar/CopyButton'
 import OwnerIcon from '@/components/sidebar/OwnerIcon'
@@ -31,7 +30,6 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
   const blockExplorerAcc = cData[testnetChain]["blockExplorerAcc"]
   const { address, connector, isConnected } = useAccount()
-
 
   console.log("Block explorer acc: " + blockExplorerAcc)
 
