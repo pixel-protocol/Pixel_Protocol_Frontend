@@ -177,19 +177,17 @@ const Home: NextPage = () => {
         arr[idx + 2] = dataArr[i + 2];
         arr[idx + 3] = 255;
       }
-      console.log("Data: ")
-      console.log(arr)
       imageData.current = new ImageData(arr, 1000, 1000);
       offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
     })
     socket.on("colorChange", (data) => {
-      const ids = data.ids; const colors = data.rgb;
+      const ids = data.ids; const colors = data.colors;
 
       if (imageData.current) {
         for (let i = 0; i < ids.length; i++) {
-          imageData.current.data[ids[i] * 4] = colors[0];
-          imageData.current.data[ids[i] * 4 + 1] = colors[1];
-          imageData.current.data[ids[i] * 4 + 2] = colors[2];
+          imageData.current.data[ids[i] * 4] = Number(colors[i][0]);
+          imageData.current.data[ids[i] * 4 + 1] = Number(colors[i][1]);
+          imageData.current.data[ids[i] * 4 + 2] = Number(colors[i][2]);
           imageData.current.data[ids[i] * 4 + 3] = 255;
 
         }

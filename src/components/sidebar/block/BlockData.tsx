@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   Stat,
   StatLabel,
@@ -17,12 +17,12 @@ import { coordToTierBlock } from '@/helper/conversion'
 
 import { useNetwork, useContractRead, useAccount } from 'wagmi'
 
-import blockABI from '@/constant/abis/Block.json'
 import BlockArt from '@/components/sidebar/block/BlockArt'
 import CopyButton from '@/components/sidebar/CopyButton'
 import OwnerIcon from '@/components/sidebar/OwnerIcon'
 
 import { testnetChain } from '@/constant/constants'
+import { BlockHomeContext } from '@/components/sidebar/block/Home'
 
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;

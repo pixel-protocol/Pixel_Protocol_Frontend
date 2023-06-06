@@ -5,9 +5,9 @@ import React, { useState, useEffect, useRef } from "react";
 export default function CopyButton({ target }: { target: string }) {
 
   const [isOpen, setIsOpen] = useState(false)
-  const timer = useRef<Timeout>()
+  const timer = useRef<NodeJS.Timeout>()
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault()
     navigator.clipboard.writeText(target)
       .then(() => {
