@@ -22,7 +22,6 @@ import CopyButton from '@/components/sidebar/CopyButton'
 import OwnerIcon from '@/components/sidebar/OwnerIcon'
 
 import { testnetChain } from '@/constant/constants'
-import { BlockHomeContext } from '@/components/sidebar/block/Home'
 
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
