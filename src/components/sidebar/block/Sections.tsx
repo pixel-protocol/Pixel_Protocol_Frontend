@@ -139,8 +139,8 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
       <Tabs onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
         <TabList>
           <Tab><Icon as={MdHomeFilled} mr="1" />Home</Tab>
-          <Tab><Icon as={MdGridView} mr="1" />Pixels</Tab>
-          <Tab><Icon as={MdMonetizationOn} mr="1" />Rent</Tab>
+          <Tab isDisabled={blockOwner === zeroAddress}><Icon as={MdGridView} mr="1" />Pixels</Tab>
+          <Tab isDisabled={blockOwner === zeroAddress}><Icon as={MdMonetizationOn} mr="1" />Rent</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -150,12 +150,12 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
           </TabPanel>
           <TabPanel>
-            {(tabIndex === 1) ? <Pixels id={id} coordinates={coordinates} tier={tier} /> : null}
+            {(tabIndex === 1) ? (blockOwner !== zeroAddress) && <Pixels id={id} coordinates={coordinates} tier={tier} /> : null}
 
           </TabPanel>
           <TabPanel>
             <RentPoolModalContext.Provider value={{ isOpen: isOpenRentPoolModal, onOpen: onOpenRentPoolModal, onClose: onCloseRentPoolModal }}>
-              {(tabIndex === 2) ? <Rent id={id} coordinates={coordinates} tier={tier} /> : null}
+              {(tabIndex === 2) ? (blockOwner !== zeroAddress) && <Rent id={id} coordinates={coordinates} tier={tier} /> : null}
             </RentPoolModalContext.Provider>
           </TabPanel>
         </TabPanels>

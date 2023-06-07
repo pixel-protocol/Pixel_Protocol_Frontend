@@ -21,15 +21,14 @@ const Pixels = ({ id, coordinates, tier }: { id: number, coordinates: Coordinate
   const { address, connector, isConnected } = useAccount()
 
 
-  const blockAddress = cData[testnetChain]["contractAddresses"][1]
 
-  const { blockOwner, pixelColors, pixelOwners } = useContext(BlockContext)
+  const { pixelColors, pixelOwners } = useContext(BlockContext)
 
   return (
     <>
 
-      {(blockOwner !== zeroAddress) ?
-        <PixelsSummary blockId={id} ids={blockIdToPixelIds(id)} colors={pixelColors} owners={pixelOwners} /> : <Mint id={id} coordinates={coordinates} tier={tier} isConnected={isConnected} isValidChain={chain?.name === testnetChain} />}
+
+      <PixelsSummary blockId={id} ids={blockIdToPixelIds(id)} colors={pixelColors} owners={pixelOwners} />
     </>
   )
 
