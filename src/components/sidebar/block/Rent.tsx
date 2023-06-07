@@ -5,6 +5,7 @@ import { useNetwork, useAccount, useContractReads } from "wagmi"
 import { testnetChain } from "@/constant/constants"
 
 import PoolNotCreated from "@/components/sidebar/block/rent/PoolNotCreated"
+import PoolCreated from "@/components/sidebar/block/rent/PoolCreated"
 import { zeroAddress } from "viem"
 
 import rentFactoryABI from "@/constant/abis/RentFactory"
@@ -58,10 +59,7 @@ const Rent = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     refetch()
   }, [])
 
-
-
-
-  return ((poolAddress === zeroAddress) ? <PoolNotCreated id={id} coordinates={coordinates} tier={tier} /> : null)
+  return ((poolAddress === zeroAddress) ? <PoolNotCreated id={id} coordinates={coordinates} tier={tier} /> : <PoolCreated id={id} coordinates={coordinates} tier={tier} />)
 }
 
 export default Rent

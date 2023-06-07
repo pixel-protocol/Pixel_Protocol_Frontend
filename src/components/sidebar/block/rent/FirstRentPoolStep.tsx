@@ -58,7 +58,7 @@ const FirstRentPoolStep = ({ id, mode, baseFloorPrice, bidDuration, bidIncrement
     max: 7,
     step: 1,
     changeHandler: handleChangeBidDuration,
-    helperText: `Bid Duration is between 3 days and 3 days`
+    helperText: `Bid Duration is between 3 days and 7 days`
   }, {
     label: "Bid Increment (%)",
     value: bidIncrementInput,
