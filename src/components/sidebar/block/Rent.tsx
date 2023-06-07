@@ -59,7 +59,7 @@ const Rent = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates,
     refetch()
   }, [])
 
-  return ((poolAddress === zeroAddress) ? <PoolNotCreated id={id} coordinates={coordinates} tier={tier} /> : <PoolCreated id={id} coordinates={coordinates} tier={tier} />)
+  return ((poolAddress === zeroAddress) ? <PoolNotCreated id={id} coordinates={coordinates} tier={tier} /> : <PoolCreated id={id} poolAddress={poolAddress} coordinates={coordinates} tier={tier} />)
 }
 
 export default Rent
