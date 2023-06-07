@@ -6,7 +6,7 @@ import chainData from '@/constant/chain.json'
 import { useNetwork, useAccount } from 'wagmi'
 
 import { BlockContext } from '@/components/sidebar/block/Sections'
-
+import CreatePool from '@/components/sidebar/block/rent/CreatePool'
 
 
 const PoolNotCreated = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
@@ -27,7 +27,7 @@ const PoolNotCreated = ({ id, coordinates, tier }: { id: number, coordinates: Co
               Rent Pool not created
             </Text>
           </Alert>
-          {(blockOwner === address) && <Button colorScheme='purple'>Create Pool</Button>}
+          {(blockOwner === address) && <CreatePool id={id} />}
         </VStack>
 
       </CardBody></Card>

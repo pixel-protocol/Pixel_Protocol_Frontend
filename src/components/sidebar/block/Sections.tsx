@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect } from 'react'
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Icon } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Icon, useDisclosure } from '@chakra-ui/react'
 import { MdHomeFilled, MdGridView, MdMonetizationOn } from 'react-icons/md'
 import Home from '@/components/sidebar/block/Home'
 import Pixels from '@/components/sidebar/block/Pixels'
@@ -30,10 +30,28 @@ type BlockContextType = {
   pixelColors: `#${string}`[],
   pixelOwners: `0x${string}`[],
 }
+
+type ModalContextType = {
+  isOpen: boolean,
+  onOpen: () => void,
+  onClose: () => void
+}
 export const BlockContext = createContext<BlockContextType>({
   blockOwner: zeroAddress,
   pixelColors: [...Array(100)].map(_ => "#ffffff"),
   pixelOwners: [...Array(100)].map(_ => zeroAddress)
+})
+
+export const MintModalContext = createContext<ModalContextType>({
+  isOpen: false,
+  onOpen: () => { },
+  onClose: () => { }
+})
+
+export const RentPoolModalContext = createContext<ModalContextType>({
+  isOpen: false,
+  onOpen: () => { },
+  onClose: () => { }
 })
 
 const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordinates, tier: Tier }) => {
@@ -47,6 +65,13 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
   const [blockOwner, setBlockOwner] = useState<`0x${string}`>(zeroAddress)
   const [pixelColors, setPixelColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
   const [pixelOwners, setPixelOwners] = useState<`0x${string}`[]>([...Array(100)].map(_ => zeroAddress))
+
+
+  // Modals placed at the top of the hierarchy to prevent auto close on rerendering
+  const { isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal } = useDisclosure()
+  const { isOpen: isOpenRentPoolModal, onOpen: onOpenRentPoolModal, onClose: onCloseRentPoolModal } = useDisclosure()
+
+
 
 
   const blockContract = {
@@ -111,7 +136,6 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
   return (
     <BlockContext.Provider value={{ blockOwner: blockOwner, pixelColors: pixelColors, pixelOwners: pixelOwners }}>
 
-
       <Tabs onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
         <TabList>
           <Tab><Icon as={MdHomeFilled} mr="1" />Home</Tab>
@@ -120,8 +144,9 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
         </TabList>
         <TabPanels>
           <TabPanel>
-            {(tabIndex === 0) ? <Home id={id} coordinates={coordinates} tier={tier} /> : null}
-
+            <MintModalContext.Provider value={{ isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal }}>
+              {(tabIndex === 0) ? <Home id={id} coordinates={coordinates} tier={tier} /> : null}
+            </MintModalContext.Provider>
 
           </TabPanel>
           <TabPanel>
@@ -129,7 +154,9 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
           </TabPanel>
           <TabPanel>
-            {(tabIndex === 2) ? <Rent id={id} coordinates={coordinates} tier={tier} /> : null}
+            <RentPoolModalContext.Provider value={{ isOpen: isOpenRentPoolModal, onOpen: onOpenRentPoolModal, onClose: onCloseRentPoolModal }}>
+              {(tabIndex === 2) ? <Rent id={id} coordinates={coordinates} tier={tier} /> : null}
+            </RentPoolModalContext.Provider>
           </TabPanel>
         </TabPanels>
       </Tabs >

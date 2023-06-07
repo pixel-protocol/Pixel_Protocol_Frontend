@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   Icon,
   VStack,
@@ -22,6 +22,8 @@ import MintModal from '@/components/sidebar/block/MintModal';
 import { testnetChain } from '@/constant/constants';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
+import { MintModalContext } from '@/components/sidebar/block/Sections';
+
 const cData: ChainData = chainData;
 
 const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number, coordinates: Coordinates, tier: Tier, isConnected: boolean, isValidChain: boolean }) => {
@@ -29,8 +31,9 @@ const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork()
 
-  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
+
+  const { isOpen, onOpen, onClose } = useContext(MintModalContext)
 
   const { openConnectModal } = useConnectModal();
 
@@ -70,7 +73,7 @@ const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number
             </GridItem>
           </Grid>
           {(isConnected) ? (isValidChain) ?
-            <Button loadingText="Minting" colorScheme='purple' onClick={onModalOpen}>
+            <Button loadingText="Minting" colorScheme='purple' onClick={onOpen}>
               Mint
             </Button> : <><Alert status="error">
               <AlertIcon />
@@ -91,7 +94,7 @@ const Mint = ({ id, coordinates, tier, isConnected, isValidChain }: { id: number
 
       </CardBody>
     </Card >
-    {isModalOpen && (<MintModal id={id} coordinates={coordinates} tier={tier} isModalOpen={isModalOpen} onModalClose={onModalClose} />)}
+    {isOpen && (<MintModal id={id} coordinates={coordinates} tier={tier} isModalOpen={isOpen} onModalClose={onClose} />)}
   </>
   )
 }
