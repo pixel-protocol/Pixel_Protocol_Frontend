@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext, useEffect } from 'react'
-import { Card, CardBody, VStack, Image, Alert, AlertIcon, Text, Button } from '@chakra-ui/react'
+import { Card, CardBody, VStack, Image, Alert, AlertIcon, Text, Button, Box, HStack, Select, Stat, StatLabel, StatNumber, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, StatHelpText, Spacer, Link } from '@chakra-ui/react'
 import { Coordinates, Tier, ChainData } from '@/constant/types'
 import { testnetChain, zeroAddress } from '@/constant/constants'
 import chainData from '@/constant/chain.json'
@@ -10,6 +10,9 @@ import CreatePool from '@/components/sidebar/block/rent/CreatePool'
 import rentPoolABI from '@/constant/abis/RentPool'
 import { formatEther } from 'viem'
 import { poolStateString } from '@/helper/conversion'
+import PoolInfo from '@/components/sidebar/block/rent/PoolInfo'
+import MaticIcon from '@/components/icons/MaticIcon'
+import { truncateAddress } from '@/helper/misc'
 
 type RentPoolContextType = {
   poolState: number,
@@ -103,24 +106,139 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   useEffect(() => {
     refetch()
   }, [])
+  // label: "Base Floor Price per Pixel (MATIC)",
+  //   value: baseFloorPriceInput,
+  //   precision: 4,
+  //   min: fairValuePerPixel,
+  //   max: fairValuePerPixel * 1e4,
+  //   step: Number((fairValuePerPixel / 10).toPrecision(1)),
+
+  let content = <></>;
+  if (poolState === 0) {
+    (content = <><Box>
+      <Text color='gray.600' fontWeight='bold'>Select Pool Duration</Text>
+      <Select variant='filled' colorScheme='purple' bg='white' focusBorderColor={"purple.500"}
+      >{/* value = {} onChange={}*/}
+        <option value={30}>30 Days</option>
+        <option value={90}>90 Days</option>
+        <option value={180}>180 Days</option>
+      </Select>
+    </Box>
+      <HStack align="stretch">
+        <Button colorScheme='purple' width='100%' onClick={() => { }}>Activate</Button>
+        <Button colorScheme='purple' width='100%' onClick={() => { }}>Edit Pool</Button>
+      </HStack></>)
+  } else if (poolState === 1) {
+    content = <>
+      <Box>
+        <Text color='gray.600' fontWeight='bold'>Set Bid Price Per Pixel</Text>
+        <Card border="1px solid" borderColor="purple">
+          <CardBody px="3" py="2">
+            <Stat>
+              <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
+              <HStack><MaticIcon boxSize={8} mr="2" />
+                <NumberInput focusBorderColor={"purple.500"} defaultValue={baseFloorPrice} precision={4} step={Number((baseFloorPrice / 10).toPrecision(1))}
+                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={() => { }}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput><StatNumber my="1" fontSize={"lg"}>
+                  MATIC / Pixel</StatNumber></HStack>
+              <StatHelpText mb="0">*Min bid {baseFloorPrice} MATIC per Pixel</StatHelpText>
+            </Stat>
+          </CardBody>
+        </Card>
+
+      </Box>
+      <Button colorScheme='purple' width='100%'>Activate</Button>
+    </>
+  } else if (poolState === 2/* && within bid duration */) {
+    content = <>
+      <HStack spacing={2}>
+        <Text color='gray.600' fontWeight='bold'>Days left to bid:</Text>
+        <Text >5 days left</Text>
+      </HStack>
+      <HStack spacing={0}>
+        <Text color='gray.600' fontWeight='bold' mr={2}>Current Bid:</Text>
+        <MaticIcon boxSize={5} /><Text pl={1}>{baseFloorPrice} MATIC per Pixel</Text>
+      </HStack>
+      <Box>
+        <Text color='gray.600' fontWeight='bold'>Set Bid Price Per Pixel</Text>
+        <Card border="1px solid" borderColor="purple">
+          <CardBody px="3" py="2">
+            <Stat>
+              <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
+              <HStack><MaticIcon boxSize={8} mr="2" />
+                <NumberInput focusBorderColor={"purple.500"} defaultValue={baseFloorPrice} precision={4} step={Number((baseFloorPrice / 10).toPrecision(1))}
+                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={() => { }}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput><StatNumber my="1" fontSize={"lg"}>
+                  MATIC / Pixel</StatNumber></HStack>
+              <StatHelpText mb="0">*Min bid {baseFloorPrice} MATIC per Pixel</StatHelpText>
+            </Stat>
+          </CardBody>
+        </Card>
+      </Box>
+      <Button colorScheme='purple' width='100%' onClick={() => { }}>Place Bid</Button>
+    </>
+  } else if (poolState === 2 /* && no time left to bid */) {
+    content = <>
+      <HStack spacing={2}>
+        <Text color='gray.600' fontWeight='bold'>Days left to bid:</Text>
+        <Text color='red'>Bidding Period Over</Text>
+      </HStack>
+      <Card border="1px solid" borderColor="purple">
+        <CardBody px="3" py="2">
+          <Stat>
+            <StatLabel color="purple">Last Bid Price Per Pixel</StatLabel>
+            <StatNumber my="1" fontSize={"lg"}>
+              <MaticIcon boxSize={8} mr="2" /> {baseFloorPrice} MATIC / Pixel</StatNumber>
+          </Stat>
+        </CardBody>
+      </Card>
+      <Text>You will receive 0.5% of all bids as reward</Text>
+      <Button colorScheme='purple' width='100%'>Initiate</Button>
+    </>
+  } else if (poolState === 3) {
+    content = <>
+      <Card border="1px solid" borderColor="purple">
+        <CardBody px="3" py="2">
+          <Stat>
+            <StatLabel color="purple">Last Bid Price Per Pixel</StatLabel>
+            <StatNumber my="1" fontSize={"lg"}>
+              <MaticIcon boxSize={8} mr="2" /> {baseFloorPrice} MATIC / Pixel</StatNumber>
+          </Stat>
+        </CardBody>
+      </Card>
+      <HStack>
+        <Text color='gray.600' fontWeight='bold'>Bidder: </Text>
+        <Link title={poolAddress}>{truncateAddress(poolAddress)}</Link>
+      </HStack>
+    </>
+  }
+
+
   return (
     <RentPoolContext.Provider value={{ poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch }}>
       {
         //To become a separate component: PoolInfo.tsx or sth
       }
-      <Card variant="filled">
-        <CardBody>
-          <VStack spacing="3" align="stretch">
-            <Image h="120px" src="/images/rent.svg" alt="rent me!" />
-            <Text>{poolAddress}</Text>
-            <Text>Pool State: {poolStateString[poolState]}</Text>
-            <Text>{baseFloorPrice} MATIC per Pixel</Text>
-            <Text>{bidDuration} days</Text>
-            <Text>{bidIncrement}%</Text>
-            <Text>Current Epoch: {epoch}</Text>
-          </VStack>
+      <PoolInfo poolAddress={poolAddress} poolState={poolState}
+        baseFloorPrice={baseFloorPrice} bidDuration={bidDuration} bidIncrement={bidIncrement} epoch={epoch} />
 
-        </CardBody></Card>
+      <Card variant="filled" my={4}>
+        <CardBody>
+          <VStack spacing="3" align="left" width='100%'>
+            {content}
+          </VStack>
+        </CardBody>
+      </Card>
     </RentPoolContext.Provider>
 
   )
