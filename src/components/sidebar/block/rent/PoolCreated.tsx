@@ -9,6 +9,7 @@ import { BlockContext } from '@/components/sidebar/block/Sections'
 import CreatePool from '@/components/sidebar/block/rent/CreatePool'
 import rentPoolABI from '@/constant/abis/RentPool'
 import { formatEther } from 'viem'
+import { poolStateString } from '@/helper/conversion'
 
 type RentPoolContextType = {
   poolState: number,
@@ -94,6 +95,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   })
 
 
+
   useEffect(() => {
     refetch()
   }, [id])
@@ -111,12 +113,11 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
           <VStack spacing="3" align="stretch">
             <Image h="120px" src="/images/rent.svg" alt="rent me!" />
             <Text>{poolAddress}</Text>
-            <Text>Pool State: {poolState}</Text>
+            <Text>Pool State: {poolStateString[poolState]}</Text>
             <Text>{baseFloorPrice} MATIC per Pixel</Text>
             <Text>{bidDuration} days</Text>
             <Text>{bidIncrement}%</Text>
             <Text>Current Epoch: {epoch}</Text>
-
           </VStack>
 
         </CardBody></Card>

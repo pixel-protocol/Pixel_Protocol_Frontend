@@ -93,3 +93,5 @@ export const pixelCoordToBlockCoord = (x: number, y: number) => {
 export const invertColor = (dec: number) => {
     return 16777215 - dec;
 }
+
+export const poolStateString: { [key: number]: string } = { 0: 'Dormant', 1: 'Active', 2: 'Pending', 3: 'Ongoing', 4: 'Ended' }
