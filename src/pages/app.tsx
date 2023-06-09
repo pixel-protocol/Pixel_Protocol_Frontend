@@ -29,6 +29,8 @@ const Home: NextPage = () => {
   const offscreenCanvas = useRef<HTMLCanvasElement | null>(null);
   const [mode, setMode] = useState<Mode>('Pixel')
   const startMousePosition = useRef({ x: 0, y: 0 });
+  const firstStart = useRef(true);
+  const [imageDownloaded, setImageDownloaded] = useState(false);
 
   useEffect(() => {
     if (!!window && !!selectedPointerPosition) {
@@ -40,18 +42,20 @@ const Home: NextPage = () => {
       const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
       window.history.replaceState(null, '', newUrl);
     }
-  }, [selectedPointerPosition, mode])
+  }, [selectedPointerPosition?.x, selectedPointerPosition?.y, mode])
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const x = searchParams.get('x');
     const y = searchParams.get('y');
     const mode = searchParams.get('mode');
-    if (x !== null && y !== null) {
+
+    if (x !== null && y !== null && imageDownloaded && firstStart.current) {
+      firstStart.current = false;
       moveToPoint(parseInt(x), parseInt(y));
       setMode(mode ? mode as Mode : 'Pixel');
     }
-  }, [])
+  }, [imageDownloaded])
 
   const toggleMode = () => {
     setMode((mode === "Pixel") ? "Block" : "Pixel");
@@ -60,7 +64,8 @@ const Home: NextPage = () => {
   }
 
   const redraw = useRef(() => {
-    requestAnimationFrame(redraw.current);
+    const id = requestAnimationFrame(redraw.current);
+    return id
   });
 
 
@@ -164,7 +169,7 @@ const Home: NextPage = () => {
     offscreenCanvas.current.width = 1000;
     offscreenCanvas.current.height = 1000;
 
-    redraw.current();
+    const id = redraw.current();
 
     socket.on("canvas", (data) => {
       const dataArr = new Uint8Array(data);
@@ -179,6 +184,7 @@ const Home: NextPage = () => {
       }
       imageData.current = new ImageData(arr, 1000, 1000);
       offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
+      setImageDownloaded(true)
     })
     socket.on("colorChange", (data) => {
       const ids = data.ids; const colors = data.colors;
@@ -197,7 +203,14 @@ const Home: NextPage = () => {
         socket.emit("requestCanvas")
       }
 
+      return () => {
+        cancelAnimationFrame(id);
+      }
     })
+
+    return () => {
+      socket.removeAllListeners()
+    }
   }, []);
 
 
@@ -207,8 +220,8 @@ const Home: NextPage = () => {
 
     redraw.current = () => {
       if (ctx == null || c == null) {
-        requestAnimationFrame(redraw.current);
-        return;
+        const id = requestAnimationFrame(redraw.current);
+        return id
       };
 
       c.width = window.innerWidth
@@ -258,7 +271,8 @@ const Home: NextPage = () => {
       }
 
 
-      requestAnimationFrame(redraw.current);
+      const id = requestAnimationFrame(redraw.current);
+      return id
     };
 
   }, [ctx, c, lastX, lastY, cameraZoom, pointerPosition, selectedPointerPosition, mode])
