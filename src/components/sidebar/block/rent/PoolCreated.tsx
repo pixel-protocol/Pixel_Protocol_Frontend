@@ -1,9 +1,10 @@
-import React, { useState, useContext, createContext, useEffect } from 'react'
+import React, { useState, useContext, createContext, useEffect, useMemo } from 'react'
 import { Card, CardBody, VStack, Image, Alert, AlertIcon, Text, Button, Box, HStack, Select, Stat, StatLabel, StatNumber, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, StatHelpText, Spacer, Link } from '@chakra-ui/react'
 import { Coordinates, Tier, ChainData } from '@/constant/types'
 import { testnetChain, zeroAddress } from '@/constant/constants'
 import chainData from '@/constant/chain.json'
 import { useNetwork, useAccount, useContractReads } from 'wagmi'
+import { writeContract, prepareWriteContract, readContract } from 'wagmi/actions'
 
 import { BlockContext } from '@/components/sidebar/block/Sections'
 import CreatePool from '@/components/sidebar/block/rent/CreatePool'
@@ -20,6 +21,15 @@ type RentPoolContextType = {
   bidIncrement: number,
   bidDuration: number,
   epoch: number
+}
+
+type EpochMetadata = {
+  epoch: number;
+  startDate: number;
+  endDate: number;
+  costPerPixel: number;
+  tenant: string;
+  duration: number;
 }
 
 export const RentPoolContext = createContext<RentPoolContextType>({
@@ -42,6 +52,8 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   const [bidIncrement, setBidIncrement] = useState<number>(0)
   const [bidDuration, setBidDuration] = useState<number>(0)
   const [epoch, setEpoch] = useState<number>(0)
+  const [epochData, setEpochData] = useState<EpochMetadata | null>(null)
+  const [bidPrice, setBidPrice] = useState<number | null>(null)
 
   const rentPoolContract = {
     address: poolAddress,
@@ -97,6 +109,23 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
 
   })
 
+  useEffect(() => {
+    const fetchEpochData = async () => {
+      if (epoch !== 0) {
+        try {
+          const epochData = await readContract({
+            ...rentPoolContract,
+            functionName: '_epochs',
+            args: [epoch]
+          })
+          setEpochData(epochData as any)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+    }
+    fetchEpochData()
+  }, [epoch])
 
 
   useEffect(() => {
@@ -113,6 +142,28 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   //   max: fairValuePerPixel * 1e4,
   //   step: Number((fairValuePerPixel / 10).toPrecision(1)),
 
+  const onActivate = async () => {
+    const config = await prepareWriteContract({
+      ...rentPoolContract,
+      functionName: 'activate',
+      args: [bidDuration]
+    })
+    await writeContract(config);
+  }
+
+  const onPlaceBid = async () => {
+    if (bidPrice === null) return
+
+    const parsedBidPrice = BigInt(bidPrice * 1e4) * (BigInt(10) ** BigInt(14))
+    const config = await prepareWriteContract({
+      ...rentPoolContract,
+      functionName: 'makeBid',
+      args: [parsedBidPrice, []]
+    })
+
+    await writeContract(config)
+  }
+
   let content = <></>;
   if (poolState === 0) {
     (content = <><Box>
@@ -125,7 +176,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
       </Select>
     </Box>
       <HStack align="stretch">
-        <Button colorScheme='purple' width='100%' onClick={() => { }}>Activate</Button>
+        <Button colorScheme='purple' width='100%' onClick={onActivate}>Activate</Button>
         <Button colorScheme='purple' width='100%' onClick={() => { }}>Edit Pool</Button>
       </HStack></>)
   } else if (poolState === 1) {
@@ -152,7 +203,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
         </Card>
 
       </Box>
-      <Button colorScheme='purple' width='100%'>Activate</Button>
+      <Button colorScheme='purple' width='100%' onClick={onActivate}>Activate</Button>
     </>
   } else if (poolState === 2/* && within bid duration */) {
     content = <>
@@ -172,7 +223,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
               <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
               <HStack><MaticIcon boxSize={8} mr="2" />
                 <NumberInput focusBorderColor={"purple.500"} defaultValue={baseFloorPrice} precision={4} step={Number((baseFloorPrice / 10).toPrecision(1))}
-                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={() => { }}>
+                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={(e) => { setBidPrice(parseFloat(e)) }}>
                   <NumberInputField />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
@@ -185,7 +236,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
           </CardBody>
         </Card>
       </Box>
-      <Button colorScheme='purple' width='100%' onClick={() => { }}>Place Bid</Button>
+      <Button colorScheme='purple' width='100%' onClick={onPlaceBid}>Place Bid</Button>
     </>
   } else if (poolState === 2 /* && no time left to bid */) {
     content = <>
