@@ -16,6 +16,8 @@ import MaticIcon from '@/components/icons/MaticIcon'
 import { truncateAddress } from '@/helper/misc'
 
 import EditPool from '@/components/sidebar/block/rent/EditPool'
+import PoolDormant from '@/components/sidebar/block/rent/PoolDormant'
+import PoolActive from '@/components/sidebar/block/rent/PoolActive'
 
 type RentPoolContextType = {
   poolAddress: `0x${string}`,
@@ -60,8 +62,6 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   const [epoch, setEpoch] = useState<number>(0)
   const [epochData, setEpochData] = useState<EpochMetadata | null>(null)
   const [bidPrice, setBidPrice] = useState<number | null>(null)
-
-  const [rentDuration, setRentDuration] = useState<number>(0)
 
   const rentPoolContract = {
     address: poolAddress,
@@ -143,21 +143,6 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   useEffect(() => {
     refetch()
   }, [])
-  // label: "Base Floor Price per Pixel (MATIC)",
-  //   value: baseFloorPriceInput,
-  //   precision: 4,
-  //   min: fairValuePerPixel,
-  //   max: fairValuePerPixel * 1e4,
-  //   step: Number((fairValuePerPixel / 10).toPrecision(1)),
-
-  const onActivate = async () => {
-    const { request } = await prepareWriteContract({
-      ...rentPoolContract,
-      functionName: 'activate',
-      args: [BigInt(rentDuration)]
-    })
-    await writeContract(request);
-  }
 
   const onPlaceBid = async () => {
     if (bidPrice === null) return
@@ -173,46 +158,8 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   }
 
   let content = <></>;
-  if (poolState === 0) {
-    (content = <><Box>
-      <Text color='gray.600' fontWeight='bold'>Select Rent Duration</Text>
-      <Select variant='filled' colorScheme='purple' bg='white' focusBorderColor={"purple.500"} onChange={(e) => setRentDuration(Number(e.target.value))}>
-        <option value={0}>30 Days</option>
-        <option value={1}>90 Days</option>
-        <option value={2}>180 Days</option>
-      </Select>
-    </Box>
-      <HStack align="stretch">
-        <Button colorScheme='purple' width='100%' onClick={onActivate}>Activate</Button>
-        <EditPool id={id} />
-      </HStack></>)
-  } else if (poolState === 1) {
-    content = <>
-      <Box>
-        <Text color='gray.600' fontWeight='bold'>Set Bid Price Per Pixel</Text>
-        <Card border="1px solid" borderColor="purple">
-          <CardBody px="3" py="2">
-            <Stat>
-              <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
-              <HStack><MaticIcon boxSize={8} mr="2" />
-                <NumberInput focusBorderColor={"purple.500"} defaultValue={baseFloorPrice} precision={4} step={Number((baseFloorPrice / 10).toPrecision(1))}
-                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={() => { }}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput><StatNumber my="1" fontSize={"lg"}>
-                  MATIC</StatNumber></HStack>
-              <StatHelpText mb="0">*Min bid {baseFloorPrice} MATIC per Pixel</StatHelpText>
-            </Stat>
-          </CardBody>
-        </Card>
 
-      </Box>
-      <Button colorScheme='purple' width='100%' onClick={onActivate}>Activate</Button>
-    </>
-  } else if (poolState === 2/* && within bid duration */) {
+  if (poolState === 2/* && within bid duration */) {
     content = <>
       <HStack spacing={2}>
         <Text color='gray.600' fontWeight='bold'>Days left to bid:</Text>
@@ -289,11 +236,14 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
 
       <Card variant="filled" my={4}>
         <CardBody>
-          <VStack spacing="3" align="left" width='100%'>
+          <VStack spacing="3" align="stretch">
             {content}
           </VStack>
         </CardBody>
       </Card>
+
+      (poolState===0) && <PoolDormant id={id} poolAddress={poolAddress} baseFloorPrice={baseFloorPrice} /> {/*Dormant*/}
+      (poolState===1) && <PoolActive id={id} poolAddress={poolAddress} /> {/*Active*/}
     </RentPoolContext.Provider>
 
   )
