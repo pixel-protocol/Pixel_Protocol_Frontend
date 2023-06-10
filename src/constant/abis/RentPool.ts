@@ -8,12 +8,12 @@ const rentPoolABI = [
       },
       {
         "internalType": "uint256",
-        "name": "initialBaseCostPerPixel_",
+        "name": "baseFloorBidPerPixel_",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "cooldownDuration_",
+        "name": "bidDuration_",
         "type": "uint256"
       },
       {
@@ -50,6 +50,69 @@ const rentPoolABI = [
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "enum PoolState",
+        "name": "previous",
+        "type": "uint8"
+      },
+      {
+        "indexed": true,
+        "internalType": "enum PoolState",
+        "name": "current",
+        "type": "uint8"
+      }
+    ],
+    "name": "PoolStateChange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "blockReward",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pixelReward",
+        "type": "uint256"
+      }
+    ],
+    "name": "Reward",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "_baseFloorBidPerPixel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -74,14 +137,8 @@ const rentPoolABI = [
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "_bidCostPerPixel",
+    "inputs": [],
+    "name": "_bidDuration",
     "outputs": [
       {
         "internalType": "uint256",
@@ -95,6 +152,25 @@ const rentPoolABI = [
   {
     "inputs": [],
     "name": "_bidIncrement",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "_bidPerPixel",
     "outputs": [
       {
         "internalType": "uint256",
@@ -145,46 +221,33 @@ const rentPoolABI = [
   },
   {
     "inputs": [],
+    "name": "_biddingEndDate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_biddingStartDate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "_blockReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_cooldownDuration",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_cooldownEndDate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_cooldownStartDate",
     "outputs": [
       {
         "internalType": "uint256",
@@ -200,7 +263,7 @@ const rentPoolABI = [
     "name": "_duration",
     "outputs": [
       {
-        "internalType": "enum RentPool.Duration",
+        "internalType": "enum Duration",
         "name": "",
         "type": "uint8"
       }
@@ -251,6 +314,21 @@ const rentPoolABI = [
       },
       {
         "internalType": "uint256",
+        "name": "numBids",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "biddingStartDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "biddingEndDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "startDate",
         "type": "uint256"
       },
@@ -261,7 +339,7 @@ const rentPoolABI = [
       },
       {
         "internalType": "uint256",
-        "name": "costPerPixel",
+        "name": "bidPerPixel",
         "type": "uint256"
       },
       {
@@ -270,7 +348,7 @@ const rentPoolABI = [
         "type": "address"
       },
       {
-        "internalType": "enum RentPool.Duration",
+        "internalType": "enum Duration",
         "name": "duration",
         "type": "uint8"
       }
@@ -280,7 +358,7 @@ const rentPoolABI = [
   },
   {
     "inputs": [],
-    "name": "_finalBidCostPerPixel",
+    "name": "_finalBidPerPixel",
     "outputs": [
       {
         "internalType": "uint256",
@@ -293,20 +371,7 @@ const rentPoolABI = [
   },
   {
     "inputs": [],
-    "name": "_initialBaseCostPerPixel",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_initialCostPerPixel",
+    "name": "_floorBidPerPixel",
     "outputs": [
       {
         "internalType": "uint256",
@@ -350,32 +415,6 @@ const rentPoolABI = [
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "_pendingBlockReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_pendingPixelReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -399,7 +438,7 @@ const rentPoolABI = [
     "name": "_poolState",
     "outputs": [
       {
-        "internalType": "enum RentPool.PoolState",
+        "internalType": "enum PoolState",
         "name": "",
         "type": "uint8"
       }
@@ -437,12 +476,12 @@ const rentPoolABI = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "initialBaseCostPerPixel_",
+        "name": "baseFloorBidPerPixel_",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "cooldownDuration_",
+        "name": "bidDuration_",
         "type": "uint256"
       },
       {
@@ -502,7 +541,7 @@ const rentPoolABI = [
         "type": "uint256"
       }
     ],
-    "name": "getInitialCostPerPixel",
+    "name": "getFloorBidPerPixel",
     "outputs": [
       {
         "internalType": "uint256",
@@ -515,7 +554,7 @@ const rentPoolABI = [
   },
   {
     "inputs": [],
-    "name": "getMinNextBidCost",
+    "name": "getMinNextBid",
     "outputs": [
       {
         "internalType": "uint256",
@@ -593,7 +632,7 @@ const rentPoolABI = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "costPerPixel_",
+        "name": "bidPerPixel_",
         "type": "uint256"
       },
       {
@@ -731,7 +770,7 @@ const rentPoolABI = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "newCostPerPixel_",
+        "name": "newBidPerPixel_",
         "type": "uint256"
       },
       {
@@ -750,6 +789,6 @@ const rentPoolABI = [
     "stateMutability": "payable",
     "type": "function"
   }
-]
+] as const
 
 export default rentPoolABI

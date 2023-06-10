@@ -516,6 +516,6 @@ const stakePixelABI = [
     "stateMutability": "nonpayable",
     "type": "function"
   }
-]
+] as const
 
 export default stakePixelABI
