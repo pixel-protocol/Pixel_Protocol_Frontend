@@ -50,7 +50,7 @@ function EditPoolModal({ id, isModalOpen, onModalClose, parameters }: { id: numb
   } = usePrepareContractWrite({
     ...rentPoolContract,
     functionName: 'adjustPoolParameters',
-    args: [BigInt(baseFloorPrice), BigInt(bidDuration), BigInt(bidIncrement)],
+    args: [parseEther((baseFloorPrice * 100).toString() as `${number}`), BigInt(bidDuration), BigInt(bidIncrement)],
     onError(error) {
       alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {

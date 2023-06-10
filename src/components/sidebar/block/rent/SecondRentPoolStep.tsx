@@ -32,7 +32,7 @@ const SecondRentPoolStep = ({ id, mode, baseFloorPrice, bidDuration, bidIncremen
 
   return (
     <VStack spacing={3} align="stretch">
-      {(mode === "Create") ? <Text fontSize="xl">Confirm Pool Parameters for <Text as="span" fontWeight="bold">Block #{id}</Text></Text> : <Text fontSize="xl">Confirm Changes Pool Parameters for <Text as="span" fontWeight="bold">Block #{id}</Text></Text>}
+      {(mode === "Create") ? <Text fontSize="xl">Confirm Pool Parameters for <Text as="span" fontWeight="bold">Block #{id}</Text> Rent Pool</Text> : <Text fontSize="xl">Confirm Changes to Pool Parameters for <Text as="span" fontWeight="bold">Block #{id}</Text></Text>}
 
       {inputs.map((input, i) => {
         return (

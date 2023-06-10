@@ -20,7 +20,7 @@ export default function PoolInfo({ poolAddress, poolState, baseFloorPrice, bidDu
                 <Tag size='md' variant='solid' colorScheme='purple'>{poolStateString[poolState]}</Tag>
               </HStack>
               <HStack>
-                <Text color='gray.600' fontWeight='bold'>Epochs:</Text>
+                <Text color='gray.600' fontWeight='bold'>Epoch:</Text>
                 <Text>{epoch}</Text>
               </HStack>
             </VStack>

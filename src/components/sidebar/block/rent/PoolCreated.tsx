@@ -9,18 +9,22 @@ import { writeContract, prepareWriteContract, readContract } from 'wagmi/actions
 import { BlockContext } from '@/components/sidebar/block/Sections'
 import CreatePool from '@/components/sidebar/block/rent/CreatePool'
 import rentPoolABI from '@/constant/abis/RentPool'
-import { formatEther } from 'viem'
+import { formatEther, parseEther } from 'viem'
 import { poolStateString } from '@/helper/conversion'
 import PoolInfo from '@/components/sidebar/block/rent/PoolInfo'
 import MaticIcon from '@/components/icons/MaticIcon'
 import { truncateAddress } from '@/helper/misc'
 
+import EditPool from '@/components/sidebar/block/rent/EditPool'
+
 type RentPoolContextType = {
+  poolAddress: `0x${string}`,
   poolState: number,
   baseFloorPrice: number,
   bidIncrement: number,
   bidDuration: number,
-  epoch: number
+  epoch: number,
+  setPoolState: React.Dispatch<React.SetStateAction<number>>,
 }
 
 type EpochMetadata = {
@@ -33,11 +37,13 @@ type EpochMetadata = {
 }
 
 export const RentPoolContext = createContext<RentPoolContextType>({
+  poolAddress: zeroAddress,
   poolState: 0,
   baseFloorPrice: 0,
   bidIncrement: 0,
   bidDuration: 0,
-  epoch: 0
+  epoch: 0,
+  setPoolState: () => { },
 })
 
 const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolAddress: `0x${string}`, coordinates: Coordinates, tier: Tier }) => {
@@ -156,14 +162,14 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   const onPlaceBid = async () => {
     if (bidPrice === null) return
 
-    const parsedBidPrice = BigInt(bidPrice * 1e4) * (BigInt(10) ** BigInt(14))
-    const config = await prepareWriteContract({
+    const parsedBidPrice = parseEther((bidPrice * 100).toString() as `${number}`);
+    const { request } = await prepareWriteContract({
       ...rentPoolContract,
       functionName: 'makeBid',
       args: [parsedBidPrice, []]
     })
 
-    await writeContract(config)
+    await writeContract(request)
   }
 
   let content = <></>;
@@ -178,7 +184,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
     </Box>
       <HStack align="stretch">
         <Button colorScheme='purple' width='100%' onClick={onActivate}>Activate</Button>
-        <Button colorScheme='purple' width='100%' onClick={() => { }}>Edit Pool</Button>
+        <EditPool id={id} />
       </HStack></>)
   } else if (poolState === 1) {
     content = <>
@@ -197,7 +203,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
                     <NumberDecrementStepper />
                   </NumberInputStepper>
                 </NumberInput><StatNumber my="1" fontSize={"lg"}>
-                  MATIC / Pixel</StatNumber></HStack>
+                  MATIC</StatNumber></HStack>
               <StatHelpText mb="0">*Min bid {baseFloorPrice} MATIC per Pixel</StatHelpText>
             </Stat>
           </CardBody>
@@ -277,10 +283,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
 
 
   return (
-    <RentPoolContext.Provider value={{ poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch }}>
-      {
-        //To become a separate component: PoolInfo.tsx or sth
-      }
+    <RentPoolContext.Provider value={{ poolAddress: poolAddress, poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch, setPoolState: setPoolState }}>
       <PoolInfo poolAddress={poolAddress} poolState={poolState}
         baseFloorPrice={baseFloorPrice} bidDuration={bidDuration} bidIncrement={bidIncrement} epoch={epoch} />
 
