@@ -55,6 +55,8 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   const [epochData, setEpochData] = useState<EpochMetadata | null>(null)
   const [bidPrice, setBidPrice] = useState<number | null>(null)
 
+  const [rentDuration, setRentDuration] = useState<number>(0)
+
   const rentPoolContract = {
     address: poolAddress,
     abi: rentPoolABI,
@@ -73,11 +75,11 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
       },
       {
         ...rentPoolContract,
-        functionName: '_initialBaseCostPerPixel',
+        functionName: '_baseFloorBidPerPixel',
       },
       {
         ...rentPoolContract,
-        functionName: '_cooldownDuration',
+        functionName: '_bidDuration',
       },
       {
         ...rentPoolContract,
@@ -116,7 +118,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
           const epochData = await readContract({
             ...rentPoolContract,
             functionName: '_epochs',
-            args: [epoch]
+            args: [BigInt(epoch)]
           })
           setEpochData(epochData as any)
         } catch (err) {
@@ -143,12 +145,12 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   //   step: Number((fairValuePerPixel / 10).toPrecision(1)),
 
   const onActivate = async () => {
-    const config = await prepareWriteContract({
+    const { request } = await prepareWriteContract({
       ...rentPoolContract,
       functionName: 'activate',
-      args: [bidDuration]
+      args: [BigInt(rentDuration)]
     })
-    await writeContract(config);
+    await writeContract(request);
   }
 
   const onPlaceBid = async () => {
@@ -167,12 +169,11 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
   let content = <></>;
   if (poolState === 0) {
     (content = <><Box>
-      <Text color='gray.600' fontWeight='bold'>Select Pool Duration</Text>
-      <Select variant='filled' colorScheme='purple' bg='white' focusBorderColor={"purple.500"}
-      >{/* value = {} onChange={}*/}
-        <option value={30}>30 Days</option>
-        <option value={90}>90 Days</option>
-        <option value={180}>180 Days</option>
+      <Text color='gray.600' fontWeight='bold'>Select Rent Duration</Text>
+      <Select variant='filled' colorScheme='purple' bg='white' focusBorderColor={"purple.500"} onChange={(e) => setRentDuration(Number(e.target.value))}>
+        <option value={0}>30 Days</option>
+        <option value={1}>90 Days</option>
+        <option value={2}>180 Days</option>
       </Select>
     </Box>
       <HStack align="stretch">
