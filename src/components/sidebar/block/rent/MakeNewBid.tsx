@@ -25,7 +25,7 @@ import { RentPoolModalContext } from '@/components/sidebar/block/Sections';
 import MakeNewBidModal from '@/components/sidebar/block/rent/MakeNewBidModal';
 
 
-const MakeNewBid = ({ id, bidPrice, isConnected, isValidChain }: { id: number, bidPrice: number, isConnected: boolean, isValidChain: boolean }) => {
+const MakeNewBid = ({ id, bidPrice, isConnected, isValidChain, rentDuration }: { id: number, bidPrice: number, isConnected: boolean, isValidChain: boolean, rentDuration: number }) => {
   const { chain } = useNetwork()
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork()
@@ -55,7 +55,7 @@ const MakeNewBid = ({ id, bidPrice, isConnected, isValidChain }: { id: number, b
       <Button disabled={!openConnectModal || isConnected} colorScheme='purple' onClick={openConnectModal}>Connect Wallet</Button></>
 
     }
-    {isOpen && (<MakeNewBidModal id={id} isModalOpen={isOpen} onModalClose={onClose} bidPrice={bidPrice} />)}
+    {isOpen && (<MakeNewBidModal id={id} isModalOpen={isOpen} onModalClose={onClose} bidPrice={bidPrice} rentDuration={rentDuration} />)}
   </>
   )
 }

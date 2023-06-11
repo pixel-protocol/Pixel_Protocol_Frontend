@@ -19,6 +19,7 @@ import EditPool from '@/components/sidebar/block/rent/EditPool'
 import PoolDormant from '@/components/sidebar/block/rent/PoolDormant'
 import PoolActive from '@/components/sidebar/block/rent/PoolActive'
 
+
 type RentPoolContextType = {
   poolAddress: `0x${string}`,
   poolState: number,
@@ -26,7 +27,7 @@ type RentPoolContextType = {
   bidIncrement: number,
   bidDuration: number,
   epoch: number,
-  setPoolState: React.Dispatch<React.SetStateAction<number>>,
+  refetch: (...args: any[]) => any,
 }
 
 type EpochMetadata = {
@@ -45,7 +46,7 @@ export const RentPoolContext = createContext<RentPoolContextType>({
   bidIncrement: 0,
   bidDuration: 0,
   epoch: 0,
-  setPoolState: () => { },
+  refetch: () => { },
 })
 
 const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolAddress: `0x${string}`, coordinates: Coordinates, tier: Tier }) => {
@@ -230,7 +231,7 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
 
 
   return (
-    <RentPoolContext.Provider value={{ poolAddress: poolAddress, poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch, setPoolState: setPoolState }}>
+    <RentPoolContext.Provider value={{ poolAddress: poolAddress, poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch, refetch: refetch }}>
       <PoolInfo poolAddress={poolAddress} poolState={poolState}
         baseFloorPrice={baseFloorPrice} bidDuration={bidDuration} bidIncrement={bidIncrement} epoch={epoch} />
 

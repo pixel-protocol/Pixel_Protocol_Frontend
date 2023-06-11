@@ -10,7 +10,6 @@ import Pill from '@/components/Pill'
 
 const socket = process.env.dev ? io("http://localhost:8000/") : io("https://d36kqrie6n44tn.cloudfront.net/");
 const BLOCK_SIZE = 10;
-
 const Home: NextPage = () => {
 
 

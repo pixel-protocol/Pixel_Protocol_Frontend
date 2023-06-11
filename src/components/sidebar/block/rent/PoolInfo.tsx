@@ -30,10 +30,10 @@ export default function PoolInfo({ poolAddress, poolState, baseFloorPrice, bidDu
               <Text color='gray.600' fontWeight='bold'>Pool Contract: </Text>
               <Link title={poolAddress}>{truncateAddress(poolAddress)}</Link>
             </HStack>
-            <Card border="1px solid" borderColor="purple">
+            <Card border="1px solid" borderColor="purple.500">
               <CardBody px="3" py="2">
                 <Stat>
-                  <StatLabel color="purple">Base Cost Per Pixel</StatLabel>
+                  <StatLabel color="purple.500">Base Floor Price</StatLabel>
                   <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{baseFloorPrice} MATIC / Pixel</StatNumber>
                 </Stat>
               </CardBody>

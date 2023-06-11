@@ -18,8 +18,8 @@ const SecondRentPoolStep = ({ id, mode, baseFloorPrice, bidDuration, bidIncremen
 
   const inputs = [{
     label: "Base Floor Price",
-    value: `${baseFloorPrice * 100} MATIC`,
-    helpText: `${baseFloorPrice} MATIC per Pixel`
+    value: `${baseFloorPrice} MATIC / Pixel`,
+    helpText: `Total = ${baseFloorPrice * 100} MATIC`
   }, {
     label: "Bid Duration",
     value: `${bidDuration} days`,

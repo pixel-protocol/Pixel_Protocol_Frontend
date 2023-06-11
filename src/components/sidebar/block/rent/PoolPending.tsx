@@ -7,7 +7,7 @@ import rentPoolABI from '@/constant/abis/RentPool'
 import { RentPoolContext } from '@/components/sidebar/block/rent/PoolCreated'
 import { useStateCallback } from '@/helper/hooks'
 
-const PoolDormant = ({ id, poolAddress, baseFloorPrice }: { id: number, poolAddress: `0x${string}`, baseFloorPrice: number }) => {
+const PoolPending = ({ id, poolAddress, baseFloorPrice }: { id: number, poolAddress: `0x${string}`, baseFloorPrice: number }) => {
 
   const [rentDuration, setRentDuration] = useState<number>(0)
   const [isLoading, setIsLoading] = useStateCallback<boolean>(false)
@@ -80,4 +80,4 @@ const PoolDormant = ({ id, poolAddress, baseFloorPrice }: { id: number, poolAddr
   )
 }
 
-export default PoolDormant
+export default PoolPending

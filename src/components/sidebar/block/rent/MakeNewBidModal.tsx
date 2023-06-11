@@ -28,7 +28,7 @@ import { colorChoices } from "@/constant/constants";
 
 import { RentPoolContext } from '@/components/sidebar/block/rent/PoolCreated'
 
-const SecondMakeBidStep = ({ colors, bidPrice }: { colors: `#${string}`[], bidPrice: number }) => {
+const SecondMakeBidStep = ({ id, colors, bidPrice, rentDuration }: { id: number, colors: `#${string}`[], bidPrice: number, rentDuration: number }) => {
   return (
     <SimpleGrid p={5} columns={2} spacing={8}>
       <GridItem>
@@ -36,15 +36,25 @@ const SecondMakeBidStep = ({ colors, bidPrice }: { colors: `#${string}`[], bidPr
       </GridItem>
       <GridItem>
         <VStack spacing="3" align="stretch">
+          <Text fontSize="xl">Placing bid for <Text color="purple.500" as="span" fontWeight={"bold"}>Block #{id}</Text></Text>
+          <Card border="1px solid" borderColor="purple.500">
+            <CardBody px="3" py="2">
+              <Stat>
+                <StatLabel color="purple.500">Bid Price</StatLabel>
+                <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{bidPrice * 100} MATIC</StatNumber>
+                <StatHelpText mb="0"><Text as="span" fontWeight={"bold"}>{bidPrice} MATIC / Pixel</Text></StatHelpText>
 
-          {bidPrice}
+              </Stat>
+
+            </CardBody>
+          </Card>
+          <Text>Rent Duration is <Text color="purple.500" as="span" fontWeight={"bold"}>{(rentDuration === 0) ? 30 : (rentDuration === 1) ? 90 : 180} days</Text></Text>
+
         </VStack>
       </GridItem>
     </SimpleGrid>
   )
 }
-
-
 
 const FirstMakeBidStep = ({ colors, setColors, onCellClick }:
   { colors: `#${string}`[], setColors: React.Dispatch<React.SetStateAction<`#${string}`[]>>, onCellClick: (index: number, newColor: `#${string}`) => void }) => {
@@ -89,7 +99,7 @@ const FirstMakeBidStep = ({ colors, setColors, onCellClick }:
 }
 
 
-function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice }: { id: number, isModalOpen: boolean, onModalClose: () => void, bidPrice: number }) {
+function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice, rentDuration }: { id: number, isModalOpen: boolean, onModalClose: () => void, bidPrice: number, rentDuration: number }) {
 
   const cData: ChainData = chainData;
   const { chain, chains } = useNetwork()
@@ -199,7 +209,7 @@ function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice }: { id: numb
           <Spacer />
           <ModalBody>
             {(activeStep == 0) && <FirstMakeBidStep colors={colors} setColors={setColors} onCellClick={onCellClick} />}
-            {(activeStep == 1) && <SecondMakeBidStep colors={colors} bidPrice={bidPrice} />}
+            {(activeStep == 1) && <SecondMakeBidStep id={id} colors={colors} bidPrice={bidPrice} rentDuration={rentDuration} />}
 
             {(activeStep == 2) && <SimpleGrid><Spinner size='xl' justifySelf="center" /></SimpleGrid>}
             {(activeStep == 3) && <VStack spacing={5} mt={5}><Image justifySelf="center"

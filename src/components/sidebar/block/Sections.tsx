@@ -124,6 +124,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
   useEffect(() => {
     refetch()
+    setTabIndex(0)
   }, [id])
 
   useEffect(() => {
@@ -138,7 +139,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
   return (
     <BlockContext.Provider value={{ blockOwner: blockOwner, pixelColors: pixelColors, pixelOwners: pixelOwners, refetch: refetch }}>
 
-      <Tabs onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
+      <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
         <TabList>
           <Tab><Icon as={MdHomeFilled} mr="1" />Home</Tab>
           <Tab isDisabled={blockOwner === zeroAddress}><Icon as={MdGridView} mr="1" />Pixels</Tab>

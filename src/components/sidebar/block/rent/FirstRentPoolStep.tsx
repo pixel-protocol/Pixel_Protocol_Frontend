@@ -42,7 +42,7 @@ const FirstRentPoolStep = ({ id, mode, baseFloorPrice, bidDuration, bidIncrement
   }
 
   const inputs = [{
-    label: "Base Floor Price per Pixel (MATIC)",
+    label: "Base Floor Price (MATIC / Pixel)",
     value: baseFloorPriceInput,
     precision: 4,
     min: fairValuePerPixel,
