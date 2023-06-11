@@ -1,6 +1,7 @@
 # Pixel Protocol
 
 ## Overview
+
 Pixel Protocol is a Web3 ecosystem powered by NFTs. It offers "The Homepage," a decentralized canvas where users can engage in public discourse, convey meaningful messages, and showcase art. The protocol facilitates community building, passive income through pixel rentals, fractional ownership of NFTs, and decentralized governance.
 
 ## Getting Started
@@ -62,5 +63,7 @@ Don't forget to change the package name in package.json
 This starter is using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), it is mandatory to use it to commit changes.
 
 ## External Links
+
 [Website](https://www.pixelprotocol.net)
+
 [Pixel Protocol Smart Contracts (Hardhat Project)](https://github.com/pixel-protocol/Pixel_Protocol_Contracts)
