@@ -25,6 +25,7 @@
     "@hello-pangea/color-picker": "^3.2.2",
     "@rainbow-me/rainbowkit": "^1.0.0",
     "@use-gesture/react": "^10.2.26",
+    "alchemy-sdk": "^2.9.0",
     "clsx": "^1.2.1",
     "framer-motion": "^10.12.12",
     "next": "^13.4.2",
