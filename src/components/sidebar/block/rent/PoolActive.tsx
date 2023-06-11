@@ -37,6 +37,7 @@ const PoolActive = ({ id, poolAddress }: { id: number, poolAddress: `0x${string}
       const [duration, floorPrice] = data
       setRentDuration(duration.result ? duration.result as number : 0)
       setFloorPrice(floorPrice.result ? Number(formatEther(floorPrice.result)) : 0)
+      setBidPrice(floorPrice.result ? Number(formatEther(floorPrice.result)) : 0)
     },
     onError(err) {
       setRentDuration(0)
@@ -69,7 +70,7 @@ const PoolActive = ({ id, poolAddress }: { id: number, poolAddress: `0x${string}
                   <StatLabel color="purple.500">Set Bid Price</StatLabel>
                   <HStack><MaticIcon boxSize={8} mr="2" />
                     <NumberInput focusBorderColor={"purple.500"} precision={4} step={Number((floorPrice / 10).toPrecision(1))}
-                      min={floorPrice} onChange={(valueAsString: string, valueAsNumber: number) => { setBidPrice(valueAsNumber) }}>
+                      min={floorPrice} value={bidPrice.toPrecision(4)} onChange={(valueAsString: string, valueAsNumber: number) => { setBidPrice(valueAsNumber) }}>
                       <NumberInputField />
                       <NumberInputStepper>
                         <NumberIncrementStepper />

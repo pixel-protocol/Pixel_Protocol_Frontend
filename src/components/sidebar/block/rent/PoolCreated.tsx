@@ -18,6 +18,8 @@ import { truncateAddress } from '@/helper/misc'
 import EditPool from '@/components/sidebar/block/rent/EditPool'
 import PoolDormant from '@/components/sidebar/block/rent/PoolDormant'
 import PoolActive from '@/components/sidebar/block/rent/PoolActive'
+import PoolPending from '@/components/sidebar/block/rent/PoolPending'
+import PoolOngoing from '@/components/sidebar/block/rent/PoolOngoing'
 
 
 type RentPoolContextType = {
@@ -158,93 +160,15 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
     await writeContract(request)
   }
 
-  let content = <></>;
-
-  if (poolState === 2/* && within bid duration */) {
-    content = <>
-      <HStack spacing={2}>
-        <Text color='gray.600' fontWeight='bold'>Days left to bid:</Text>
-        <Text >5 days left</Text>
-      </HStack>
-      <HStack spacing={0}>
-        <Text color='gray.600' fontWeight='bold' mr={2}>Current Bid:</Text>
-        <MaticIcon boxSize={5} /><Text pl={1}>{baseFloorPrice} MATIC per Pixel</Text>
-      </HStack>
-      <Box>
-        <Text color='gray.600' fontWeight='bold'>Set Bid Price Per Pixel</Text>
-        <Card border="1px solid" borderColor="purple">
-          <CardBody px="3" py="2">
-            <Stat>
-              <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
-              <HStack><MaticIcon boxSize={8} mr="2" />
-                <NumberInput focusBorderColor={"purple.500"} defaultValue={baseFloorPrice} precision={4} step={Number((baseFloorPrice / 10).toPrecision(1))}
-                  max={baseFloorPrice * 1e4} min={baseFloorPrice} onChange={(e) => { setBidPrice(parseFloat(e)) }}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput><StatNumber my="1" fontSize={"lg"}>
-                  MATIC / Pixel</StatNumber></HStack>
-              <StatHelpText mb="0">*Min bid {baseFloorPrice} MATIC per Pixel</StatHelpText>
-            </Stat>
-          </CardBody>
-        </Card>
-      </Box>
-      <Button colorScheme='purple' width='100%' onClick={onPlaceBid}>Place Bid</Button>
-    </>
-  } else if (poolState === 2 /* && no time left to bid */) {
-    content = <>
-      <HStack spacing={2}>
-        <Text color='gray.600' fontWeight='bold'>Days left to bid:</Text>
-        <Text color='red'>Bidding Period Over</Text>
-      </HStack>
-      <Card border="1px solid" borderColor="purple">
-        <CardBody px="3" py="2">
-          <Stat>
-            <StatLabel color="purple">Last Bid Price Per Pixel</StatLabel>
-            <StatNumber my="1" fontSize={"lg"}>
-              <MaticIcon boxSize={8} mr="2" /> {baseFloorPrice} MATIC / Pixel</StatNumber>
-          </Stat>
-        </CardBody>
-      </Card>
-      <Text>You will receive 0.5% of all bids as reward</Text>
-      <Button colorScheme='purple' width='100%'>Initiate</Button>
-    </>
-  } else if (poolState === 3) {
-    content = <>
-      <Card border="1px solid" borderColor="purple">
-        <CardBody px="3" py="2">
-          <Stat>
-            <StatLabel color="purple">Last Bid Price Per Pixel</StatLabel>
-            <StatNumber my="1" fontSize={"lg"}>
-              <MaticIcon boxSize={8} mr="2" /> {baseFloorPrice} MATIC / Pixel</StatNumber>
-          </Stat>
-        </CardBody>
-      </Card>
-      <HStack>
-        <Text color='gray.600' fontWeight='bold'>Bidder: </Text>
-        <Link title={poolAddress}>{truncateAddress(poolAddress)}</Link>
-      </HStack>
-    </>
-  }
-
-
   return (
     <RentPoolContext.Provider value={{ poolAddress: poolAddress, poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch, refetch: refetch }}>
       <PoolInfo poolAddress={poolAddress} poolState={poolState}
         baseFloorPrice={baseFloorPrice} bidDuration={bidDuration} bidIncrement={bidIncrement} epoch={epoch} />
 
-      <Card variant="filled" my={4}>
-        <CardBody>
-          <VStack spacing="3" align="stretch">
-            {content}
-          </VStack>
-        </CardBody>
-      </Card>
-
       {(poolState === 0) && <PoolDormant id={id} poolAddress={poolAddress} baseFloorPrice={baseFloorPrice} /> /*Dormant*/}
       {(poolState === 1) && <PoolActive id={id} poolAddress={poolAddress} /> /*Active*/}
+      {(poolState === 2) && <PoolPending id={id} poolAddress={poolAddress} /> /*Pending*/}
+      {(poolState === 3) && <PoolOngoing poolAddress={poolAddress} /> /*Ongoing*/}
     </RentPoolContext.Provider>
 
   )
