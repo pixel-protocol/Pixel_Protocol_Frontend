@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
-import { useContractReads } from 'wagmi'
+import { useContractReads, useNetwork, useAccount } from 'wagmi'
 import { Card, CardBody, VStack, Box, Text, HStack, Button, StatLabel, NumberInput, Stat, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, StatHelpText, StatNumber } from '@chakra-ui/react'
 import MaticIcon from '@/components/icons/MaticIcon'
 import EditPool from '@/components/sidebar/block/rent/EditPool'
 import rentPoolABI from '@/constant/abis/RentPool'
 import { formatEther } from 'viem'
+import MakeNewBid from '@/components/sidebar/block/rent/MakeNewBid'
+import { testnetChain } from '@/constant/constants'
 
 const PoolActive = ({ id, poolAddress }: { id: number, poolAddress: `0x${string}` }) => {
-
+  const { chain } = useNetwork()
+  const { address, connector, isConnected } = useAccount()
   const [rentDuration, setRentDuration] = useState<number>(0)
   const [floorPrice, setFloorPrice] = useState<number>(0)
+  const [bidPrice, setBidPrice] = useState<number>(0)
+
 
   const rentPoolContract = {
     address: poolAddress,
@@ -57,14 +62,14 @@ const PoolActive = ({ id, poolAddress }: { id: number, poolAddress: `0x${string}
       <CardBody>
         <VStack spacing="3" align="stretch">
           <Box>
-            <Text color='gray.600' fontWeight='bold'>Set Bid Price Per Pixel</Text>
+            <Text color='gray.600' fontWeight='bold'>Set Bid Price per Pixel</Text>
             <Card border="1px solid" borderColor="purple">
               <CardBody px="3" py="2">
                 <Stat>
-                  <StatLabel color="purple">Bid Price Per Pixel</StatLabel>
+                  <StatLabel color="purple">Set Bid Price per Pixel</StatLabel>
                   <HStack><MaticIcon boxSize={8} mr="2" />
                     <NumberInput focusBorderColor={"purple.500"} defaultValue={floorPrice} precision={4} step={Number((floorPrice / 10).toPrecision(1))}
-                      min={floorPrice} onChange={() => { }}>
+                      min={floorPrice} onChange={(valueAsString: string, valueAsNumber: number) => { setBidPrice(valueAsNumber) }}>
                       <NumberInputField />
                       <NumberInputStepper>
                         <NumberIncrementStepper />
@@ -72,13 +77,14 @@ const PoolActive = ({ id, poolAddress }: { id: number, poolAddress: `0x${string}
                       </NumberInputStepper>
                     </NumberInput><StatNumber my="1" fontSize={"lg"}>
                       MATIC</StatNumber></HStack>
-                  <StatHelpText mb="0">*Mininum bid is {floorPrice} MATIC per Pixel</StatHelpText>
+                  <StatHelpText mb="0">Total Bid Price is {Math.floor(bidPrice * 100)} MATIC</StatHelpText>
                 </Stat>
               </CardBody>
             </Card>
 
           </Box>
-          <Button colorScheme='purple' width='100%' onClick={() => { }}>Make First Bid!</Button>
+
+          <MakeNewBid id={id} bidPrice={bidPrice} isConnected={isConnected} isValidChain={chain?.name === testnetChain} />
         </VStack>
       </CardBody>
     </Card >

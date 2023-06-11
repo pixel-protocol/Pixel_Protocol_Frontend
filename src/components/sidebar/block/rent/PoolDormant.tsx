@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { prepareWriteContract, writeContract } from 'wagmi/dist/actions'
+import { prepareWriteContract, writeContract } from 'wagmi/actions'
 import { Card, CardBody, VStack, Box, Text, Select, HStack, Button } from '@chakra-ui/react'
 import EditPool from '@/components/sidebar/block/rent/EditPool'
 import rentPoolABI from '@/constant/abis/RentPool'

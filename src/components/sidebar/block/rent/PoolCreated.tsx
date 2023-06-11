@@ -242,8 +242,8 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
         </CardBody>
       </Card>
 
-      (poolState===0) && <PoolDormant id={id} poolAddress={poolAddress} baseFloorPrice={baseFloorPrice} /> {/*Dormant*/}
-      (poolState===1) && <PoolActive id={id} poolAddress={poolAddress} /> {/*Active*/}
+      {(poolState === 0) && <PoolDormant id={id} poolAddress={poolAddress} baseFloorPrice={baseFloorPrice} /> /*Dormant*/}
+      {(poolState === 1) && <PoolActive id={id} poolAddress={poolAddress} /> /*Active*/}
     </RentPoolContext.Provider>
 
   )

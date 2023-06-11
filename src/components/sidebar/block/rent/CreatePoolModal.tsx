@@ -46,7 +46,7 @@ function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModa
   } = usePrepareContractWrite({
     ...rentFactoryContract,
     functionName: 'createRentPool',
-    args: [BigInt(id), parseEther((baseFloorPrice * 100).toString() as `${number}`), BigInt(bidDuration), BigInt(bidIncrement)],
+    args: [BigInt(id), parseEther((baseFloorPrice).toString() as `${number}`), BigInt(bidDuration), BigInt(bidIncrement)],
     onError(error) {
       alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {
