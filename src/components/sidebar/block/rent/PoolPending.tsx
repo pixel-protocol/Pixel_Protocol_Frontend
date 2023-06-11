@@ -144,8 +144,8 @@ const PoolPending = ({ id, poolAddress }: { id: number, poolAddress: `0x${string
                     <Stat>
                       <StatLabel color="purple">Bid Price</StatLabel>
                       <HStack><MaticIcon boxSize={8} mr="2" />
-                        <NumberInput focusBorderColor={"purple.500"} defaultValue={minBidPrice} precision={4} step={Number((currentBid.bidPrice / 10).toPrecision(1))}
-                          min={minBidPrice} value={newBidPrice.toPrecision(4)} onChange={(e) => { setNewBidPrice(parseFloat(e)) }}>
+                        <NumberInput focusBorderColor={"purple.500"} defaultValue={minBidPrice} precision={Math.max(minBidPrice.toString().split(".")[1]?.length + 2 || 5, 5)} step={Number((currentBid.bidPrice / 10).toPrecision(1))}
+                          min={minBidPrice} onChange={(e) => { setNewBidPrice(parseFloat(e)) }}>
                           <NumberInputField />
                           <NumberInputStepper>
                             <NumberIncrementStepper />

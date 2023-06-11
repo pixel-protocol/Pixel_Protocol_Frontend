@@ -11,6 +11,8 @@ const PoolOngoing = ({ poolAddress }: { poolAddress: `0x${string}` }) => {
   const [rentDuration, setRentDuration] = useState<number>(0)
   const [winningBid, setWinningBid] = useState<{ id: number | bigint, bidPrice: number, bidder: `0x${string}` }>({ id: 0, bidPrice: 0, bidder: '0x...' })
 
+  const durations = [{ index: 0, days: 30 }, { index: 1, days: 90 }, { index: 2, days: 180 }]
+
   const rentPoolContract = {
     address: poolAddress,
     abi: rentPoolABI,
@@ -82,8 +84,12 @@ const PoolOngoing = ({ poolAddress }: { poolAddress: `0x${string}` }) => {
             </CardBody>
           </Card>
           <HStack>
-            <Text color='gray.600' fontWeight='bold'>Bidder: </Text>
+            <Text color='gray.600' fontWeight='bold'>Winning Bidder: </Text>
             <Link title={winningBid.bidder}>{truncateAddress(winningBid.bidder)}</Link>
+          </HStack>
+          <HStack>
+            <Text color='gray.600' fontWeight='bold'>Rent Duration: </Text>
+            <Text>{durations[rentDuration].days} days</Text>
           </HStack>
         </VStack>
       </CardBody>
