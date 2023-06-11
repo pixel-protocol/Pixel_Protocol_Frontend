@@ -29,6 +29,7 @@ type BlockContextType = {
   blockOwner: `0x${string}`,
   pixelColors: `#${string}`[],
   pixelOwners: `0x${string}`[],
+  refetch: () => void
 }
 
 type ModalContextType = {
@@ -39,7 +40,8 @@ type ModalContextType = {
 export const BlockContext = createContext<BlockContextType>({
   blockOwner: zeroAddress,
   pixelColors: [...Array(100)].map(_ => "#ffffff"),
-  pixelOwners: [...Array(100)].map(_ => zeroAddress)
+  pixelOwners: [...Array(100)].map(_ => zeroAddress),
+  refetch: () => { }
 })
 
 export const MintModalContext = createContext<ModalContextType>({
@@ -134,7 +136,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
 
   return (
-    <BlockContext.Provider value={{ blockOwner: blockOwner, pixelColors: pixelColors, pixelOwners: pixelOwners }}>
+    <BlockContext.Provider value={{ blockOwner: blockOwner, pixelColors: pixelColors, pixelOwners: pixelOwners, refetch: refetch }}>
 
       <Tabs onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
         <TabList>
