@@ -26,7 +26,6 @@ export const useStateCallback = <T>(initialState: T): [state: T, setState: (upda
     return [state, handleSetState];
 }
 
-
 export const useNFTOwnership = (account: `0x${string}`) => {
     const cData: ChainData = chainData;
     const pixelAddress = cData[testnetChain]["contractAddresses"][0]
@@ -47,20 +46,34 @@ export const useNFTOwnership = (account: `0x${string}`) => {
     const alchemy = new Alchemy(settings);
 
     const refetch = async () => {
+
         const req = await alchemy.nft.getNftsForOwner(account, {
             contractAddresses: [pixelAddress, blockAddress, stakedPixelAddress, stakedBlockAddress],
-            omitMetadata: true
+            omitMetadata: true,
         })
 
-        const { ownedNfts: rawNftsData } = req
+        let { ownedNfts: rawNftsData } = req
+
+        let pageKey = req.pageKey
+
+        while (pageKey) {
+            const req = await alchemy.nft.getNftsForOwner(account, {
+                contractAddresses: [pixelAddress, blockAddress, stakedPixelAddress, stakedBlockAddress],
+                omitMetadata: true,
+                pageKey: pageKey
+            })
+            const { ownedNfts } = req
+            rawNftsData = [...rawNftsData, ...ownedNfts]
+            pageKey = req.pageKey
+        }
 
         const ownedNfts = rawNftsData.map((nft) => { return { contract: nft.contract.address, id: Number(nft.tokenId) } })
 
-        const ownedBlocks = ownedNfts.filter((nft) => { return nft.contract === blockAddress }).map((nft) => nft.id)
+        const ownedBlocks = ownedNfts.filter((nft) => { return nft.contract === (blockAddress as string).toLowerCase() }).map((nft) => nft.id)
 
-        const ownedPixels = ownedNfts.filter((nft) => { return nft.contract === pixelAddress }).map((nft) => nft.id)
-        const ownedStakedBlocks = ownedNfts.filter((nft) => { return nft.contract === stakedBlockAddress }).map((nft) => nft.id)
-        const ownedStakedPixels = ownedNfts.filter((nft) => { return nft.contract === stakedPixelAddress }).map((nft) => nft.id)
+        const ownedPixels = ownedNfts.filter((nft) => { return nft.contract === (pixelAddress as string).toLowerCase() }).map((nft) => nft.id)
+        const ownedStakedBlocks = ownedNfts.filter((nft) => { return nft.contract === (stakedBlockAddress as string).toLowerCase() }).map((nft) => nft.id)
+        const ownedStakedPixels = ownedNfts.filter((nft) => { return nft.contract === (stakedPixelAddress as string).toLowerCase() }).map((nft) => nft.id)
 
         setBlocks(ownedBlocks)
         setPixels(ownedPixels)

@@ -20,6 +20,7 @@ import PoolDormant from '@/components/sidebar/block/rent/PoolDormant'
 import PoolActive from '@/components/sidebar/block/rent/PoolActive'
 import PoolPending from '@/components/sidebar/block/rent/PoolPending'
 import PoolOngoing from '@/components/sidebar/block/rent/PoolOngoing'
+import StakeUnstake from '@/components/sidebar/block/rent/StakeUnstake'
 
 
 type RentPoolContextType = {
@@ -147,18 +148,6 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
     refetch()
   }, [])
 
-  const onPlaceBid = async () => {
-    if (bidPrice === null) return
-
-    const parsedBidPrice = parseEther((bidPrice * 100).toString() as `${number}`);
-    const { request } = await prepareWriteContract({
-      ...rentPoolContract,
-      functionName: 'makeBid',
-      args: [parsedBidPrice, []]
-    })
-
-    await writeContract(request)
-  }
 
   return (
     <RentPoolContext.Provider value={{ poolAddress: poolAddress, poolState: poolState, baseFloorPrice: baseFloorPrice, bidDuration: bidDuration, bidIncrement: bidIncrement, epoch: epoch, refetch: refetch }}>
@@ -169,6 +158,8 @@ const PoolCreated = ({ id, poolAddress, coordinates, tier }: { id: number, poolA
       {(poolState === 1) && <PoolActive id={id} poolAddress={poolAddress} /> /*Active*/}
       {(poolState === 2) && <PoolPending id={id} poolAddress={poolAddress} /> /*Pending*/}
       {(poolState === 3) && <PoolOngoing poolAddress={poolAddress} /> /*Ongoing*/}
+      {(false) && <StakeUnstake id={id} poolAddress={poolAddress} poolState={poolState} />}
+
     </RentPoolContext.Provider>
 
   )
