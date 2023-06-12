@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    dev: true,
+    dev: false,
     exposeSidebar: false,
     modeForDebugging: 'Block',
     POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY,
