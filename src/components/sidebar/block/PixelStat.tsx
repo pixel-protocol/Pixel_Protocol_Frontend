@@ -34,7 +34,7 @@ const PixelStat = ({ id, coordinates, owner, color }: { id: number, coordinates:
           h="80px"
           borderRadius="lg"
           border="1px solid"
-          borderColor="purple"
+          borderColor="purple.500"
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -48,7 +48,7 @@ const PixelStat = ({ id, coordinates, owner, color }: { id: number, coordinates:
         </GridItem>
         <GridItem>
           <VStack spacing={2} align="stretch">
-            <Link fontWeight="bold" color="purple" href={`/app?x=${idToCoordPixel(id)[0]}&y=${idToCoordPixel(id)[1]}&mode=Pixel`}>
+            <Link fontWeight="bold" color="purple.500" href={`/app?x=${idToCoordPixel(id)[0]}&y=${idToCoordPixel(id)[1]}&mode=Pixel`}>
               <Text fontSize="xl">Pixel #{id}<ExternalLinkIcon ml={1} /></Text>
             </Link>
             <Grid
@@ -66,7 +66,7 @@ const PixelStat = ({ id, coordinates, owner, color }: { id: number, coordinates:
       </Grid>
 
       <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
-        <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>
+        <Badge ml={2} variant='solid' bg='purple.500'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>
       </HStack>
     </VStack>
   )

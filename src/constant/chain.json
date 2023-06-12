@@ -1,17 +1,17 @@
 {
     "Polygon Mumbai": {
         "contractAddresses": [
-            "0x92a5EC81F857fA8C3cF9391325344136770d4cb7",
-            "0x1bf38885692c161aBc0CfFDb53A786947D80C396",
-            "0xC9980afDDC4fE31a78D8B4c6567bb3920CA10a31",
-            "0x5D67d0d2a300b79caF5b9B48F296068Da3D37c11",
-            "0x3F2dd7ed9baC6E22cd80Ef765f1fCce6833700CE",
-            "0x4e6a11B8E3edB645fe3dE347478B27f36aC75d7C"
+            "0x4bf4F110dB84e87d4cA89FAd14A47Aa2B8CA3499",
+            "0xbDb7c44fE4fcfC380EecB40ae237360285B55D2d",
+            "0x430308df4D91e07384c71Af8c4deA4200C05B298",
+            "0x46e0FF7458674648b83b5cAf127d84e522B3e6Ad",
+            "0x6cC3d89B3086Dc59A44FEa975ca6d414342DE1e2",
+            "0x0b181C2f13B3f2D2b994e2C8A7fcFD0BEDFbC599"
         ],
         "fairValueEther": {
-            "Bronze": 0.01,
-            "Silver": 0.0125,
-            "Gold": 0.015
+            "Bronze": 0.001,
+            "Silver": 0.0015,
+            "Gold": 0.002
         },
         "blockExplorerTx": "https://mumbai.polygonscan.com/tx/",
         "blockExplorerAcc": "https://mumbai.polygonscan.com/address/"

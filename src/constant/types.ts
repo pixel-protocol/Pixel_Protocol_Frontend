@@ -20,3 +20,10 @@ export type ChainData = {
 export type Mode = 'Pixel' | 'Block'
 
 export type Tier = "Bronze" | "Silver" | "Gold"
+
+export type RentPoolParameters = {
+    address: `0x${string}`,
+    baseFloorPrice: number,
+    bidDuration: number,
+    bidIncrement: number
+}

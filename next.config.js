@@ -5,6 +5,7 @@ const nextConfig = {
     exposeSidebar: false,
     modeForDebugging: 'Block',
     POLYGON_MUMBAI_ALCHEMY_API_KEY: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY,
+    POLYGON_MUMBAI_ALCHEMY_API_KEY_NFT: process.env.POLYGON_MUMBAI_ALCHEMY_API_KEY_NFT,
     INFURA_API_KEY: process.env.INFURA_API_KEY,
     INFURA_API_KEY_SECRET: process.env.INFURA_API_KEY_SECRET
   },

@@ -22,7 +22,8 @@ import CopyButton from '@/components/sidebar/CopyButton'
 import OwnerIcon from '@/components/sidebar/OwnerIcon'
 
 import { testnetChain } from '@/constant/constants'
-import { BlockHomeContext } from '@/components/sidebar/block/Home'
+
+
 
 const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: number, coordinates: Coordinates, tier: Tier, exists: boolean, owner: `0x${string}`, colors: `#${string}`[] }) => {
   const cData: ChainData = chainData;
@@ -51,7 +52,7 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
                 h="80px"
                 borderRadius="md"
                 border="1px solid"
-                borderColor="purple"
+                borderColor="purple.500"
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -68,7 +69,7 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
             </GridItem>
             <GridItem>
               <VStack spacing={2} align="stretch">
-                <Text fontSize="xl" fontWeight="bold" color="purple">Block #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
+                <Text fontSize="xl" fontWeight="bold" color="purple.500">Block #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
 
                   {tier}
                 </Badge></Text>
@@ -87,13 +88,13 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
           </Grid>
           {(exists) ?
             <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={(blockExplorerAcc as string) + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
-              {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
+              {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple.500'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
             </HStack> : null}
 
-          <Card border="1px solid" borderColor="purple">
+          <Card border="1px solid" borderColor="purple.500">
             <CardBody px="3" py="2">
               <Stat>
-                <StatLabel color="purple">Fair Value / Mint Price</StatLabel>
+                <StatLabel color="purple.500">Fair Value / Mint Price</StatLabel>
                 <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel * 100} MATIC</StatNumber>
                 <StatHelpText mb="0">{fairValuePerPixel} MATIC per Pixel</StatHelpText>
               </Stat>

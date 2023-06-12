@@ -9,31 +9,6 @@ const rentFactoryABI = [
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "pool",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      }
-    ],
-    "name": "CreatePool",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
         "type": "address"
@@ -49,6 +24,31 @@ const rentFactoryABI = [
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      }
+    ],
+    "name": "RentPoolCreation",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -57,12 +57,12 @@ const rentFactoryABI = [
       },
       {
         "internalType": "uint256",
-        "name": "initialBaseCostPerPixel_",
+        "name": "baseFloorBidPerPixel_",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "cooldownDuration_",
+        "name": "bidDuration_",
         "type": "uint256"
       },
       {
@@ -147,6 +147,6 @@ const rentFactoryABI = [
     "stateMutability": "nonpayable",
     "type": "function"
   }
-]
+] as const
 
 export default rentFactoryABI

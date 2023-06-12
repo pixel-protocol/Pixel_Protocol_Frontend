@@ -40,16 +40,16 @@ const PixelsSummary = ({ blockId, ids, owners, colors }: { blockId: number, ids:
           <PixelsGrid selectedCell={selectedCellPos} showAll={showAll} colors={colors} owners={owners} onCellClick={handleCellClick} />
         </Box>
         <Box>
-          <Card border="1px solid" borderColor="purple">
+          <Card border="1px solid" borderColor="purple.500">
             <CardBody px="3" py="2">
               {(selectedCellPos !== undefined) ?
                 <PixelStat id={ids[selectedCellPos]} coordinates={{ x: idToCoordPixel(ids[selectedCellPos])[0], y: idToCoordPixel(ids[selectedCellPos])[1] }} owner={owners[selectedCellPos]} color={colors[selectedCellPos]} /> : <Text>No pixels selected.</Text>}
             </CardBody></Card>
         </Box>
         <Box>
-          <Card border="1px solid" borderColor="purple">
+          <Card border="1px solid" borderColor="purple.500">
             <CardBody px="3" py="2">
-              <Text>You have <Text as="span" color="purple" fontWeight={"bold"}>{getNumPixelsOwned()}</Text> Pixel(s) in <Link color="purple" fontWeight={"bold"} href={`/app?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=Block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
+              <Text>You have <Text as="span" color="purple.500" fontWeight={"bold"}>{getNumPixelsOwned()}</Text> Pixel(s) in <Text as="span" color="purple.500" fontWeight={"bold"}>Block #{blockId}</Text></Text>
             </CardBody></Card>
         </Box>
       </VStack>

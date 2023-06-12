@@ -33,6 +33,11 @@ export const coordToTierPixel = (x: number, y: number): Tier => {
     }
 }
 
+export const idToTierPixel = (id: number) => {
+    const [x, y] = idToCoordPixel(id)
+    return coordToTierPixel(x, y)
+}
+
 export const coordToIdBlock = (x: number, y: number) => {
     return y * 100 + x;
 }
@@ -53,6 +58,11 @@ export const coordToTierBlock = (x: number, y: number): Tier => {
     else {
         return 'Bronze';
     }
+}
+
+export const idToTierBlock = (id: number) => {
+    const [x, y] = idToCoordBlock(id)
+    return coordToTierBlock(x, y)
 }
 
 export const blockIdToPixelIds = (id: number) => {
@@ -83,3 +93,5 @@ export const pixelCoordToBlockCoord = (x: number, y: number) => {
 export const invertColor = (dec: number) => {
     return 16777215 - dec;
 }
+
+export const poolStateString: { [key: number]: string } = { 0: 'Dormant', 1: 'Active', 2: 'Pending', 3: 'Ongoing', 4: 'Ended' }
