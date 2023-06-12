@@ -125,7 +125,7 @@ function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice, rentDuration
     args: [parseEther((bidPrice).toString() as `${number}`), colors.map(c => hexToDec("0x" + c.slice(1)))],
     value: parseEther((bidPrice * 100).toString() as `${number}`),
     onError(error) {
-      alert("Prepare Contract Write Error!")
+      //alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
@@ -138,13 +138,13 @@ function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice, rentDuration
     hash: data?.hash,
 
     onSuccess(data) {
-      alert("Transaction Successful!")
+      //alert("Transaction Successful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
     },
     onError(error) {
-      alert("Transaction Unsuccessful!")
+      //alert("Transaction Unsuccessful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
