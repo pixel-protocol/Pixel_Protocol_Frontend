@@ -5,6 +5,54 @@ const stakePixelABI = [
     "type": "constructor"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedPixel__AlreadyMinted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedPixel__FactoryAlreadySet",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedPixel__InvalidId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedPixel__NotMinted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedPixel__NotRentFactory",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedPixel__NotRentPool",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -194,6 +242,25 @@ const stakePixelABI = [
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "ids_",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "getPixelOwners",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "owners",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",

@@ -5,6 +5,69 @@ const pixelABI = [
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "Pixel__ArrayLengthMismatch",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Pixel__BatchLimitExceeded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Pixel__BlockAlreadySet",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "Pixel__InvalidId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "Pixel__NotMinted",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
+    "name": "Pixel__NotPixelOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Pixel__OnlyBlock",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Pixel__RowIndexOutOfRange",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -64,13 +127,13 @@ const pixelABI = [
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256[]",
         "name": "ids",
         "type": "uint256[]"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint24[]",
         "name": "colors",
         "type": "uint24[]"

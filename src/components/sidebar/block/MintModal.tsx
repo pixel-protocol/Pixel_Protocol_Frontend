@@ -50,7 +50,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     args: [BigInt(id), colors.map(c => hexToDec("0x" + c.slice(1)))],
     value: parseEther((fairValuePerPixel * 100).toString() as `${number}`),
     onError(error) {
-      alert("Prepare Contract Write Error!")
+      //alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
@@ -63,13 +63,13 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
     hash: data?.hash,
 
     onSuccess(data) {
-      alert("Transaction Successful!")
+      //alert("Transaction Successful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
     },
     onError(error) {
-      alert("Transaction Unsuccessful!")
+      //alert("Transaction Unsuccessful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }

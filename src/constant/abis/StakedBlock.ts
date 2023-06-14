@@ -5,6 +5,54 @@ const stakedBlockABI = [
     "type": "constructor"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedBlock__AlreadyMinted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedBlock__FactoryAlreadySet",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedBlock__InvalidId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "StakedBlock__NotMinted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedBlock__NotRentFactory",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StakedBlock__NotRentPool",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {

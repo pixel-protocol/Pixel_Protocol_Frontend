@@ -52,7 +52,7 @@ function EditPoolModal({ id, isModalOpen, onModalClose, parameters }: { id: numb
     functionName: 'adjustPoolParameters',
     args: [parseEther((baseFloorPrice * 100).toString() as `${number}`), BigInt(bidDuration), BigInt(bidIncrement)],
     onError(error) {
-      alert("Prepare Contract Write Error!")
+      //alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
@@ -65,13 +65,13 @@ function EditPoolModal({ id, isModalOpen, onModalClose, parameters }: { id: numb
     hash: data?.hash,
 
     onSuccess(data) {
-      alert("Transaction Successful!")
+      //alert("Transaction Successful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
     },
     onError(error) {
-      alert("Transaction Unsuccessful!")
+      //alert("Transaction Unsuccessful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }

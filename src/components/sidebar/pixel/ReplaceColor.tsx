@@ -29,7 +29,7 @@ const cData: ChainData = chainData;
 const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, coordinates: Coordinates, tier: Tier, color: `#${string}`, setColor: React.Dispatch<React.SetStateAction<`#${string}`>> }) => {
   const { address, connector, isConnected } = useAccount()
   const { chain, chains } = useNetwork()
-  const [pixelAddress, setPixelAddress] = cData[testnetChain]["contractAddresses"][0]
+  const pixelAddress = cData[testnetChain]["contractAddresses"][0]
   const [newColor, setNewColor] = useState<`#${string}`>('#ffffff')
 
   const pixelContract = {
@@ -44,7 +44,7 @@ const ReplaceColor = ({ id, coordinates, tier, color, setColor }: { id: number, 
   } = usePrepareContractWrite({
     ...pixelContract,
     functionName: 'transform',
-    args: [hexToDec("0x" + newColor.slice(1)), BigInt(id)],
+    args: [hexToDec("0x" + newColor.slice(1)), BigInt(id)]
 
   })
 

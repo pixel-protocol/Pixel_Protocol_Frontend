@@ -48,7 +48,7 @@ function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModa
     functionName: 'createRentPool',
     args: [BigInt(id), parseEther((baseFloorPrice).toString() as `${number}`), BigInt(bidDuration), BigInt(bidIncrement)],
     onError(error) {
-      alert("Prepare Contract Write Error!")
+      //alert("Prepare Contract Write Error!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
@@ -61,13 +61,13 @@ function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModa
     hash: data?.hash,
 
     onSuccess(data) {
-      alert("Transaction Successful!")
+      //alert("Transaction Successful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }
     },
     onError(error) {
-      alert("Transaction Unsuccessful!")
+      //alert("Transaction Unsuccessful!")
       if (activeStep !== 3) {
         setActiveStep(3)
       }

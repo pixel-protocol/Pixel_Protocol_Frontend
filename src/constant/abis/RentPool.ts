@@ -31,6 +31,149 @@ const rentPoolABI = [
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "RentPool__BaseFloorBidPerPixelOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__BidDurationOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__BidIncrementOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__Bidder",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__BiddingNotEnded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__DurationOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__EpochNotCloseable",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "minimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "actual",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__InsufficientBid",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "expected",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "actual",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__InsufficientETH",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum PoolState",
+        "name": "expected",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum PoolState",
+        "name": "actual",
+        "type": "uint8"
+      }
+    ],
+    "name": "RentPool__InvalidState",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentPool__NotBidder",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__NotBlockOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__NotPixelOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__NotStakedBlockOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__NotStakedPixelOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentPool__PixelNotOwnedByBlock",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {

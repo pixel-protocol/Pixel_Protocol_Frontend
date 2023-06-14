@@ -5,6 +5,59 @@ const rentFactoryABI = [
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "RentFactory__BaseFloorBidPerPixelOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentFactory__BidDurationOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RentFactory__BidIncrementOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "num",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentFactory__InvalidBlockId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
+    "name": "RentFactory__NotBlockOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "RentFactory__PoolAlreadyExists",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
