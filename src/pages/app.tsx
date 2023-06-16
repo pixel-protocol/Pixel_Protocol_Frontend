@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import { Coordinates, Mode } from '@/constant/types';
 import { FloatingMenu } from '@/components/FloatingMenu'
 import Pill from '@/components/Pill'
+import { Box } from '@chakra-ui/react'
 
 const socket = process.env.dev ? io("http://localhost:8000/") : io("https://d36kqrie6n44tn.cloudfront.net/");
 const BLOCK_SIZE = 10;
@@ -313,13 +314,13 @@ const Home: NextPage = () => {
   };
 
   return (
-    < div >
+    <>
       <Header />
 
       <FloatingMenu mode={mode} toggleMode={toggleMode} />
 
       <div id="canvas-container" className='bg-slate-300' style={{ overflow: 'hidden', height: '100vh' }}>
-        <canvas id="pixelCanvas" width={1000} height={1000} style={{ imageRendering: 'pixelated', touchAction: 'none' }} ref={canvasRef}
+        <canvas id="pixelCanvas" width={1000} height={1000} style={{ imageRendering: 'pixelated', touchAction: 'none', background: "linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url(/images/PixelProtocolBg.jpeg)", backgroundSize: "cover", backgroundPosition: "cover" }} ref={canvasRef}
           onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}></canvas>
       </div>
       <Pill pointerPosition={selectedPointerPosition as Coordinates} cameraZoom={cameraZoom} moveToPoint={moveToPoint} />
@@ -330,7 +331,7 @@ const Home: NextPage = () => {
           : null
       }
 
-    </div >
+    </>
 
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input } from '@chakra-ui/react'
+import { Button, Input, Box } from '@chakra-ui/react'
 import { Coordinates } from '@/constant/types'
 import { SearchIcon, CloseIcon } from '@chakra-ui/icons'
 
@@ -53,12 +53,12 @@ const Pill = ({ pointerPosition, cameraZoom, moveToPoint }: PillProps) => {
     </>
 
     return (
-        <div id='coordinatesPill' className="rounded-full font-semibold text-md bg-cyan-500 text-white py-2 px-4" style={{
-            position: 'absolute', left: '50%', transform: 'translateX(-50%)', border: '3px solid white', filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3))',
+        <Box id='coordinatesPill' bg="purple.500" className="rounded-full font-semibold text-md bg-cyan-500 text-white py-2 px-4" style={{
+            position: 'absolute', left: '50%', transform: 'translateX(-50%)', border: '2px solid white', filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3))',
             display: 'flex', flexDirection: 'row', bottom: '10px'
         }}>
             {isSearchMode ? SearchBar : Coordinates}
-        </div>
+        </Box>
     )
 }
 

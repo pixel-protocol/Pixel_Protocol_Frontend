@@ -11,8 +11,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
     <Tabs onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
       <TabList>
         <Tab><Icon as={MdHomeFilled} mr="1" />Home</Tab>
-        <Tab isDisabled><Icon as={MdMonetizationOn} mr="1" />Rent</Tab>
-        <Tab isDisabled><Icon as={MdList} mr="1" />Activity</Tab>
+        <Tab isDisabled><Icon as={MdMonetizationOn} mr="1" />Draw</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
