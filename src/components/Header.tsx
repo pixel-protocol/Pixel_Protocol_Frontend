@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <>
       <div id='brandLogo' className="fixed p-4 h-0">
-        <LogoContainer onClick={() => window.location.href = '/'}>
+        <LogoContainer style={{ cursor: "pointer" }} onClick={() => window.location.href = '/about'}>
           <Logo src="/images/pixellogo.png" alt="logo" width="66" height="66" />
 
         </LogoContainer>

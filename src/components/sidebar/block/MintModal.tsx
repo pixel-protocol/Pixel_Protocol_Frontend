@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
@@ -24,6 +24,8 @@ import SecondMintStep from '@/components/sidebar/block/SecondMintStep'
 import { invertColor, hexToDec } from '@/helper/conversion'
 import { testnetChain } from '@/constant/constants'
 
+import { BlockContext } from '@/components/sidebar/block/Sections'
+
 
 function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: number, coordinates: Coordinates, tier: Tier, isModalOpen: boolean, onModalClose: () => void }) {
 
@@ -32,6 +34,8 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
   const blockAddress = cData[testnetChain]["contractAddresses"][1]
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][tier]
   const blockExplorerTx = cData[testnetChain]["blockExplorerTx"]
+
+  const { refetch } = useContext(BlockContext)
 
   const [colors, setColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
 
@@ -67,6 +71,7 @@ function MintModal({ id, coordinates, tier, isModalOpen, onModalClose }: { id: n
       if (activeStep !== 3) {
         setActiveStep(3)
       }
+      refetch()
     },
     onError(error) {
       //alert("Transaction Unsuccessful!")

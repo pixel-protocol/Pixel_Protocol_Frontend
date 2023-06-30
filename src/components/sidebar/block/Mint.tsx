@@ -22,7 +22,7 @@ import MintModal from '@/components/sidebar/block/MintModal';
 import { testnetChain } from '@/constant/constants';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
-import { MintModalContext } from '@/components/sidebar/block/Sections';
+import { MintModalContext } from '@/components/sidebar/block/Block';
 
 const cData: ChainData = chainData;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Dispatch, SetStateAction, createContext } from "react";
 import { Coordinates, Tier } from "@/constant/types";
-
+import { useDisclosure } from "@chakra-ui/react";
 
 import Sections from "@/components/sidebar/block/Sections";
 
@@ -9,6 +9,17 @@ import { Box } from '@chakra-ui/react'
 
 import { coordToIdBlock, coordToTierBlock } from "@/helper/conversion";
 
+type ModalContextType = {
+  isOpen: boolean,
+  onOpen: () => void,
+  onClose: () => void
+}
+
+export const MintModalContext = createContext<ModalContextType>({
+  isOpen: false,
+  onOpen: () => { },
+  onClose: () => { }
+})
 
 
 
@@ -28,6 +39,8 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
     setTier(coordToTierBlock(coordinates.x, coordinates.y))
   }, [coordinates])
 
+  // Modals placed at the top of the hierarchy to prevent auto close on rerendering
+  const { isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal } = useDisclosure()
 
 
 
@@ -54,7 +67,11 @@ const Block = ({ coordinates }: { coordinates: Coordinates }) => {
 
   return (
     <Box p="2">
-      <Sections id={id} coordinates={coordinates} tier={tier} />
+      <MintModalContext.Provider value={{ isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal }}>
+
+        <Sections id={id} coordinates={coordinates} tier={tier} />
+      </MintModalContext.Provider>
+
     </Box>
   )
 }

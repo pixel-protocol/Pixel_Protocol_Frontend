@@ -106,8 +106,9 @@ function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice, rentDuration
   const blockExplorerTx = cData[testnetChain]["blockExplorerTx"]
 
 
-  const { poolAddress } = useContext(RentPoolContext)
+  const { poolAddress, refetch } = useContext(RentPoolContext)
   const [colors, setColors] = useState<`#${string}`[]>([...Array(100)].map(_ => "#ffffff"))
+
 
 
   const rentPoolContract = {
@@ -142,6 +143,8 @@ function MakeNewBidModal({ id, isModalOpen, onModalClose, bidPrice, rentDuration
       if (activeStep !== 3) {
         setActiveStep(3)
       }
+      refetch()
+
     },
     onError(error) {
       //alert("Transaction Unsuccessful!")

@@ -44,11 +44,7 @@ export const BlockContext = createContext<BlockContextType>({
   refetch: () => { }
 })
 
-export const MintModalContext = createContext<ModalContextType>({
-  isOpen: false,
-  onOpen: () => { },
-  onClose: () => { }
-})
+
 
 export const RentPoolModalContext = createContext<ModalContextType>({
   isOpen: false,
@@ -69,11 +65,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
   const [pixelOwners, setPixelOwners] = useState<`0x${string}`[]>([...Array(100)].map(_ => zeroAddress))
 
 
-  // Modals placed at the top of the hierarchy to prevent auto close on rerendering
-  const { isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal } = useDisclosure()
   const { isOpen: isOpenRentPoolModal, onOpen: onOpenRentPoolModal, onClose: onCloseRentPoolModal } = useDisclosure()
-
-
 
 
   const blockContract = {
@@ -137,6 +129,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
 
 
   return (
+
     <BlockContext.Provider value={{ blockOwner: blockOwner, pixelColors: pixelColors, pixelOwners: pixelOwners, refetch: refetch }}>
 
       <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant='soft-rounded' colorScheme='purple' >
@@ -147,9 +140,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
         </TabList>
         <TabPanels>
           <TabPanel>
-            <MintModalContext.Provider value={{ isOpen: isOpenMintModal, onOpen: onOpenMintModal, onClose: onCloseMintModal }}>
-              {(tabIndex === 0) ? <Home id={id} coordinates={coordinates} tier={tier} /> : null}
-            </MintModalContext.Provider>
+            {(tabIndex === 0) ? <Home id={id} coordinates={coordinates} tier={tier} /> : null}
 
           </TabPanel>
           <TabPanel>
@@ -164,6 +155,7 @@ const Sections = ({ id, coordinates, tier }: { id: number, coordinates: Coordina
         </TabPanels>
       </Tabs >
     </BlockContext.Provider>
+
   )
 }
 

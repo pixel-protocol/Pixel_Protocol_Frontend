@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton,
@@ -23,6 +23,8 @@ import { testnetChain } from '@/constant/constants'
 import FirstRentPoolStep from '@/components/sidebar/block/rent/FirstRentPoolStep'
 import SecondRentPoolStep from '@/components/sidebar/block/rent/SecondRentPoolStep'
 
+import { RentPoolContext } from '@/components/sidebar/block/rent/PoolCreated'
+
 function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModalOpen: boolean, onModalClose: () => void }) {
 
   const cData: ChainData = chainData;
@@ -31,6 +33,7 @@ function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModa
   const fairValuePerPixel = cData[testnetChain]["fairValueEther"][idToTierBlock(id)]
   const blockExplorerTx = cData[testnetChain]["blockExplorerTx"]
 
+  const { refetch } = useContext(RentPoolContext)
   const [baseFloorPrice, setBaseFloorPrice] = useState(fairValuePerPixel)
   const [bidDuration, setBidDuration] = useState(3)
   const [bidIncrement, setBidIncrement] = useState(5)
@@ -65,6 +68,7 @@ function CreatePoolModal({ id, isModalOpen, onModalClose }: { id: number, isModa
       if (activeStep !== 3) {
         setActiveStep(3)
       }
+      refetch()
     },
     onError(error) {
       //alert("Transaction Unsuccessful!")

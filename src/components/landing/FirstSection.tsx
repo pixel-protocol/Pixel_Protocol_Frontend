@@ -23,7 +23,7 @@ const FirstSection = () => {
         <Text fontSize={["1xl", "2xl"]} color="white" padding="0px">
           A Web3 Renaissance of <Link href="http://www.milliondollarhomepage.com/" target="_blank"><Text as="span" color={"#f2a900"}>The Million Dollar Homepage <ExternalLinkIcon /></Text></Link>
         </Text>
-        <Link href="/app">
+        <Link href="/">
           <Box pr={2} mt={5}>
             <LaunchAppButton />
           </Box>
