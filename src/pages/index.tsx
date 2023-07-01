@@ -166,12 +166,12 @@ const Home: NextPage = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     setC(canvas);
     setCtx(ctx);
-    setLastX(window.innerWidth / 2 - window.innerHeight / 2)
+    setLastX(window.innerWidth / 2 - window.innerHeight / 2 + (1000 - window.innerHeight) / 2)
     setLastY(0)
 
     offscreenCanvas.current = document.createElement('canvas');
-    offscreenCanvas.current.width = window.innerHeight;
-    offscreenCanvas.current.height = window.innerHeight;
+    offscreenCanvas.current.width = 1000;
+    offscreenCanvas.current.height = 1000;
 
     const id = redraw.current();
 
@@ -188,6 +188,7 @@ const Home: NextPage = () => {
       }
       imageData.current = new ImageData(arr, 1000, 1000);
       offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
+
       setImageDownloaded(true)
     })
     socket.on("colorChange", (data) => {
@@ -202,6 +203,7 @@ const Home: NextPage = () => {
 
         }
         offscreenCanvas.current.getContext('2d').putImageData(imageData.current, 0, 0);
+
       }
       else {
         socket.emit("requestCanvas")
@@ -211,6 +213,8 @@ const Home: NextPage = () => {
         cancelAnimationFrame(id);
       }
     })
+
+    setCameraZoom(window.innerHeight / 1000.0)
 
     return () => {
       socket.removeAllListeners()
