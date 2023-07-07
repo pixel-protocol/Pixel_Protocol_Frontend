@@ -44,7 +44,7 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
       <CardBody>
         <VStack spacing={3} align="stretch">
 
-          <Grid templateColumns="1fr 3fr" gap={6} alignItems="center">
+          <Grid templateColumns="1fr 3fr" gap={5} alignItems="center">
             <GridItem h="100%">
 
               <Box
@@ -69,7 +69,7 @@ const BlockData = ({ id, coordinates, tier, exists, owner, colors }: { id: numbe
             </GridItem>
             <GridItem>
               <VStack spacing={2} align="stretch">
-                <Text fontSize="xl" fontWeight="bold" color="purple.500">Block #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
+                <Text fontSize="lg" fontWeight="bold" color="purple.500">Block #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
 
                   {tier}
                 </Badge></Text>

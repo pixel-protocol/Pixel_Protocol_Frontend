@@ -285,19 +285,19 @@ const Home: NextPage = () => {
 
   }, [ctx, c, lastX, lastY, cameraZoom, pointerPosition, selectedPointerPosition, mode])
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement> | React.PointerEvent<HTMLCanvasElement>) => {
     dragStart.current = { x: e.clientX / cameraZoom - lastX, y: e.clientY / cameraZoom - lastY };
     startMousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
-  const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement> | React.PointerEvent<HTMLCanvasElement>) => {
     if (startMousePosition.current.x === e.clientX && startMousePosition.current.y === e.clientY) {
       const { x, y } = calculateRealPosition(e.clientX, e.clientY);
       moveToPoint(x, y);
     }
   }
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement> | React.PointerEvent<HTMLCanvasElement>) => {
     if (e.buttons === 1) {
       const deltaX = e.clientX / cameraZoom - dragStart.current.x;
       const deltaY = e.clientY / cameraZoom - dragStart.current.y;
@@ -328,7 +328,7 @@ const Home: NextPage = () => {
       <FloatingMenu mode={mode} toggleMode={toggleMode} />
 
       <canvas id="pixelCanvas" width={1000} height={1000} style={{ imageRendering: 'pixelated', touchAction: 'none', background: "linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url(/images/PixelProtocolBg.jpeg)", backgroundSize: "cover", backgroundPosition: "cover" }} ref={canvasRef}
-        onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}></canvas>
+        onMouseDown={handleMouseDown} onPointerUp={handleMouseUp} onPointerDown={handleMouseDown} onPointerMove={handleMouseMove} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}></canvas>
       <Pill pointerPosition={selectedPointerPosition as Coordinates} cameraZoom={cameraZoom} moveToPoint={moveToPoint} />
 
 

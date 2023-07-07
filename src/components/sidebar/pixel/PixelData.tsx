@@ -51,7 +51,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
             h="80px"
             borderRadius="lg"
             border="1px solid"
-            borderColor="purple"
+            borderColor="purple.500"
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -61,7 +61,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
             h="80px"
             borderRadius="md"
             border="1px solid"
-            borderColor="purple"
+            borderColor="purple.500"
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -75,7 +75,7 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
           </GridItem>
           <GridItem>
             <VStack spacing={2} align="stretch">
-              <Text fontSize="xl" fontWeight="bold" color="purple">Pixel #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
+              <Text fontSize="lg" fontWeight="bold" color="purple.500">Pixel #{id}<Badge ml={2} variant='solid' bg={getColorForTier(tier)}>
 
                 {tier}
               </Badge></Text>
@@ -97,19 +97,19 @@ const PixelData = ({ id, coordinates, tier, exists, owner, color }: { id: number
         }
         {(exists) ?
           <HStack spacing="3"><HStack spacing="1"><Text>Owner: </Text><Link href={blockExplorerAcc + owner} isExternal>{truncateAddress(owner)}</Link><CopyButton target={owner} /></HStack>
-            {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
+            {(chain?.name === testnetChain && address === owner) && <Badge ml={2} variant='solid' bg='purple.500'><HStack><OwnerIcon /><Text marginInlineStart={"0.2rem"}>You</Text></HStack></Badge>}
           </HStack> : null}
-        <Card border="1px solid" borderColor="purple">
+        <Card border="1px solid" borderColor="purple.500">
           <CardBody p="3">
             <Stat>
-              <StatLabel color="purple">Fair Value</StatLabel>
+              <StatLabel color="purple.500">Fair Value</StatLabel>
               <StatNumber my="1" fontSize={"lg"}><MaticIcon boxSize={8} mr="2" />{fairValuePerPixel} MATIC</StatNumber>
             </Stat>
           </CardBody>
         </Card>
         <Alert status='info'>
           <AlertIcon />
-          <Text>This Pixel belongs to <Link color="purple" href={`/?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=Block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
+          <Text>This Pixel belongs to <Link color="purple.500" href={`/?x=${idToCoordBlock(blockId)[0]}&y=${idToCoordBlock(blockId)[1]}&mode=Block`}>Block #{blockId}<ExternalLinkIcon /></Link></Text>
         </Alert>
 
 

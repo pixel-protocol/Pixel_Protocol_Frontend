@@ -30,6 +30,7 @@ top: 0;
 height: 100vh;
 width: 420px;
 background-color: white;
+box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
 @media (max-width: 992px) {
     top:auto;
